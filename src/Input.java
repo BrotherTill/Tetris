@@ -47,7 +47,6 @@ public class Input extends KeyAdapter {
                 break;
             case KeyEvent.VK_RIGHT:
             case KeyEvent.VK_NUMPAD6:
-                System.out.println("right");
                 Board.MoveRight();
                 break;
         }
