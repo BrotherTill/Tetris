@@ -1,4 +1,10 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class PieceUtil {
+
+    private static ArrayList<types> GenBag = new ArrayList<>();
 
     public enum types {
         O(Pieces.OPiece),
@@ -15,8 +21,16 @@ public class PieceUtil {
 
         public Piece getPiece() { return obj; }
 
+        private static types out;
         public static types randomtype()  {
-            return values()[(int) (Math.random() * (values().length - 1))];
+            if(GenBag.isEmpty()) {
+                GenBag = new ArrayList<>(List.of(types.values()));
+                GenBag.remove(empty);
+                Collections.shuffle(GenBag);
+            }
+            out = GenBag.get(0);
+            GenBag.remove(0);
+            return out;
         }
     }
 

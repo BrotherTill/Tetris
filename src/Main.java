@@ -21,15 +21,12 @@ public class Main extends JFrame {
 
     public static void main(String[] args) {
 
-        new Board(4);
+        new Board(7);
 
         EventQueue.invokeLater(() -> {
             JFrame ex = new Main();
             ex.setVisible(true);
         });
-
-        FallingPiece fali = new FallingPiece(0,0,-1);
-        PieceUtil.fieldtoString(fali.getPieceField());
 
     }
 

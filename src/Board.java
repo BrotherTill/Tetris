@@ -107,10 +107,7 @@ public class Board implements ActionListener {
         return false;
     }
 
-    private static int intr = 0;
-
     private static void placePiece() {
-        System.out.println(intr++);
         Block[][] pieceField = fallingPiece.getPieceField();
         for(int y=0; y < pieceField.length; y++) {
             for(int x=0; x < pieceField[0].length; x++) {
