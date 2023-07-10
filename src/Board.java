@@ -131,7 +131,9 @@ public class Board implements ActionListener {
 
     private static void clear_line(int line) {
         for (int y = line; y > 0; y--) {
-            field[y + fieldExtra] = field[y + fieldExtra - 1];
+            for(int i=0; i < fieldWidth; i++) {
+                field[y + fieldExtra][i].setFilled(field[y + fieldExtra - 1][i].isFilled());
+            }
         }
     }
 
