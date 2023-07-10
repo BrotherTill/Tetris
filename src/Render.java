@@ -4,6 +4,8 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.Duration;
+import java.time.Instant;
 
 public class Render extends JPanel implements ActionListener{
 
@@ -22,11 +24,17 @@ public class Render extends JPanel implements ActionListener{
     private static final int blockPadding = Board.getBlockPadding();
     private static final int totalBlockHeight = Board.getTotalBlockHeight();
     private static final int totalBlockWidth = Board.getTotalBlockWidth();
-    private int frameHeight;
-    private int frameWidth;
+    private final int frameHeight;
+    private final int frameWidth;
 
     private static final int fieldHeight = Board.getFieldHeight();
     private static final int fieldWidth = Board.getFieldWidth();
+
+    private static long GameOverOpacity = 0;
+    private static final float GameOverAlpha = 218;
+    private static final float fadeDuration = 1000L;
+    private static Duration deltaTime = Duration.ZERO;
+    private static Instant beginTime = Instant.now();
 
     private FallingPiece fallingPiece;
 
@@ -46,18 +54,34 @@ public class Render extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         repaint();
+        deltaTime = Duration.between(beginTime, Instant.now());
+        beginTime = Instant.now();
     }
 
     @Override
     public void paintComponent(Graphics g) {
         //System.out.println("Starting paint");
-
         //super.paint(g);
-
         drawScreen(g);
+
+        if(Board.GameOver) {
+            drawGameOver(g);
+        }
+    }
+    public void drawGameOver(Graphics g) {
+        g.setColor(new Color(14, 14, 14, (int) GameOverOpacity));
+        g.fillRect(0, 0, frameWidth, frameHeight);
+        if(GameOverOpacity <= GameOverAlpha) {
+            GameOverOpacity += (GameOverAlpha / fadeDuration) * (float) deltaTime.toMillis();
+            return;
+        }
+        g.setColor(new Color(203, 5, 5));
+        g.setFont(Text_font);
+        g.drawString("GameOver", (frameWidth / 2) - (Font_metrics.stringWidth("GameOver") / 2), (frameHeight / 2) - (Font_metrics.getHeight() / 2) - blockPadding);
+        g.drawString("Score: " + String.valueOf(Scoring.getScore()), (frameWidth / 2) - (Font_metrics.stringWidth("Score: " + String.valueOf(Scoring.getScore())) / 2), (frameHeight / 2) + (Font_metrics.getHeight() / 2) + blockPadding);
+        renderCaller.stop();
     }
 
-    
     public void drawScreen(Graphics g) {
         fallingPiece = Board.getFallingPiece();
         int nextLength = fallingPiece.getNextLength();

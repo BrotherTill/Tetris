@@ -33,6 +33,8 @@ public class Board implements ActionListener {
     private static PieceUtil.types holdSlot2 = PieceUtil.types.empty;
     private static boolean hold2Used = false;
 
+    public static boolean GameOver = false;
+
     public Board(int queueGenLength) {
         fallingPiece = new FallingPiece(queueGenLength);
         for(int i = 0; i < fieldHeight + fieldExtra; i++) {
@@ -76,6 +78,9 @@ public class Board implements ActionListener {
             placePiece();
             checkLines();
             generateNewPiece();
+            if(collide(0,0)) {
+                GameOver();
+            }
         }
         return out;
     }
@@ -144,11 +149,16 @@ public class Board implements ActionListener {
         hold2Used = false;
     }
 
+    public static void GameOver() {
+        GameOver = true;
+        fallCaller.stop();
+    }
+
     public static void Pause() {
         if(fallCaller.isRunning()) {
             fallCaller.stop();
         } else {
-            fallCaller.restart();
+            fallCaller.start();
         }
     }
 
