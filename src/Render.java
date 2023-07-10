@@ -77,8 +77,9 @@ public class Render extends JPanel implements ActionListener{
         }
         g.setColor(new Color(203, 5, 5));
         g.setFont(Text_font);
-        g.drawString("GameOver", (frameWidth / 2) - (Font_metrics.stringWidth("GameOver") / 2), (frameHeight / 2) - (Font_metrics.getHeight() / 2) - blockPadding);
-        g.drawString("Score: " + String.valueOf(Scoring.getScore()), (frameWidth / 2) - (Font_metrics.stringWidth("Score: " + String.valueOf(Scoring.getScore())) / 2), (frameHeight / 2) + (Font_metrics.getHeight() / 2) + blockPadding);
+        g.drawString("GameOver", (frameWidth / 2) - (Font_metrics.stringWidth("GameOver") / 2), (frameHeight / 2) - (frameHeight / 5) - blockPadding);
+        g.drawString("Level: " + Scoring.getScore(), (frameWidth / 2) - (Font_metrics.stringWidth("Level: " + Scoring.getScore()) / 2), (frameHeight / 2) - (Font_metrics.getHeight() / 2) + blockPadding);
+        g.drawString("Score: " + Scoring.getScore(), (frameWidth / 2) - (Font_metrics.stringWidth("Score: " + Scoring.getScore()) / 2), (frameHeight / 2) + (Font_metrics.getHeight() / 2) + blockPadding);
         renderCaller.stop();
     }
 

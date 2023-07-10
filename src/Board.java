@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -20,13 +22,19 @@ public class Board implements ActionListener {
     private static int frameHeight;
     private static int frameWidth;
 
-    private static final int fallCallRate = 50;
-    private static final int fallRate = 1000;
+    private static final int fallCallDividor = 20;
+    private static int fallRate = 1000;
     static Timer fallCaller;
     private static boolean softFall = false;
+    private static int softFallRate = 50;
     private static int fallCounter = 0;
 
+    private static Duration deltaTime = Duration.ZERO;
+    private static Duration elapsedTime = Duration.ZERO;
+    private static Instant beginTime = Instant.now();
+
     private static FallingPiece fallingPiece;
+    private static int queueGenLength;
 
     private static PieceUtil.types holdSlot1 = PieceUtil.types.empty;
     private static boolean hold1Used = false;
@@ -34,9 +42,11 @@ public class Board implements ActionListener {
     private static boolean hold2Used = false;
 
     public static boolean GameOver = false;
+    public static boolean GameWon = false;
 
     public Board(int queueGenLength) {
-        fallingPiece = new FallingPiece(queueGenLength);
+        Board.queueGenLength = queueGenLength;
+        fallingPiece = new FallingPiece(Board.queueGenLength);
         for(int i = 0; i < fieldHeight + fieldExtra; i++) {
             for(int j = 0; j < fieldWidth ; j++) {
                 field[i][j] = new Block();
@@ -48,25 +58,52 @@ public class Board implements ActionListener {
             Pieces.fullLine[i] = new Block(true);
         }
 
-        fallCaller = new Timer(fallCallRate, this);
+        Scoring.resetScore();
+
+        fallCaller = new Timer(fallRate / fallCallDividor, this);
+        fallCaller.start();
+    }
+
+    public static void resetField() {
+        fallCaller.stop();
+        fallingPiece = new FallingPiece(queueGenLength);
+        holdSlot1 = PieceUtil.types.empty;
+        holdSlot2 = PieceUtil.types.empty;
+        generateNewPiece();
+        for(int i = 0; i < fieldHeight + fieldExtra; i++) {
+            for(int j = 0; j < fieldWidth ; j++) {
+                field[i][j] = new Block();
+            }
+        }
+
+        Scoring.resetScore();
+        try {
+            Thread.sleep(1000);
+        } catch(InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         fallCaller.start();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         //System.out.println("action Performing");
+        elapsedTime = elapsedTime.plus(deltaTime);
         if(softFall) {
-            pieceFall();
-            fallCounter = 0;
+            if(elapsedTime.toMillis() >= softFallRate) {
+                pieceFall();
+                elapsedTime = Duration.ZERO;
+            }
             return;
         }
-        if(fallCounter == fallRate / fallCallRate) {
+        if(elapsedTime.toMillis() >= fallRate) {
             pieceFall();
-            fallCounter = 0;
-        } else {
-            fallCounter++;
+            elapsedTime = Duration.ZERO;
         }
 
+        fallCaller.setDelay(fallRate / fallCallDividor);
+        deltaTime = Duration.between(beginTime, Instant.now());
+        beginTime = Instant.now();
     }
 
     private static boolean pieceFall() {
@@ -125,6 +162,7 @@ public class Board implements ActionListener {
             if(y + i + fieldExtra < fieldHeight + fieldExtra) {
                 //System.out.println(Arrays.toString(Game_field[y + i + 20]));
                 if (Arrays.equals(field[y + i + fieldExtra], Pieces.fullLine)) {
+                    Scoring.sendLine();
                     clear_line(y + i);
                 }
             }
@@ -148,6 +186,11 @@ public class Board implements ActionListener {
 
     public static void GameOver() {
         GameOver = true;
+        fallCaller.stop();
+    }
+
+    public static void GameWin() {
+        GameWon = true;
         fallCaller.stop();
     }
 
@@ -246,6 +289,10 @@ public class Board implements ActionListener {
     }
     public static void stopSoftDrop() {
         softFall = false;
+    }
+
+    public static void setFallRate(int fallRate) {
+        Board.fallRate = fallRate;
     }
 
     public static FallingPiece getFallingPiece() {

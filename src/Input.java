@@ -6,9 +6,13 @@ public class Input extends KeyAdapter {
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
-        switch (key) {case KeyEvent.VK_ESCAPE:
+        switch (key) {
+            case KeyEvent.VK_ESCAPE:
             case KeyEvent.VK_F1:
                 Board.Pause();
+                break;
+            case KeyEvent.VK_F2:
+                Board.GameWin();
                 break;
             case KeyEvent.VK_SHIFT:
             case KeyEvent.VK_LESS:
