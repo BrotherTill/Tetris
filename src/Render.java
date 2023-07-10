@@ -4,15 +4,24 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 
 public class Render extends JPanel implements ActionListener{
 
-    private final Font Text_font = new Font("Roboto", Font.PLAIN, 30);
-    private final FontMetrics Font_metrics = getFontMetrics(Text_font);
-    private final int HOLD_width = Font_metrics.stringWidth("HOLD");
-    private final int NEXT_width = Font_metrics.stringWidth("NEXT");
+    //private final Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts\\custom_font.ttf")).deriveFont(30f);
+    private static Font textFont;                  // = new Font("MinecraftRegular", Font.PLAIN, 30);
+    private static Font textBigFont;               // = new Font("MinecraftRegular", Font.PLAIN, 45);
+    private static FontMetrics fontMetrics;        // = getFontMetrics(textFont);
+    private static FontMetrics bigFontMetrics;     // = getFontMetrics(textBigFont);
+    private static int holdWidth;            // = fontMetrics.stringWidth("HOLD");
+    private static int nextWidth;            // = fontMetrics.stringWidth("NEXT");
+    private static int overWidth;            // = bigFontMetrics.stringWidth("Game Over!");
+    private static int winWidth;             // = bigFontMetrics.stringWidth("You Win!");
+    private static int fontHeight;
+    private static int bigFontHeight;
     private final Color Background = Color.DARK_GRAY;
     private final Color Primary = Color.WHITE;
 
@@ -41,6 +50,7 @@ public class Render extends JPanel implements ActionListener{
     public Render() {
         frameWidth = totalBlockWidth * 10 + totalBlockWidth * 14;
         frameHeight = totalBlockHeight * 20 + totalBlockHeight * 2;
+        initFont();
 
         setFocusable(true);
         setPreferredSize(new Dimension(frameWidth, frameHeight));
@@ -49,6 +59,26 @@ public class Render extends JPanel implements ActionListener{
 
         renderCaller = new Timer(1000 / frameRate, this);
         renderCaller.start();
+    }
+
+    private void initFont() {
+        try {
+            textFont = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts\\Minecraft.otf")).deriveFont(1, 30f);
+            textBigFont = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts\\Minecraft.otf")).deriveFont(1, 45f);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(textFont);
+            ge.registerFont(textBigFont);
+        } catch (IOException | FontFormatException e) {
+            System.out.println(e);
+        }
+        fontMetrics = getFontMetrics(textFont);
+        bigFontMetrics = getFontMetrics(textBigFont);
+        fontHeight = fontMetrics.getHeight();
+        bigFontHeight = bigFontMetrics.getHeight();
+        holdWidth = fontMetrics.stringWidth("HOLD");
+        nextWidth = fontMetrics.stringWidth("NEXT");
+        overWidth = bigFontMetrics.stringWidth("Game Over");
+        winWidth = bigFontMetrics.stringWidth("You Win!");
     }
 
     @Override
@@ -67,6 +97,9 @@ public class Render extends JPanel implements ActionListener{
         if(Board.GameOver) {
             drawGameOver(g);
         }
+        if(Board.GameWon) {
+            drawGameWon(g);
+        }
     }
     public void drawGameOver(Graphics g) {
         g.setColor(new Color(14, 14, 14, (int) GameOverOpacity));
@@ -76,10 +109,24 @@ public class Render extends JPanel implements ActionListener{
             return;
         }
         g.setColor(new Color(203, 5, 5));
-        g.setFont(Text_font);
-        g.drawString("GameOver", (frameWidth / 2) - (Font_metrics.stringWidth("GameOver") / 2), (frameHeight / 2) - (frameHeight / 5) - blockPadding);
-        g.drawString("Level: " + Scoring.getScore(), (frameWidth / 2) - (Font_metrics.stringWidth("Level: " + Scoring.getScore()) / 2), (frameHeight / 2) - (Font_metrics.getHeight() / 2) + blockPadding);
-        g.drawString("Score: " + Scoring.getScore(), (frameWidth / 2) - (Font_metrics.stringWidth("Score: " + Scoring.getScore()) / 2), (frameHeight / 2) + (Font_metrics.getHeight() / 2) + blockPadding);
+        g.setFont(textBigFont);
+        g.drawString("GameOver!", (frameWidth / 2) - (overWidth / 2), (frameHeight / 2) - (frameHeight / 5) - blockPadding);
+        g.setFont(textFont);
+        g.drawString("Level: " + Scoring.getScore(), (frameWidth / 2) - (Render.fontMetrics.stringWidth("Level: " + Scoring.getScore()) / 2), (frameHeight / 2) - (fontHeight / 2) + blockPadding);
+        g.drawString("Score: " + Scoring.getScore(), (frameWidth / 2) - (Render.fontMetrics.stringWidth("Score: " + Scoring.getScore()) / 2), (frameHeight / 2) + (fontHeight / 2) + blockPadding);
+        renderCaller.stop();
+    }
+
+    public void drawGameWon(Graphics g) {
+        g.setColor(new Color(14, 14, 14, (int) GameOverOpacity));
+        g.fillRect(0, 0, frameWidth, frameHeight);
+        if(GameOverOpacity <= GameOverAlpha) {
+            GameOverOpacity += (GameOverAlpha / fadeDuration) * (float) deltaTime.toMillis();
+            return;
+        }
+        g.setColor(new Color(81, 220, 11));
+        g.setFont(textBigFont);
+        g.drawString("You Win!", (frameWidth / 2) - (winWidth / 2), (frameHeight / 2) - (bigFontHeight / 2));
         renderCaller.stop();
     }
 
@@ -106,10 +153,10 @@ public class Render extends JPanel implements ActionListener{
         g.fillRect(totalBlockWidth * 18 - blockPadding, (8 + (nextLength * 3)) * totalBlockHeight + blockPadding, totalBlockWidth * 6 - blockWidth, (13 - (nextLength * 3)) * totalBlockHeight);
 
         g.setColor(Background);
-        g.setFont(Text_font);
-        g.drawString("HOLD",(totalBlockWidth) + (totalBlockWidth * 5 / 2) - (HOLD_width / 2), blockHeight - blockPadding);
-        g.drawString("HOLD",(totalBlockWidth * 18) + (totalBlockWidth * 5 / 2) - (HOLD_width / 2), blockHeight - blockPadding);
-        g.drawString("NEXT",(totalBlockWidth * 18) + (totalBlockWidth * 5 / 2) - (NEXT_width / 2),totalBlockHeight * 7 - blockPadding * 3);
+        g.setFont(textFont);
+        g.drawString("HOLD",(totalBlockWidth) + (totalBlockWidth * 5 / 2) - (holdWidth / 2), blockHeight - blockPadding);
+        g.drawString("HOLD",(totalBlockWidth * 18) + (totalBlockWidth * 5 / 2) - (holdWidth / 2), blockHeight - blockPadding);
+        g.drawString("NEXT",(totalBlockWidth * 18) + (totalBlockWidth * 5 / 2) - (nextWidth / 2),totalBlockHeight * 7 - blockPadding * 3);
 
         //
 
