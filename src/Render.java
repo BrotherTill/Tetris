@@ -1,10 +1,7 @@
+import javax.swing.*;
 import java.awt.*;
-
-import javax.swing.JPanel;
-import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
@@ -65,8 +62,8 @@ public class Render extends JPanel implements ActionListener{
 
     private void initFont() {
         try {
-            textFont = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts\\Minecraft.otf")).deriveFont(Font.BOLD, 30f);
-            textBigFont = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts\\Minecraft.otf")).deriveFont(Font.BOLD, 45f);
+            textFont = Font.createFont(Font.TRUETYPE_FONT, this.getClass().getResourceAsStream("Fonts/Minecraft.otf")).deriveFont(Font.BOLD, 30f);
+            textBigFont = Font.createFont(Font.TRUETYPE_FONT, this.getClass().getResourceAsStream("Fonts/Minecraft.otf")).deriveFont(Font.BOLD, 45f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(textFont);
             ge.registerFont(textBigFont);
