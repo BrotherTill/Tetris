@@ -13,11 +13,11 @@ public class Scoring {
             case 4: score += 800 * level;    break;
         }
         if(Scoring.lines >= level * 5) {
-            nextLevel();
-            Board.resetField();
-            if(level == 16) {
+            if(level == 15) {
                 Board.GameWin();
             }
+            nextLevel();
+            Board.resetField();
         }
     }
 
