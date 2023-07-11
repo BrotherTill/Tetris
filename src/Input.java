@@ -59,7 +59,9 @@ public class Input extends KeyAdapter {
     @Override
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
-        if(key == KeyEvent.VK_DOWN) {
+        switch (key) {
+            case KeyEvent.VK_DOWN:
+            case KeyEvent.VK_NUMPAD2:
             Board.stopSoftDrop();
         }
     }

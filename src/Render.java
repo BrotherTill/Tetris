@@ -50,8 +50,8 @@ public class Render extends JPanel implements ActionListener{
     private FallingPiece fallingPiece;
 
     public Render() {
-        frameWidth = totalBlockWidth * 10 + totalBlockWidth * 14;
-        frameHeight = totalBlockHeight * 20 + totalBlockHeight * 2;
+        frameWidth = totalBlockWidth * fieldWidth + totalBlockWidth * 14;
+        frameHeight = totalBlockHeight * fieldHeight + totalBlockHeight * 2;
         initFont();
 
         setFocusable(true);
@@ -116,7 +116,7 @@ public class Render extends JPanel implements ActionListener{
         g.setFont(textBigFont);
         g.drawString("GameOver!", (frameWidth / 2) - (overWidth / 2), (frameHeight / 2) - (frameHeight / 5) - blockPadding);
         g.setFont(textFont);
-        g.drawString("Level: " + Scoring.getScore(), (frameWidth / 2) - (Render.fontMetrics.stringWidth("Level: " + Scoring.getScore()) / 2), (frameHeight / 2) - (fontHeight / 2) + blockPadding);
+        g.drawString("Level: " + Scoring.getLevel(), (frameWidth / 2) - (Render.fontMetrics.stringWidth("Level: " + Scoring.getLevel()) / 2), (frameHeight / 2) - (fontHeight / 2) + blockPadding);
         g.drawString("Score: " + Scoring.getScore(), (frameWidth / 2) - (Render.fontMetrics.stringWidth("Score: " + Scoring.getScore()) / 2), (frameHeight / 2) + (fontHeight / 2) + blockPadding);
         renderCaller.stop();
     }

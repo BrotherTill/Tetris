@@ -1,10 +1,9 @@
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
-import java.util.Set;
 
 public class Board implements ActionListener {
 
