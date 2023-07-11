@@ -20,6 +20,8 @@ public class Render extends JPanel implements ActionListener{
     private static int nextWidth;            // = fontMetrics.stringWidth("NEXT");
     private static int overWidth;            // = bigFontMetrics.stringWidth("Game Over!");
     private static int winWidth;             // = bigFontMetrics.stringWidth("You Win!");
+    private static int scoreWidth;             // = bigFontMetrics.stringWidth("Score:");
+    private static int linesWidth;             // = bigFontMetrics.stringWidth("lines:");
     private static int fontHeight;
     private static int bigFontHeight;
     private final Color Background = Color.DARK_GRAY;
@@ -79,6 +81,8 @@ public class Render extends JPanel implements ActionListener{
         nextWidth = fontMetrics.stringWidth("NEXT");
         overWidth = bigFontMetrics.stringWidth("Game Over");
         winWidth = bigFontMetrics.stringWidth("You Win!");
+        scoreWidth = bigFontMetrics.stringWidth("SCORE:");
+        linesWidth = fontMetrics.stringWidth("lines:");
     }
 
     @Override
@@ -156,7 +160,14 @@ public class Render extends JPanel implements ActionListener{
         g.setFont(textFont);
         g.drawString("HOLD",(totalBlockWidth) + (totalBlockWidth * 5 / 2) - (holdWidth / 2), blockHeight - blockPadding);
         g.drawString("HOLD",(totalBlockWidth * 18) + (totalBlockWidth * 5 / 2) - (holdWidth / 2), blockHeight - blockPadding);
-        g.drawString("NEXT",(totalBlockWidth * 18) + (totalBlockWidth * 5 / 2) - (nextWidth / 2),totalBlockHeight * 7 - blockPadding * 3);
+        g.drawString("NEXT",(totalBlockWidth * 18) + (totalBlockWidth * 5 / 2) - (nextWidth / 2),totalBlockHeight * 8 - blockPadding * 3);
+        g.drawString("lines:",(totalBlockWidth) + (totalBlockWidth * 5 / 2) - (linesWidth / 2),totalBlockHeight * 16 - blockPadding * 3);
+        g.setFont(textBigFont);
+        g.drawString("LEVEL " + Scoring.getLevel(),(totalBlockWidth) + (totalBlockWidth * 5 / 2) - (bigFontMetrics.stringWidth("LEVEL " + Scoring.getLevel()) / 2),totalBlockHeight * 9 - blockPadding * 3);
+        g.drawString("SCORE:",(totalBlockWidth) + (totalBlockWidth * 5 / 2) - (scoreWidth / 2),totalBlockHeight * 12 - blockPadding * 3);
+        g.drawString(String.valueOf(Scoring.getScore()),(totalBlockWidth) + (totalBlockWidth * 5 / 2) - (bigFontMetrics.stringWidth(String.valueOf(Scoring.getScore())) / 2),(int) (totalBlockHeight * 13.5 - blockPadding * 3));
+        g.setFont(textFont);
+        g.drawString(String.valueOf(Scoring.getLines()),(totalBlockWidth) + (totalBlockWidth * 5 / 2) - (fontMetrics.stringWidth(String.valueOf(Scoring.getLines())) / 2),totalBlockHeight * 17 - blockPadding * 3);
 
         //
 

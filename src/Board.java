@@ -70,17 +70,20 @@ public class Board implements ActionListener {
         holdSlot1 = PieceUtil.types.empty;
         holdSlot2 = PieceUtil.types.empty;
         generateNewPiece();
+
+        //Scoring.resetScore();
+        for(int i=0; i < fieldHeight; i++) {
+            clear_line(fieldHeight - 1);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
         for(int i = 0; i < fieldHeight + fieldExtra; i++) {
             for(int j = 0; j < fieldWidth ; j++) {
                 field[i][j] = new Block();
             }
-        }
-
-        Scoring.resetScore();
-        try {
-            Thread.sleep(1000);
-        } catch(InterruptedException e) {
-            throw new RuntimeException(e);
         }
         fallCaller.start();
     }
@@ -91,14 +94,22 @@ public class Board implements ActionListener {
         elapsedTime = elapsedTime.plus(deltaTime);
         if(softFall) {
             if(elapsedTime.toMillis() >= softFallRate) {
-                pieceFall();
+                if(pieceFall()) {
+                    Scoring.sendSoftDrop(fallCounter);
+                    fallCounter = 0;
+                } else {
+                    fallCounter++;
+                }
                 elapsedTime = Duration.ZERO;
             }
-            return;
-        }
-        if(elapsedTime.toMillis() >= fallRate) {
-            pieceFall();
-            elapsedTime = Duration.ZERO;
+        } else {
+            if (elapsedTime.toMillis() >= fallRate) {
+                if (pieceFall()) {
+                    Scoring.sendSoftDrop(fallCounter);
+                    fallCounter = 0;
+                }
+                elapsedTime = Duration.ZERO;
+            }
         }
 
         fallCaller.setDelay(fallRate / fallCallDividor);
@@ -156,16 +167,20 @@ public class Board implements ActionListener {
     }
 
     private static void checkLines() {
+        int lines = 0;
         int length = fallingPiece.getPieceField().length;
         int y = fallingPiece.getY();
         for(int i=0; i < length; i++) {
             if(y + i + fieldExtra < fieldHeight + fieldExtra) {
                 //System.out.println(Arrays.toString(Game_field[y + i + 20]));
                 if (Arrays.equals(field[y + i + fieldExtra], Pieces.fullLine)) {
-                    Scoring.sendLine();
+                    lines++;
                     clear_line(y + i);
                 }
             }
+        }
+        if(lines != 0) {
+            Scoring.sendLines(lines);
         }
     }
 
@@ -251,6 +266,7 @@ public class Board implements ActionListener {
         public void run() {
             for (int i = 0; i < 50; i++) {
                 if (pieceFall()) {
+                    Scoring.sendHardDrop(i + 1);
                     return;
                 }
                 try {
@@ -292,6 +308,7 @@ public class Board implements ActionListener {
     }
 
     public static void setFallRate(int fallRate) {
+        System.out.println(fallRate);
         Board.fallRate = fallRate;
     }
 
