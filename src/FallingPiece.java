@@ -72,7 +72,7 @@ public class FallingPiece {
         for(int i=0; i < (nextLength - 1); i++) {
             nextTypes[i] = nextTypes[i + 1];
         }
-        nextTypes[nextLength - 1] = PieceUtil.types.randomtype();
+        nextTypes[nextLength - 1] = PieceUtil.types.randomType();
 
         setStartPos();
         return type;
@@ -81,9 +81,9 @@ public class FallingPiece {
     private void initPiece(int queueGenLength) {
         nextLength = queueGenLength;
         nextTypes = new PieceUtil.types[nextLength];
-        type = PieceUtil.types.randomtype();
+        type = PieceUtil.types.randomType();
         for(int i=0; i < nextLength; i++) {
-            nextTypes[i] = PieceUtil.types.randomtype();
+            nextTypes[i] = PieceUtil.types.randomType();
         }
         setStartPos();
     }
@@ -112,7 +112,6 @@ public class FallingPiece {
     }
 
     public Block[][] getPieceFieldbyIndex(int index) {
-        Block[][] out;
         if(index == 0) {
             return PieceUtil.rotate(type.getPiece().getField(), rotation);
         } else {

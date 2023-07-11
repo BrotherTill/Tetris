@@ -65,13 +65,13 @@ public class Render extends JPanel implements ActionListener{
 
     private void initFont() {
         try {
-            textFont = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts\\Minecraft.otf")).deriveFont(1, 30f);
-            textBigFont = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts\\Minecraft.otf")).deriveFont(1, 45f);
+            textFont = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts\\Minecraft.otf")).deriveFont(Font.BOLD, 30f);
+            textBigFont = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts\\Minecraft.otf")).deriveFont(Font.BOLD, 45f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(textFont);
             ge.registerFont(textBigFont);
         } catch (IOException | FontFormatException e) {
-            System.out.println(e);
+            throw new RuntimeException(e);
         }
         fontMetrics = getFontMetrics(textFont);
         bigFontMetrics = getFontMetrics(textBigFont);

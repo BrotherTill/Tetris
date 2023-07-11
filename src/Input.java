@@ -7,52 +7,25 @@ public class Input extends KeyAdapter {
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
         switch (key) {
-            case KeyEvent.VK_ESCAPE:
-            case KeyEvent.VK_F1:
-                Board.Pause();
-                break;
-            case KeyEvent.VK_F2:
-                Board.GameWin();
-                break;
-            case KeyEvent.VK_SHIFT:
-            case KeyEvent.VK_LESS:
-            case KeyEvent.VK_NUMPAD0:
-                Board.Hold1();
-                break;
-            case KeyEvent.VK_C:
-            case KeyEvent.VK_DECIMAL:
-                Board.Hold2();
-                break;
-            case KeyEvent.VK_Z:
-            case KeyEvent.VK_Y:
-            case KeyEvent.CTRL_DOWN_MASK:
-            case KeyEvent.VK_NUMPAD3:
-            case KeyEvent.VK_NUMPAD7:
-                Board.rotateCCW();
-                break;
-            case KeyEvent.VK_X:
-            case KeyEvent.VK_UP:
-            case KeyEvent.VK_NUMPAD1:
-            case KeyEvent.VK_NUMPAD5:
-            case KeyEvent.VK_NUMPAD9:
-                Board.rotateCW();
-                break;
-            case KeyEvent.VK_SPACE:
-            case KeyEvent.VK_NUMPAD8:
-                Board.HardDrop();
-                break;
-            case KeyEvent.VK_DOWN:
-            case KeyEvent.VK_NUMPAD2:
-                Board.startSoftDrop();
-                break;
-            case KeyEvent.VK_LEFT:
-            case KeyEvent.VK_NUMPAD4:
-                Board.MoveLeft();
-                break;
-            case KeyEvent.VK_RIGHT:
-            case KeyEvent.VK_NUMPAD6:
-                Board.MoveRight();
-                break;
+            case KeyEvent.VK_ESCAPE, KeyEvent.VK_F1
+                    -> Board.Pause();
+            case KeyEvent.VK_F2
+                    -> Board.GameWin();
+            case KeyEvent.VK_SHIFT, KeyEvent.VK_LESS, KeyEvent.VK_NUMPAD0
+                    -> Board.Hold1();
+            case KeyEvent.VK_C, KeyEvent.VK_DECIMAL -> Board.Hold2();
+            case KeyEvent.VK_Z, KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK, KeyEvent.VK_NUMPAD3, KeyEvent.VK_NUMPAD7
+                    -> Board.rotateCCW();
+            case KeyEvent.VK_X, KeyEvent.VK_UP, KeyEvent.VK_NUMPAD1, KeyEvent.VK_NUMPAD5, KeyEvent.VK_NUMPAD9
+                    -> Board.rotateCW();
+            case KeyEvent.VK_SPACE, KeyEvent.VK_NUMPAD8
+                    -> Board.HardDrop();
+            case KeyEvent.VK_DOWN, KeyEvent.VK_NUMPAD2
+                    -> Board.startSoftDrop();
+            case KeyEvent.VK_LEFT, KeyEvent.VK_NUMPAD4
+                    -> Board.MoveLeft();
+            case KeyEvent.VK_RIGHT, KeyEvent.VK_NUMPAD6
+                    -> Board.MoveRight();
         }
     }
 
@@ -60,9 +33,8 @@ public class Input extends KeyAdapter {
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
         switch (key) {
-            case KeyEvent.VK_DOWN:
-            case KeyEvent.VK_NUMPAD2:
-            Board.stopSoftDrop();
+            case KeyEvent.VK_DOWN, KeyEvent.VK_NUMPAD2
+                    -> Board.stopSoftDrop();
         }
     }
 

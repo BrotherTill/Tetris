@@ -2,11 +2,11 @@ public class Piece {
 
     private Block[][] pieceArray;
 
-    private int startX;
-    private int startY;
+    private final int startX;
+    private final int startY;
 
-    private float RxOffset;
-    private float RyOffset;
+    private final float RxOffset;
+    private final float RyOffset;
 
     private int startRotation;
 

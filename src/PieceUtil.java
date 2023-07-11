@@ -16,19 +16,18 @@ public class PieceUtil {
         T(Pieces.TPiece),
         empty(Pieces.EmptyPiece);
 
-        private types(Piece piece) { this.obj = piece; }
-        private Piece obj;
+        types(Piece piece) { this.obj = piece; }
+        private final Piece obj;
 
         public Piece getPiece() { return obj; }
 
-        private static types out;
-        public static types randomtype()  {
+        public static types randomType()  {
             if(GenBag.isEmpty()) {
                 GenBag = new ArrayList<>(List.of(types.values()));
                 GenBag.remove(empty);
                 Collections.shuffle(GenBag);
             }
-            out = GenBag.get(0);
+            types out = GenBag.get(0);
             GenBag.remove(0);
             return out;
         }
@@ -59,10 +58,12 @@ public class PieceUtil {
         for(int y=0; y < length; y++) {
             for(int x=0; x < length; x++) {
                 switch (Math.abs(rotation % 4)) {
-                    case 0: return piece;
-                    case 1: out[x][length - 1 - y]              = piece[y][x]; break;
-                    case 2: out[length - 1 - y][length - 1 - x] = piece[y][x]; break;
-                    case 3: out[length - 1 - x][y]              = piece[y][x]; break;
+                    case 0 -> {
+                        return piece;
+                    }
+                    case 1 -> out[x][length - 1 - y] = piece[y][x];
+                    case 2 -> out[length - 1 - y][length - 1 - x] = piece[y][x];
+                    case 3 -> out[length - 1 - x][y] = piece[y][x];
                 }
             }
         }

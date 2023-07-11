@@ -1,7 +1,7 @@
 public class Pieces {
 
-    private static Block filled = new Block(true);
-    private static Block empty = new Block(false);
+    private static final Block filled = new Block(true);
+    private static final Block empty = new Block(false);
 
     public static Block[] fullLine;
 

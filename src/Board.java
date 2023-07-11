@@ -18,14 +18,11 @@ public class Board implements ActionListener {
     private static final int fieldWidth = 10;
     private static Block[][] field = new Block[fieldHeight + fieldExtra][fieldWidth];
 
-    private static int frameHeight;
-    private static int frameWidth;
-
-    private static final int fallCallDividor = 20;
+    private static final int fallCallDivider = 20;
     private static int fallRate = 1000;
     static Timer fallCaller;
     private static boolean softFall = false;
-    private static int softFallRate = 50;
+    private static final int softFallRate = 50;
     private static int fallCounter = 0;
 
     private static Duration deltaTime = Duration.ZERO;
@@ -59,7 +56,7 @@ public class Board implements ActionListener {
 
         Scoring.resetScore();
 
-        fallCaller = new Timer(fallRate / fallCallDividor, this);
+        fallCaller = new Timer(fallRate / fallCallDivider, this);
         fallCaller.start();
     }
 
@@ -111,7 +108,7 @@ public class Board implements ActionListener {
             }
         }
 
-        fallCaller.setDelay(fallRate / fallCallDividor);
+        fallCaller.setDelay(fallRate / fallCallDivider);
         deltaTime = Duration.between(beginTime, Instant.now());
         beginTime = Instant.now();
     }
@@ -260,26 +257,21 @@ public class Board implements ActionListener {
         }
     }
 
-    private static final Runnable dropThread = new Runnable() {
-        @Override
-        public void run() {
-            for (int i = 0; i < 50; i++) {
-                if (pieceFall()) {
-                    Scoring.sendHardDrop(i + 1);
-                    return;
-                }
-                try {
-                    Thread.sleep(4);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+    private static final Runnable dropThread = () -> {
+        for (int i = 0; i < 50; i++) {
+            if (pieceFall()) {
+                Scoring.sendHardDrop(i + 1);
+                return;
             }
-            generateNewPiece();
-            System.out.println("failed Drop");
+            try {
+                Thread.sleep(4);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
+        generateNewPiece();
+        System.out.println("failed Drop");
     };
-
-    private static int ints = 0;
 
     public static void HardDrop() {
         Thread myThread = new Thread(dropThread);
