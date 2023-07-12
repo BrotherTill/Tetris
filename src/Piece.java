@@ -10,6 +10,13 @@ public class Piece {
 
     private int startRotation;
 
+    /**
+     * create a Piece with a Field in the pieceArray. Make sure that the number of rows matches the number of lines.
+     * the start Position Values are offsets for the 0 | 0 point(top left corner)
+     * The Render Offsets are for the next queue and are also offsets from the top-left corner
+     *
+     * @author me
+     */
     public Piece(Block[][] pieceArray, int startX, int startY, float RxOffset, float RyOffset) {
         this.pieceArray = pieceArray;
         this.startX = startX;
@@ -19,6 +26,13 @@ public class Piece {
         this.startRotation = 0;
     }
 
+    /**
+     * create a Piece with a Field in the pieceArray. Make sure that the number of rows matches the number of lines.
+     * the start Position Values are offsets for the 0 | 0 point(top left corner)
+     * The Render Offsets are for the next queue and are also offsets from the top-left corner
+     *
+     * @author me
+     */
     public Piece(Block[][] pieceArray, int startX, int startY, float RxOffset, float RyOffset, int startRotation) {
         this.pieceArray = pieceArray;
         this.startX = startX;
