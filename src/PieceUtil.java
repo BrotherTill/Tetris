@@ -6,7 +6,7 @@ public class PieceUtil {
 
     private static ArrayList<types> GenBag = new ArrayList<>();
 
-    public enum types {
+    public enum types {     //the types of pieces that exist(you can add you own)
         O(Pieces.OPiece),
         I(Pieces.IPiece),
         L(Pieces.LPiece),
@@ -14,14 +14,14 @@ public class PieceUtil {
         S(Pieces.SPiece),
         Z(Pieces.ZPiece),
         T(Pieces.TPiece),
-        empty(Pieces.EmptyPiece);
+        empty(Pieces.EmptyPiece);           //used for the Hold Slot
 
-        types(Piece piece) { this.obj = piece; }
+        types(Piece piece) { this.obj = piece; }        //store the corresponding Piece
         private final Piece obj;
 
         public Piece getPiece() { return obj; }
 
-        public static types randomType()  {
+        public static types randomType()  {     //generate a random Piece according to the Tetris Guidelines
             if(GenBag.isEmpty()) {
                 GenBag = new ArrayList<>(List.of(types.values()));
                 GenBag.remove(empty);
@@ -33,7 +33,7 @@ public class PieceUtil {
         }
     }
 
-    public static String fieldtoString(Block[][] inputArray) {
+    public static String fieldtoString(Block[][] inputArray) {      //used for debugging
         StringBuilder out = new StringBuilder();
         out.append("{");
         for(int y=0; y < inputArray[0].length; y++) {
@@ -51,7 +51,7 @@ public class PieceUtil {
         return out.toString();
     }
 
-    public static Block[][] rotate(Block[][] piece, int rotation) {
+    public static Block[][] rotate(Block[][] piece, int rotation) {         //rotate a Piece based on a rotation "index"
         int length = piece.length;
         Block[][] out = new Block[length][length];
 

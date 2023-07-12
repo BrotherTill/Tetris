@@ -9,7 +9,7 @@ public class Main extends JFrame {
 
     private void initUI() {
 
-        add(new Render());
+        add(new Render());              //add the Renderer to Frame
 
         setResizable(false);
         pack();
@@ -21,7 +21,7 @@ public class Main extends JFrame {
 
     public static void main(String[] args) {
 
-        new Board(7);
+        new Board(0);       //initialize The Game Board with a next queue Generation Length of 7(cannot be 0)
 
         EventQueue.invokeLater(() -> {
             JFrame ex = new Main();

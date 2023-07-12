@@ -8,7 +8,11 @@ import java.time.Instant;
 
 public class Render extends JPanel implements ActionListener{
 
-    //private final Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts\\custom_font.ttf")).deriveFont(30f);
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////************  All the Variables above the Code are modifiable to whatever you desire  *****************/////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //Font Variables cant be modified here, modify them in initFont()
     private static Font textFont;                  // = new Font("MinecraftRegular", Font.PLAIN, 30);
     private static Font textBigFont;               // = new Font("MinecraftRegular", Font.PLAIN, 45);
     private static FontMetrics fontMetrics;        // = getFontMetrics(textFont);
@@ -17,36 +21,38 @@ public class Render extends JPanel implements ActionListener{
     private static int nextWidth;            // = fontMetrics.stringWidth("NEXT");
     private static int overWidth;            // = bigFontMetrics.stringWidth("Game Over!");
     private static int winWidth;             // = bigFontMetrics.stringWidth("You Win!");
-    private static int scoreWidth;             // = bigFontMetrics.stringWidth("Score:");
-    private static int linesWidth;             // = bigFontMetrics.stringWidth("lines:");
+    private static int scoreWidth;             // = bigFontMetrics.stringWidth("SCORE:");
+    private static int linesWidth;             // = FontMetrics.stringWidth("lines:");
     private static int fontHeight;
     private static int bigFontHeight;
+
     private final Color Background = Color.DARK_GRAY;
     private final Color Primary = Color.WHITE;
 
     private final int frameRate = 165;
     Timer renderCaller;
 
+    //To modify these Variables goto Board
     private static final int blockHeight = Board.getBlockHeight();
     private static final int blockWidth = Board.getBlockWidth();
     private static final int blockPadding = Board.getBlockPadding();
     private static final int totalBlockHeight = Board.getTotalBlockHeight();
     private static final int totalBlockWidth = Board.getTotalBlockWidth();
-    private final int frameHeight;
-    private final int frameWidth;
+    private final int frameHeight;                  //Calculated from the Block height and padding
+    private final int frameWidth;                   //Calculated from the Block width and padding
 
     private static final int fieldHeight = Board.getFieldHeight();
     private static final int fieldWidth = Board.getFieldWidth();
 
-    private static long GameOverOpacity = 0;
-    private static final float GameOverAlpha = 218;
-    private static final float fadeDuration = 1000L;
-    private static Duration deltaTime = Duration.ZERO;
-    private static Instant beginTime = Instant.now();
+    private static long GameOverOpacity = 0;                //Used as a Counter to gradually fade ou the Board when the game ends(you can modify it if you want to change the start Opacity)
+    private static final float GameOverAlpha = 218;         //The final Value of the Opacity when the game ends in Alpha
+    private static final float fadeDuration = 1000L;        //The time to fade out the Board in Milliseconds
+    private static Duration deltaTime = Duration.ZERO;      //Just used to initialize
+    private static Instant beginTime = Instant.now();       //Just used to initialize
 
     private FallingPiece fallingPiece;
 
-    public Render() {
+    public Render() {           //initialize the Renderer
         frameWidth = totalBlockWidth * fieldWidth + totalBlockWidth * 14;
         frameHeight = totalBlockHeight * fieldHeight + totalBlockHeight * 2;
         initFont();
@@ -60,21 +66,21 @@ public class Render extends JPanel implements ActionListener{
         renderCaller.start();
     }
 
-    private void initFont() {
+    private void initFont() {           //initialize Font Variables (in own method because I read form a File)
         try {
-            textFont = Font.createFont(Font.TRUETYPE_FONT, this.getClass().getResourceAsStream("Fonts/Minecraft.otf")).deriveFont(Font.BOLD, 30f);
-            textBigFont = Font.createFont(Font.TRUETYPE_FONT, this.getClass().getResourceAsStream("Fonts/Minecraft.otf")).deriveFont(Font.BOLD, 45f);
+            textFont = Font.createFont(Font.TRUETYPE_FONT, this.getClass().getResourceAsStream("Fonts/Minecraft.otf")).deriveFont(Font.BOLD, blockHeight);                  //DON'T TOUCH THIS IS VERY FRAGILE CODE
+            textBigFont = Font.createFont(Font.TRUETYPE_FONT, this.getClass().getResourceAsStream("Fonts/Minecraft.otf")).deriveFont(Font.BOLD, blockHeight + 15f);    //I don't know why it's fragile
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(textFont);
+            ge.registerFont(textFont);                          //I think it adds it to a list of Fonts somewhere(from StackOverflow)
             ge.registerFont(textBigFont);
         } catch (IOException | FontFormatException e) {
-            throw new RuntimeException(e);
-        }
+            throw new RuntimeException(e);                      //catch exception if the File is missing
+        }                                                       //initialize other Font Variables(you can modify them if you want)
         fontMetrics = getFontMetrics(textFont);
         bigFontMetrics = getFontMetrics(textBigFont);
         fontHeight = fontMetrics.getHeight();
         bigFontHeight = bigFontMetrics.getHeight();
-        holdWidth = fontMetrics.stringWidth("HOLD");
+        holdWidth = fontMetrics.stringWidth("HOLD");            //you need to change these text width Variables if you change the Text displayed
         nextWidth = fontMetrics.stringWidth("NEXT");
         overWidth = bigFontMetrics.stringWidth("Game Over");
         winWidth = bigFontMetrics.stringWidth("You Win!");
@@ -85,15 +91,14 @@ public class Render extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         repaint();
-        deltaTime = Duration.between(beginTime, Instant.now());
+        deltaTime = Duration.between(beginTime, Instant.now());         //deltaTime used so the Board fades out in the correct time(not used for FrameRate)
         beginTime = Instant.now();
     }
 
     @Override
     public void paintComponent(Graphics g) {
         //System.out.println("Starting paint");
-        //super.paint(g);
-        drawScreen(g);
+        drawScreen(g);          //draw the whole Board(Game Field, Score, Held pieces, and net queue)
 
         if(Board.GameOver) {
             drawGameOver(g);
@@ -102,14 +107,15 @@ public class Render extends JPanel implements ActionListener{
             drawGameWon(g);
         }
     }
+
     public void drawGameOver(Graphics g) {
         g.setColor(new Color(14, 14, 14, (int) GameOverOpacity));
         g.fillRect(0, 0, frameWidth, frameHeight);
-        if(GameOverOpacity <= GameOverAlpha) {
-            GameOverOpacity += (GameOverAlpha / fadeDuration) * (float) deltaTime.toMillis();
-            return;
+        if(GameOverOpacity <= GameOverAlpha) {              //increase the Opacity of the overlay depending on deltaTime
+            GameOverOpacity += (GameOverAlpha / fadeDuration) * (float) deltaTime.toMillis();       //make sure fadeDuration is consistent and correct
+            return;                                         //return to skip the rest of the code
         }
-        g.setColor(new Color(203, 5, 5));
+        g.setColor(new Color(203, 5, 5));           //Text color
         g.setFont(textBigFont);
         g.drawString("GameOver!", (frameWidth / 2) - (overWidth / 2), (frameHeight / 2) - (frameHeight / 5) - blockPadding);
         g.setFont(textFont);
@@ -117,15 +123,14 @@ public class Render extends JPanel implements ActionListener{
         g.drawString("Score: " + Scoring.getScore(), (frameWidth / 2) - (Render.fontMetrics.stringWidth("Score: " + Scoring.getScore()) / 2), (frameHeight / 2) + (fontHeight / 2) + blockPadding);
         renderCaller.stop();
     }
-
     public void drawGameWon(Graphics g) {
         g.setColor(new Color(14, 14, 14, (int) GameOverOpacity));
         g.fillRect(0, 0, frameWidth, frameHeight);
-        if(GameOverOpacity <= GameOverAlpha) {
-            GameOverOpacity += (GameOverAlpha / fadeDuration) * (float) deltaTime.toMillis();
-            return;
+        if(GameOverOpacity <= GameOverAlpha) {              //increase the Opacity of the overlay depending on deltaTime
+            GameOverOpacity += (GameOverAlpha / fadeDuration) * (float) deltaTime.toMillis();       //make sure fadeDuration is consistent and correct
+            return;                                         //return to skip the rest of the code
         }
-        g.setColor(new Color(81, 220, 11));
+        g.setColor(new Color(81, 220, 11));         //Text color
         g.setFont(textBigFont);
         g.drawString("You Win!", (frameWidth / 2) - (winWidth / 2), (frameHeight / 2) - (bigFontHeight / 2));
         renderCaller.stop();
@@ -133,12 +138,13 @@ public class Render extends JPanel implements ActionListener{
 
     public void drawScreen(Graphics g) {
         fallingPiece = Board.getFallingPiece();
-        int nextLength = fallingPiece.getNextLength();
+        int nextLength = fallingPiece.getNextLength();          //get the Next queue Length
         Piece tempPiece;
         
         g.setColor(Background);
         g.fillRect(0,0,frameWidth,frameHeight);
 
+        ///////////////////////// draw the borders of the Frame
         g.setColor(Primary);
         g.fillRect(0,0, frameWidth, blockHeight + blockPadding);
         g.fillRect(0,0, blockWidth + blockPadding, frameHeight);
@@ -148,16 +154,18 @@ public class Render extends JPanel implements ActionListener{
         g.fillRect(blockWidth + blockPadding, totalBlockHeight * 6 + blockPadding, totalBlockWidth * 6 - blockWidth, totalBlockHeight * 15);
         g.fillRect(totalBlockWidth * 17 + blockPadding, 0, blockWidth, frameHeight);
         g.fillRect(totalBlockWidth * 18 - blockPadding, totalBlockHeight * 6 + blockPadding, totalBlockWidth * 6 - blockWidth, blockHeight);
-        if(nextLength > (fieldHeight - 8) / 3) {
+        if(nextLength > (fieldHeight - 8) / 3) {            //make sure Next queue Length isn't above 4
             nextLength = (fieldHeight - 8) / 3;
         }
         g.fillRect(totalBlockWidth * 18 - blockPadding, (8 + (nextLength * 3)) * totalBlockHeight + blockPadding, totalBlockWidth * 6 - blockWidth, (13 - (nextLength * 3)) * totalBlockHeight);
 
+        //////////////////////Draw Text     !!Important when changing the Displayed Text make sure to change the width variables in initFont() too!!
         g.setColor(Background);
         g.setFont(textFont);
         g.drawString("HOLD",(totalBlockWidth) + (totalBlockWidth * 5 / 2) - (holdWidth / 2), blockHeight - blockPadding);
         g.drawString("HOLD",(totalBlockWidth * 18) + (totalBlockWidth * 5 / 2) - (holdWidth / 2), blockHeight - blockPadding);
-        g.drawString("NEXT",(totalBlockWidth * 18) + (totalBlockWidth * 5 / 2) - (nextWidth / 2),totalBlockHeight * 8 - blockPadding * 3);
+        g.drawString("NEXT",(totalBlockWidth * 18) + (totalBlockWidth * 5 / 2) - (nextWidth / 2),totalBlockHeight * 7 - blockPadding * 3);
+        //draw Stats
         g.drawString("lines:",(totalBlockWidth) + (totalBlockWidth * 5 / 2) - (linesWidth / 2),totalBlockHeight * 16 - blockPadding * 3);
         g.setFont(textBigFont);
         g.drawString("LEVEL " + Scoring.getLevel(),(totalBlockWidth) + (totalBlockWidth * 5 / 2) - (bigFontMetrics.stringWidth("LEVEL " + Scoring.getLevel()) / 2),totalBlockHeight * 9 - blockPadding * 3);
@@ -170,15 +178,16 @@ public class Render extends JPanel implements ActionListener{
 
         g.setColor(Primary);
 
-        drawField(Board.getField(), 7, -19, g);
+        drawField(Board.getField(), 7, -19, g);         //draw the Game Field in the middle
 
-        drawField(fallingPiece.getPieceField(), (7 + fallingPiece.getX()), (1 + fallingPiece.getY()), g);
+        drawField(fallingPiece.getPieceField(), (7 + fallingPiece.getX()), (1 + fallingPiece.getY()), g);       //draw the Falling Piece
 
-        for(int i=0; i < nextLength; i++) {
+        for(int i=0; i < nextLength; i++) {         //draw the Pieces in the Next queue
             tempPiece = fallingPiece.getNextTypes()[i].getPiece();
-            drawField(tempPiece.getField(), 18 + tempPiece.getRxOffset(), 6.5F + tempPiece.getRyOffset() + (i * 3), g);
+            drawField(tempPiece.getField(), 18 + tempPiece.getRxOffset(), 6.5F + tempPiece.getRyOffset() + (i * 3), g);         //you can change the y value to change the position
         }
 
+        ////////////////////draw the Held Pieces
         tempPiece = Board.getHoldSlot1().getPiece();
         drawField(tempPiece.getField(), 1 + tempPiece.getRxOffset(), 1 + tempPiece.getRyOffset(), g);
         tempPiece = Board.getHoldSlot2().getPiece();
@@ -196,21 +205,21 @@ public class Render extends JPanel implements ActionListener{
         }
     }
 
-    private void drawFieldBlock(Block[][] field, float x, float y, int rX, int rY, Graphics g) {
+    private void drawFieldBlock(Block[][] field, float x, float y, int rX, int rY, Graphics g) {            //draw the Block of a field and connect it with adjacent ones
         g.fillRect((int) ((x + rX) * totalBlockWidth + blockPadding),(int) ((y + rY) * totalBlockHeight + blockPadding), blockWidth, blockHeight);
 
-        if(rX != field[0].length - 1) {
-            if(field[rY][rX + 1].isFilled()) {
+        if(rX != field[0].length - 1) {             //make sure it's not out of bounds
+            if(field[rY][rX + 1].isFilled()) {      //connect with the Block to the right
                 g.fillRect((int) ((x + rX + 1) * totalBlockWidth - blockPadding), (int) ((y + rY) * totalBlockHeight + blockPadding), blockPadding * 2, blockHeight);
             }
         }
-        if(rY != field.length - 1) {
-            if(field[rY + 1][rX].isFilled()) {
+        if(rY != field.length - 1) {                //make sure it's not out of bounds
+            if(field[rY + 1][rX].isFilled()) {      //connect with the Block below
                 g.fillRect((int) ((x + rX) * totalBlockWidth + blockPadding), (int) ((y + rY + 1) * totalBlockHeight - blockPadding), blockWidth, blockPadding * 2);
             }
         }
-        if(rX != field[0].length - 1 && rY != field.length - 1) {
-            if(     field[rY + 1][rX + 1].isFilled() &&
+        if(rX != field[0].length - 1 && rY != field.length - 1) {           //make sure it's not out of bounds
+            if(     field[rY + 1][rX + 1].isFilled() &&                     //connect with the block to the down-right diagonal
                     field[rY][rX + 1].isFilled() &&
                     field[rY + 1][rX].isFilled()) {
                 g.fillRect((int) ((x + rX + 1) * totalBlockWidth -blockPadding), (int) ((y + rY + 1) * totalBlockHeight - blockPadding), blockPadding * 2, blockPadding * 2);
