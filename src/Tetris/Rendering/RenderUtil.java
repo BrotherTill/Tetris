@@ -1,6 +1,7 @@
 package Tetris.Rendering;
 
-import Tetris.Logic.Board;
+import Tetris.Game.Board;
+import Tetris.Pieces.Piece;
 
 import java.awt.*;
 import java.io.IOException;
@@ -29,14 +30,17 @@ public class RenderUtil {
     public static int headerFontHeight;
 
     public static final Color Background = Color.DARK_GRAY;
+    public static final Color SELECTION = Color.LIGHT_GRAY;
     public static final Color Primary = Color.WHITE;
 
     //To modify these Variables goto Tetris.Logic.Board
-    public static final int blockHeight = Board.getBlockHeight();
-    public static final int totalBlockHeight = Board.getTotalBlockHeight();
-    public static final int totalBlockWidth = Board.getTotalBlockWidth();
-    private static final int fieldHeight = Board.getFieldHeight();
-    private static final int fieldWidth = Board.getFieldWidth();
+    public static final int fieldHeight = Board.getFieldHeight();
+    public static final int fieldWidth = Board.getFieldWidth();
+    public static final int blockHeight = 30;
+    public static final int blockWidth = 30;
+    public static final int blockPadding = 1;
+    public static final int totalBlockHeight = blockHeight + blockPadding*2;
+    public static final int totalBlockWidth = blockWidth + blockPadding*2;
     public static int frameHeight;                  //Calculated from the Tetris.Pieces.Block height and padding
     public static int frameWidth;                   //Calculated from the Tetris.Pieces.Block width and padding
 
@@ -70,9 +74,19 @@ public class RenderUtil {
     }
 
     public enum ScreenState {
-        TitleScreen,
-        Menu,
-        Game,
-        TryAgain;
+        TitleScreen(0 ,0),
+        Menu(3, 2),
+        Game(0, 0),
+        TryAgain(2, 0);
+
+        ScreenState(int maxXSelection, int maxYSelection) {
+            this.maxXSelection = maxXSelection;
+            this.maxYSelection = maxXSelection;
+        }
+        private final int maxXSelection;
+        private final int maxYSelection;
+
+        public int getMaxXSelection() { return maxXSelection; }
+        public int getMaxYSelection() { return maxYSelection; }
     }
 }

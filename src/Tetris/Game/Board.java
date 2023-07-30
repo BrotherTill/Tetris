@@ -1,12 +1,18 @@
-package Tetris.Logic;
+package Tetris.Game;
 
+import Tetris.Main;
 import Tetris.Pieces.Block;
 import Tetris.Pieces.FallingPiece;
 import Tetris.Pieces.PieceUtil;
 import Tetris.Pieces.Pieces;
+import Tetris.Rendering.MenuInput;
+import Tetris.Rendering.Menus;
+import Tetris.Rendering.Render;
+import Tetris.Rendering.RenderUtil;
 import Tetris.Scoring;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.Duration;
@@ -14,12 +20,6 @@ import java.time.Instant;
 import java.util.Arrays;
 
 public class Board implements ActionListener {
-
-    private static final int blockHeight = 30;
-    private static final int blockWidth = 30;
-    private static final int blockPadding = 1;
-    private static final int totalBlockHeight = blockHeight + blockPadding*2;
-    private static final int totalBlockWidth = blockWidth + blockPadding*2;
 
     private static final int fieldHeight = 20;
     private static final int fieldExtra = 20;
@@ -48,24 +48,34 @@ public class Board implements ActionListener {
     public static boolean GameOver = false;
     public static boolean GameWon = false;
 
-    public Board(int queueGenLength) {
-        Board.queueGenLength = queueGenLength;
-        fallingPiece = new FallingPiece(Board.queueGenLength);
+
+    public static void startGame() {
+        fallingPiece = new FallingPiece(queueGenLength);
+        holdSlot1 = PieceUtil.types.empty;
+        holdSlot2 = PieceUtil.types.empty;
+        generateNewPiece();
+        Scoring.resetScore();
+        Scoring.resetLevel();
         for(int i = 0; i < fieldHeight + fieldExtra; i++) {
             for(int j = 0; j < fieldWidth ; j++) {
                 field[i][j] = new Block();
             }
         }
+        GameOver = false;
+        GameWon = false;
+        Main.render.setCurrentListener(new GameInput());
+        fallCaller.start();
+    }
+
+    public Board(int queueGenLength) {
+        Board.queueGenLength = queueGenLength;
 
         Pieces.fullLine = new Block[fieldWidth];
         for(int i = 0; i < fieldWidth ; i++) {
             Pieces.fullLine[i] = new Block(true);
         }
 
-        Scoring.resetScore();
-
         fallCaller = new Timer(fallRate / fallCallDivider, this);
-        fallCaller.start();
     }
 
     public static void resetField() {
@@ -203,14 +213,28 @@ public class Board implements ActionListener {
         hold2Used = false;
     }
 
+    private static final Runnable endThread = () -> {
+        fallCaller.stop();
+        try {
+            Thread.sleep((long) (Render.fadeDuration + 2000));
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        Menus.switchScreen();
+        Render.Screen = RenderUtil.ScreenState.TryAgain;
+        Main.render.setCurrentListener(new MenuInput());
+    };
+
     public static void GameOver() {
         GameOver = true;
-        fallCaller.stop();
+        Thread mythread = new Thread(endThread);
+        mythread.start();
     }
 
     public static void GameWin() {
         GameWon = true;
-        fallCaller.stop();
+        Thread mythread = new Thread(endThread);
+        mythread.start();
     }
 
     public static void Pause() {
@@ -296,9 +320,6 @@ public class Board implements ActionListener {
             fallingPiece.addtoX(1);
         }
     }
-
-
-
     public static void startSoftDrop() {
         softFall = true;
     }
@@ -316,21 +337,6 @@ public class Board implements ActionListener {
     }
     public static Block[][] getField() {
         return field;
-    }
-    public static int getBlockHeight() {
-        return blockHeight;
-    }
-    public static int getBlockWidth() {
-        return blockWidth;
-    }
-    public static int getBlockPadding() {
-        return blockPadding;
-    }
-    public static int getTotalBlockHeight() {
-        return totalBlockHeight;
-    }
-    public static int getTotalBlockWidth() {
-        return totalBlockWidth;
     }
     public static int getFieldHeight() {
         return fieldHeight;

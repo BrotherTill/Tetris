@@ -3,7 +3,7 @@ package Tetris.Rendering;
 import java.awt.*;
 
 import Tetris.Pieces.Block;
-import Tetris.Logic.Board;
+import Tetris.Game.Board;
 import Tetris.Pieces.FallingPiece;
 import Tetris.Pieces.Piece;
 import Tetris.Scoring;
@@ -27,13 +27,13 @@ public class DrawGame {
     private static final Color Primary = RenderUtil.Primary;
 
     //To modify these Variables goto Tetris.Logic.Board
-    private static final int blockHeight = Board.getBlockHeight();
-    private static final int blockWidth = Board.getBlockWidth();
-    private static final int blockPadding = Board.getBlockPadding();
-    private static final int totalBlockHeight = Board.getTotalBlockHeight();
-    private static final int totalBlockWidth = Board.getTotalBlockWidth();
-    private static final int frameHeight = RenderUtil.frameHeight;                  //Calculated from the Tetris.Pieces.Block height and padding
-    private static final int frameWidth = RenderUtil.frameWidth;                    //Calculated from the Tetris.Pieces.Block width and padding
+    private static final int blockHeight = RenderUtil.blockHeight;
+    private static final int blockWidth = RenderUtil.blockWidth;
+    private static final int blockPadding = RenderUtil.blockPadding;
+    private static final int totalBlockHeight = RenderUtil.totalBlockHeight;
+    private static final int totalBlockWidth = RenderUtil.totalBlockWidth;
+    private static final int frameHeight = RenderUtil.frameHeight;                  //Calculated from the Block height and padding
+    private static final int frameWidth = RenderUtil.frameWidth;                    //Calculated from the Block width and padding
 
     private static final int fieldHeight = Board.getFieldHeight();
     private static final int fieldWidth = Board.getFieldWidth();

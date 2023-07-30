@@ -1,12 +1,12 @@
 package Tetris.Rendering;
 
-import Tetris.Input;
 import Tetris.Rendering.RenderUtil.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -26,16 +26,17 @@ public class Render extends JPanel implements ActionListener{
     public static final float GameOverAlpha = 218;         //The final Value of the Opacity when the game ends in Alpha
     public static final float fadeDuration = 1000L;        //The time to fade out the Tetris.Logic.Board in Milliseconds
 
-    public static ScreenState Screen = ScreenState.Game;
+    public static ScreenState Screen = ScreenState.TitleScreen;
+    public static KeyListener currentListener = new MenuInput();
 
 
     public Render() {           //initialize the Renderer
         RenderUtil.init();
 
+        addKeyListener(currentListener);
+
         setFocusable(true);
         setPreferredSize(new Dimension(RenderUtil.frameWidth, RenderUtil.frameHeight));
-
-        addKeyListener(new Input());
 
         renderCaller = new Timer(1000 / frameRate, this);
         renderCaller.start();
@@ -51,11 +52,17 @@ public class Render extends JPanel implements ActionListener{
     @Override
     public void paintComponent(Graphics g) {
         switch (Screen) {
-            case TitleScreen -> Menu.paintTitleScreen(g);
-            case Menu -> Menu.paintMenu(g);
+            case TitleScreen -> Menus.paintTitleScreen(g);
+            case Menu -> Menus.paintMenu(g);
             case Game -> DrawGame.paintGame(g);
-            case TryAgain -> Menu.paintTryAgain(g);
+            case TryAgain -> Menus.paintTryAgain(g);
         }
+    }
+
+    public void setCurrentListener(KeyListener newListener) {
+        removeKeyListener(currentListener);
+        currentListener = newListener;
+        addKeyListener(currentListener);
     }
 
 }

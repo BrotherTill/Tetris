@@ -1,12 +1,14 @@
 package Tetris;
 
-import Tetris.Logic.Board;
+import Tetris.Game.Board;
 import Tetris.Rendering.Render;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 import java.awt.*;
 
 public class Main extends JFrame {
+
+    public static Render render = new Render();
 
     public Main() {
         initUI();
@@ -14,7 +16,7 @@ public class Main extends JFrame {
 
     private void initUI() {
 
-        add(new Render());              //add the Renderer to Frame
+        add(render);              //add the Renderer to Frame
 
         setResizable(false);
         pack();

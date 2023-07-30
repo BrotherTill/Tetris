@@ -1,6 +1,6 @@
 package Tetris;
 
-import Tetris.Logic.Board;
+import Tetris.Game.Board;
 
 public class Scoring {
 
@@ -52,5 +52,9 @@ public class Scoring {
 
     public static void resetScore() {
         score = 0;
+    }
+
+    public static void resetLevel() {
+        level = 1;
     }
 }
