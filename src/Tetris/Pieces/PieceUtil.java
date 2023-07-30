@@ -1,3 +1,5 @@
+package Tetris.Pieces;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,12 +18,12 @@ public class PieceUtil {
         T(Pieces.TPiece),
         empty(Pieces.EmptyPiece);           //used for the Hold Slot
 
-        types(Piece piece) { this.obj = piece; }        //store the corresponding Piece
+        types(Piece piece) { this.obj = piece; }        //store the corresponding Tetris.Pieces.Piece
         private final Piece obj;
 
         public Piece getPiece() { return obj; }
 
-        public static types randomType()  {     //generate a random Piece according to the Tetris Guidelines
+        public static types randomType()  {     //generate a random Tetris.Pieces.Piece according to the Tetris Guidelines
             if(GenBag.isEmpty()) {
                 GenBag = new ArrayList<>(List.of(types.values()));
                 GenBag.remove(empty);
@@ -51,7 +53,7 @@ public class PieceUtil {
         return out.toString();
     }
 
-    public static Block[][] rotate(Block[][] piece, int rotation) {         //rotate a Piece based on a rotation "index"
+    public static Block[][] rotate(Block[][] piece, int rotation) {         //rotate a Tetris.Pieces.Piece based on a rotation "index"
         int length = piece.length;
         Block[][] out = new Block[length][length];
 

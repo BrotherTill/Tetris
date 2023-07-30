@@ -7,7 +7,7 @@
       </element>
       <element id="module-output" name="Tetris" />
       <element id="directory" name="Fonts">
-        <element id="dir-copy" path="$PROJECT_DIR$/src/Fonts" />
+        <element id="dir-copy" path="$PROJECT_DIR$/src/Tetris/Rendering/Fonts" />
       </element>
     </root>
   </artifact>

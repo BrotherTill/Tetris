@@ -1,3 +1,11 @@
+package Tetris.Logic;
+
+import Tetris.Pieces.Block;
+import Tetris.Pieces.FallingPiece;
+import Tetris.Pieces.PieceUtil;
+import Tetris.Pieces.Pieces;
+import Tetris.Scoring;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -67,7 +75,7 @@ public class Board implements ActionListener {
         holdSlot2 = PieceUtil.types.empty;
         generateNewPiece();
 
-        //Scoring.resetScore();
+        //Tetris.Scoring.resetScore();
         for(int i=0; i < fieldHeight; i++) {
             clear_line(fieldHeight - 1);
             try {

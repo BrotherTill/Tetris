@@ -1,3 +1,5 @@
+package Tetris.Pieces;
+
 public class FallingPiece {
 
     private int x;

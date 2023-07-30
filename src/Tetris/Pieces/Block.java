@@ -1,3 +1,5 @@
+package Tetris.Pieces;
+
 import java.util.Objects;
 
 public class Block {

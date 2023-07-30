@@ -1,13 +1,15 @@
+package Tetris.Pieces;
+
 public class Pieces {
 
-    private static final Block filled = new Block(true);        //used to make writing of Pieces easier
+    private static final Block filled = new Block(true);        //used to make writing of Tetris.Pieces.Tetris.Pieces easier
     private static final Block empty = new Block(false);
 
-    public static Block[] fullLine;         //initialized in Board
+    public static Block[] fullLine;         //initialized in Tetris.Logic.Board
 
     public static final Piece EmptyPiece = new Piece(new Block[0][0], 0, 0, 0, 0);
 
-    //add your own pieces to the pool(also add them to PieceUtil.types)
+    //add your own pieces to the pool(also add them to Tetris.Pieces.PieceUtil.types)
     public static final Piece OPiece = new Piece(new Block[][]{
             {filled, filled},
             {filled, filled}

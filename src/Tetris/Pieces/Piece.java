@@ -1,3 +1,5 @@
+package Tetris.Pieces;
+
 public class Piece {
 
     private Block[][] pieceArray;
@@ -11,9 +13,9 @@ public class Piece {
     private int startRotation;
 
     /**
-     * create a Piece with a Field in the pieceArray. Make sure that the number of rows matches the number of lines.
+     * create a Tetris.Pieces.Piece with a Field in the pieceArray. Make sure that the number of rows matches the number of lines.
      * the start Position Values are offsets for the 0 | 0 point(top left corner)
-     * The Render Offsets are for the next queue and are also offsets from the top-left corner
+     * The Tetris.Rendering.Render Offsets are for the next queue and are also offsets from the top-left corner
      *
      * @author me
      */
@@ -27,9 +29,9 @@ public class Piece {
     }
 
     /**
-     * create a Piece with a Field in the pieceArray. Make sure that the number of rows matches the number of lines.
+     * create a Tetris.Pieces.Piece with a Field in the pieceArray. Make sure that the number of rows matches the number of lines.
      * the start Position Values are offsets for the 0 | 0 point(top left corner)
-     * The Render Offsets are for the next queue and are also offsets from the top-left corner
+     * The Tetris.Rendering.Render Offsets are for the next queue and are also offsets from the top-left corner
      *
      * @author me
      */

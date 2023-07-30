@@ -1,3 +1,7 @@
+package Tetris;
+
+import Tetris.Logic.Board;
+
 public class Scoring {
 
     private static int score = 69;
