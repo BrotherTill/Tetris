@@ -5,6 +5,8 @@ import Tetris.Scoring;
 
 import java.awt.*;
 
+import static Tetris.Rendering.Render.deltaTime;
+
 public class Menus {
 
     private static Font textFont = RenderUtil.textFont;                         // = new Font("MinecraftRegular", Font.BOLD, 30);
@@ -31,6 +33,7 @@ public class Menus {
     private static final int frameWidth = RenderUtil.frameWidth;                    //Calculated from the Tetris.Pieces.Block width and padding
 
     public static int selection = 0;
+    public static long elapsedTime = 0;
 
     public static void switchScreen() {
         selection = 0;
@@ -47,8 +50,16 @@ public class Menus {
                         Board.startGame();
                     }
                     case 2 ->   System.out.println("Placeholder Level Select");
-                    case 3 ->   System.out.println("Placeholder Credits");
+                    case 3 ->   {
+                        switchScreen();
+                        Render.Screen = RenderUtil.ScreenState.Credits;
+                    }
+                    case 4 ->   System.exit(0);
                 }
+                break;
+            case Credits:
+                switchScreen();
+                Render.Screen = RenderUtil.ScreenState.Menu;
                 break;
             case TryAgain:
                 switch(selection) {
@@ -71,8 +82,6 @@ public class Menus {
         int TOTALBLOCKWidth = RenderUtil.totalBlockWidth * 3;
         int BLOCKPadding = RenderUtil.blockPadding * 3;
 
-        g.setColor(Background);
-        g.fillRect(0, 0, frameWidth, frameHeight);
         g.setColor(Primary);
         g.fillRect(0, 0, frameWidth, frameHeight);
 
@@ -85,28 +94,79 @@ public class Menus {
         g.fillRect((int) (frameWidth / 2 + TOTALBLOCKWidth * 0.5f - BLOCKPadding), (int) ((TOTALBLOCKHeight * 2.5f) - BLOCKHeight + BLOCKPadding ), BLOCKWidth, BLOCKHeight + BLOCKPadding);
 
         g.setFont(textBigFont);
-        g.drawString("Start Game", (frameWidth / 2) - (bigFontMetrics.stringWidth("Start Game") / 2), TOTALBLOCKHeight * 5);
-        g.drawString("Select Level", (frameWidth / 2) - (bigFontMetrics.stringWidth("Select Level") / 2), TOTALBLOCKHeight * 6);
-        g.drawString("Credits", (frameWidth / 2) - (bigFontMetrics.stringWidth("Credits") / 2), TOTALBLOCKHeight * 7);
+        g.drawString("Start Game", frameWidth / 2 - bigFontMetrics.stringWidth("Start Game") / 2, TOTALBLOCKHeight * 5);
+        g.drawString("Select Level", frameWidth / 2 - bigFontMetrics.stringWidth("Select Level") / 2, TOTALBLOCKHeight * 6);
+        g.drawString("Credits", frameWidth / 2 - bigFontMetrics.stringWidth("Credits") / 2, TOTALBLOCKHeight * 7);
+        g.setColor(Color.BLACK);
+        g.setFont(textFont);
+        g.drawString("Quit", frameWidth - BLOCKWidth - fontMetrics.stringWidth("Quit") / 2, TOTALBLOCKHeight * 7);
+        g.setFont(textBigFont);
 
         g.setColor(SELECTION);
         switch (selection) {
-            case 1 ->   g.drawString("Start Game", (frameWidth / 2) - (bigFontMetrics.stringWidth("Start Game") / 2), TOTALBLOCKHeight * 5);
-            case 2 ->   g.drawString("Select Level", (frameWidth / 2) - (bigFontMetrics.stringWidth("Select Level") / 2), TOTALBLOCKHeight * 6);
-            case 3 ->   g.drawString("Credits", (frameWidth / 2) - (bigFontMetrics.stringWidth("Credits") / 2), TOTALBLOCKHeight * 7);
+            case 1 ->   g.drawString("Start Game", frameWidth / 2 - bigFontMetrics.stringWidth("Start Game") / 2, TOTALBLOCKHeight * 5);
+            case 2 ->   g.drawString("Select Level", frameWidth / 2 - bigFontMetrics.stringWidth("Select Level") / 2, TOTALBLOCKHeight * 6);
+            case 3 ->   g.drawString("Credits", frameWidth / 2 - bigFontMetrics.stringWidth("Credits") / 2, TOTALBLOCKHeight * 7);
+            case 4 -> {
+                g.setColor(new Color(246, 46, 46, 255));
+                g.setFont(textFont);
+                g.drawString("Quit", frameWidth - BLOCKWidth - fontMetrics.stringWidth("Quit") / 2, TOTALBLOCKHeight * 7);
+            }
         }
     }
 
     public static void paintTitleScreen(Graphics g) {
+        int BLOCKHeight = RenderUtil.blockHeight * 4;
+        int BLOCKWidth = RenderUtil.blockWidth * 4;
+        int TOTALBLOCKHeight = RenderUtil.totalBlockHeight * 4;
+        int TOTALBLOCKWidth = RenderUtil.totalBlockWidth * 4;
+        int BLOCKPadding = RenderUtil.blockPadding * 4;
+
+        g.setColor(Primary);
+        g.fillRect(0, 0, frameWidth, frameHeight);
+
+        g.setColor(Background);
+
+        g.setFont(textHeaderFont);
+        g.drawString("Tetris", (frameWidth / 2) - headerFontMetrics.stringWidth("Tetris") / 2, TOTALBLOCKHeight);
+        g.setFont(textFont);
+        g.drawString("by Till", (frameWidth / 2) - fontMetrics.stringWidth("by Till") / 2, TOTALBLOCKHeight * 5);
+
+
+        g.fillRect((int) (frameWidth / 2 - TOTALBLOCKWidth * 1.5f - BLOCKPadding), (int) (TOTALBLOCKHeight * 2.5f), TOTALBLOCKWidth * 3 - (BLOCKPadding * 2), BLOCKHeight);
+        g.fillRect((int) (frameWidth / 2 + TOTALBLOCKWidth * 0.5f - BLOCKPadding), (int) ((TOTALBLOCKHeight * 2.5f) - BLOCKHeight + BLOCKPadding ), BLOCKWidth, BLOCKHeight + BLOCKPadding);
+
+        elapsedTime += deltaTime.toMillis();
+        if(elapsedTime <= 3000)
+            return;
         Render.Screen = RenderUtil.ScreenState.Menu;
+    }
+
+    public static void paintCredits(Graphics g) {
+        int BLOCKHeight = RenderUtil.blockHeight * 4;
+        int BLOCKWidth = RenderUtil.blockWidth * 4;
+        int TOTALBLOCKHeight = RenderUtil.totalBlockHeight * 4;
+        int TOTALBLOCKWidth = RenderUtil.totalBlockWidth * 4;
+        int BLOCKPadding = RenderUtil.blockPadding * 4;
+
+        g.setColor(Primary);
+        g.fillRect(0, 0, frameWidth, frameHeight);
+
+        g.setColor(Background);
+
+        g.setFont(textHeaderFont);
+        g.drawString("Tetris", (frameWidth / 2) - headerFontMetrics.stringWidth("Tetris") / 2, TOTALBLOCKHeight);
+        g.setFont(textFont);
+        g.drawString("by Till", (frameWidth / 2) - fontMetrics.stringWidth("by Till") / 2, TOTALBLOCKHeight * 5);
+
+        g.fillRect((int) (frameWidth / 2 - TOTALBLOCKWidth * 1.5f - BLOCKPadding), (int) (TOTALBLOCKHeight * 2.5f), TOTALBLOCKWidth * 3 - (BLOCKPadding * 2), BLOCKHeight);
+        g.fillRect((int) (frameWidth / 2 + TOTALBLOCKWidth * 0.5f - BLOCKPadding), (int) ((TOTALBLOCKHeight * 2.5f) - BLOCKHeight + BLOCKPadding ), BLOCKWidth, BLOCKHeight + BLOCKPadding);
     }
 
     public static void paintTryAgain(Graphics g) {
         int TOTALBLOCKHeight = RenderUtil.totalBlockHeight * 3;
         int TOTALBLOCKWidth = RenderUtil.totalBlockWidth * 3;
 
-        g.setColor(Background);
-        g.fillRect(0, 0, frameWidth, frameHeight);
         g.setColor(Primary);
         g.fillRect(0, 0, frameWidth, frameHeight);
 

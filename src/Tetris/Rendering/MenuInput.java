@@ -36,10 +36,10 @@ public class MenuInput extends KeyAdapter {
                     Menus.selection = maxXSelection;
                 break;
             case KeyEvent.VK_RIGHT, KeyEvent.VK_LEFT:
-                if(Menus.selection == maxXSelection + maxYSelection - 1) {
-                    Menus.selection = maxYSelection;
+                if(Menus.selection == maxXSelection + maxYSelection) {
+                    Menus.selection = maxXSelection;
                 } else {
-                    Menus.selection = maxXSelection + maxYSelection - 1;
+                    Menus.selection = maxXSelection + maxYSelection;
                 }
                 break;
             case KeyEvent.VK_ENTER, KeyEvent.VK_SPACE:

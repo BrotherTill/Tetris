@@ -75,13 +75,14 @@ public class RenderUtil {
 
     public enum ScreenState {
         TitleScreen(0 ,0),
-        Menu(3, 2),
+        Menu(3, 1),
+        Credits(0, 0),
         Game(0, 0),
         TryAgain(2, 0);
 
         ScreenState(int maxXSelection, int maxYSelection) {
             this.maxXSelection = maxXSelection;
-            this.maxYSelection = maxXSelection;
+            this.maxYSelection = maxYSelection;
         }
         private final int maxXSelection;
         private final int maxYSelection;
