@@ -1,10 +1,5 @@
 package Tetris.Game;
 
-import Tetris.Main;
-import Tetris.Rendering.MenuInput;
-import Tetris.Rendering.Render;
-import Tetris.Rendering.RenderUtil;
-
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.HashSet;
@@ -46,8 +41,6 @@ public class GameInput extends KeyAdapter {
                     -> Board.HardDrop();
             case KeyEvent.VK_DOWN, KeyEvent.VK_NUMPAD2
                     -> Board.startSoftDrop();
-            case KeyEvent.VK_U -> Render.Screen = RenderUtil.ScreenState.Menu;
-            case KeyEvent.VK_O -> Main.render.setCurrentListener(new MenuInput());
         }
     }
 

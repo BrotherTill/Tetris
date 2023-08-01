@@ -1,14 +1,12 @@
 package Tetris.Game;
 
 import Tetris.Main;
+import Tetris.Menus.Menus;
 import Tetris.Pieces.Block;
 import Tetris.Pieces.FallingPiece;
 import Tetris.Pieces.PieceUtil;
 import Tetris.Pieces.Pieces;
-import Tetris.Rendering.MenuInput;
-import Tetris.Rendering.Menus;
-import Tetris.Rendering.Render;
-import Tetris.Rendering.RenderUtil;
+import Tetris.Rendering.*;
 import Tetris.Scoring;
 
 import javax.swing.*;
@@ -63,6 +61,7 @@ public class Board implements ActionListener {
         GameOver = false;
         GameWon = false;
         Main.render.setCurrentListener(new GameInput());
+        Board.setFallRate((int) Math.round(1000 * (Math.pow(0.8d - ((level - 1d) * 0.007d), (level - 1d)))));
         fallCaller.start();
     }
 
@@ -219,9 +218,9 @@ public class Board implements ActionListener {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        Menus.switchScreen();
+        Menus.mainMenu.selection = 0;
         Render.Screen = RenderUtil.ScreenState.TryAgain;
-        Main.render.setCurrentListener(new MenuInput());
+        Main.render.setCurrentListener(new Input());
     };
 
     public static void GameOver() {

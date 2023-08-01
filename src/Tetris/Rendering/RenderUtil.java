@@ -1,7 +1,6 @@
 package Tetris.Rendering;
 
 import Tetris.Game.Board;
-import Tetris.Pieces.PieceUtil;
 
 import java.awt.*;
 import java.io.IOException;
@@ -44,8 +43,8 @@ public class RenderUtil {
     public static int frameHeight;                  //Calculated from the Tetris.Pieces.Block height and padding
     public static int frameWidth;                   //Calculated from the Tetris.Pieces.Block width and padding
 
-    private static final int LevelSelectionX = 3;
-    private static final int LevelSelectionY = 5;
+    public static final int LevelSelectionX = 3;
+    public static final int LevelSelectionY = 5;
     private static final int[][] LevelSelectionPage = new int[LevelSelectionY + 1][LevelSelectionX];
 
 
@@ -86,18 +85,11 @@ public class RenderUtil {
     }
 
     public enum ScreenState {
-        TitleScreen(new int[][]{{0}}),
-        Menu(new int[][]{{1, -1}, {2, -1}, {3, 4}}),
-        LevelSelect(LevelSelectionPage),
-        Credits(new int[][]{{0}}),
-        Game(new int[][]{{0}}),
-        TryAgain(new int[][]{{1}, {2}});
-
-        ScreenState(int[][] selection) {
-            this.selection = selection;
-        }
-        private final int[][] selection;
-
-        public int[][] getSelection() { return selection; }
+        TitleScreen,
+        Menu,
+        LevelSelect,
+        Credits,
+        Game,
+        TryAgain
     }
 }

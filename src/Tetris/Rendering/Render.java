@@ -27,7 +27,7 @@ public class Render extends JPanel implements ActionListener{
     public static final float fadeDuration = 1000L;        //The time to fade out the Tetris.Logic.Board in Milliseconds
 
     public static ScreenState Screen = ScreenState.TitleScreen;
-    public static KeyListener currentListener = new MenuInput();
+    public static KeyListener currentListener = new Input();
 
 
     public Render() {           //initialize the Renderer
@@ -51,14 +51,11 @@ public class Render extends JPanel implements ActionListener{
 
     @Override
     public void paintComponent(Graphics g) {
-        switch (Screen) {
-            case TitleScreen -> Menus.paintTitleScreen(g);
-            case Menu -> Menus.paintMenu(g);
-            case LevelSelect -> Menus.paintLevelSelect(g);
-            case Credits -> Menus.paintCredits(g);
-            case Game -> DrawGame.paintGame(g);
-            case TryAgain -> Menus.paintTryAgain(g);
+        if(Screen == ScreenState.Game) {
+            DrawGame.paintGame(g);
+            return;
         }
+        Tetris.Menus.Menus.getCurrent().paint(g);
     }
 
     public void setCurrentListener(KeyListener newListener) {
