@@ -1,10 +1,16 @@
-package Tetris.Game;
+package Tetris.Input;
+
+import Tetris.Game.Board;
+import Tetris.Main;
+import Tetris.Menus.Menus;
+import Tetris.Rendering.Render;
+import Tetris.Rendering.RenderUtil;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.HashSet;
 
-public class GameInput extends KeyAdapter {
+public class Game extends KeyAdapter {
 
     private final HashSet<Integer> heldKeys = new HashSet<>();
 
@@ -29,7 +35,7 @@ public class GameInput extends KeyAdapter {
         }
 
         switch (key) {
-            case KeyEvent.VK_ESCAPE, KeyEvent.VK_F1
+            case KeyEvent.VK_F1
                     -> Board.Pause();
             case KeyEvent.VK_F2
                     -> Board.GameWin();
@@ -41,6 +47,12 @@ public class GameInput extends KeyAdapter {
                     -> Board.HardDrop();
             case KeyEvent.VK_DOWN, KeyEvent.VK_NUMPAD2
                     -> Board.startSoftDrop();
+            case KeyEvent.VK_ESCAPE -> {
+                Board.stop();
+                Menus.mainMenu.selection = 0;
+                Render.Screen = RenderUtil.ScreenState.TryAgain;
+                Main.render.setCurrentListener(new Menu());
+            }
         }
     }
 

@@ -34,8 +34,10 @@ public class Menu {
 
     public int selection = 0;
 
-    public void performAction() {
+    public void selectionAction() {
     }
+
+    public void exitAction() {}
 
     public void paint(Graphics g) {
     }

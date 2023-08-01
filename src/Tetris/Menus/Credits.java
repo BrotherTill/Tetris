@@ -8,7 +8,12 @@ import java.awt.*;
 public class Credits extends Menu {
 
     @Override
-    public void performAction() {
+    public void selectionAction() {
+        Render.Screen = RenderUtil.ScreenState.Menu;
+    }
+
+    @Override
+    public void exitAction() {
         Render.Screen = RenderUtil.ScreenState.Menu;
     }
 

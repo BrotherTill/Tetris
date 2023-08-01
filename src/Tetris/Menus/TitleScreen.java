@@ -12,7 +12,12 @@ public class TitleScreen extends Menu {
     public static long elapsedTime = 0;
 
     @Override
-    public void performAction() {
+    public void selectionAction() {
+        Render.Screen = RenderUtil.ScreenState.Menu;
+    }
+
+    @Override
+    public void exitAction() {
         Render.Screen = RenderUtil.ScreenState.Menu;
     }
 

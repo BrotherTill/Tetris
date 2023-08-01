@@ -1,5 +1,8 @@
 package Tetris.Rendering;
 
+import Tetris.Input.Menu;
+import Tetris.Input.Mouse;
+import Tetris.Input.MouseHover;
 import Tetris.Rendering.RenderUtil.*;
 
 import javax.swing.*;
@@ -27,13 +30,15 @@ public class Render extends JPanel implements ActionListener{
     public static final float fadeDuration = 1000L;        //The time to fade out the Tetris.Logic.Board in Milliseconds
 
     public static ScreenState Screen = ScreenState.TitleScreen;
-    public static KeyListener currentListener = new Input();
+    public static KeyListener currentListener = new Menu();
 
 
     public Render() {           //initialize the Renderer
         RenderUtil.init();
 
         addKeyListener(currentListener);
+        addMouseMotionListener(new MouseHover());
+        addMouseListener(new Mouse());
 
         setFocusable(true);
         setPreferredSize(new Dimension(RenderUtil.frameWidth, RenderUtil.frameHeight));

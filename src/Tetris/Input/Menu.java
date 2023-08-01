@@ -1,20 +1,19 @@
-package Tetris.Rendering;
+package Tetris.Input;
 
-import Tetris.Menus.Menu;
 import Tetris.Menus.Menus;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.HashSet;
 
-public class Input extends KeyAdapter {
+public class Menu extends KeyAdapter {
 
     private final HashSet<Integer> heldKeys = new HashSet<>();
 
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
-        Menu menu = Menus.getCurrent();
+        Tetris.Menus.Menu menu = Menus.getCurrent();
 
         if(heldKeys.contains(key))
             return;
@@ -25,7 +24,8 @@ public class Input extends KeyAdapter {
             case KeyEvent.VK_UP -> menu.selection = menu.getSelectionId("up", menu.selection);
             case KeyEvent.VK_LEFT -> menu.selection = menu.getSelectionId("left", menu.selection);
             case KeyEvent.VK_RIGHT -> menu.selection = menu.getSelectionId("right", menu.selection);
-            case KeyEvent.VK_ENTER, KeyEvent.VK_SPACE -> menu.performAction();
+            case KeyEvent.VK_ENTER, KeyEvent.VK_SPACE -> menu.selectionAction();
+            case KeyEvent.VK_ESCAPE -> menu.exitAction();
         }
         System.out.println(menu.selection);
     }

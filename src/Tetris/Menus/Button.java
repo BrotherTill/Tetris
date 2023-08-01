@@ -13,14 +13,14 @@ public class Button {
     private final int x;
     private final int y;
 
-    public Button(String name, int selectID, int x, int y, int boundingBoxX1, int boundingBoxX2, int boundingBoxY1, int boundingBoxY2) {
+    public Button(String name, int selectID, int x, int y, int boundingBoxX1, int boundingBoxY1, int boundingBoxX2, int boundingBoxY2) {
         this.name = name;
         this.selectionID = selectID;
         this.x = x;
         this.y = y;
         this.boundingBoxX1 = boundingBoxX1;
-        this.boundingBoxX2 = boundingBoxX2;
         this.boundingBoxY1 = boundingBoxY1;
+        this.boundingBoxX2 = boundingBoxX2;
         this.boundingBoxY2 = boundingBoxY2;
     }
 

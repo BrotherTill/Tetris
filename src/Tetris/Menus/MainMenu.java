@@ -12,14 +12,28 @@ public class MainMenu extends Menu {
 
     @Override
     public void init() {
-        addBtn(new Button("Game", 1, 1, 1, 10, 20 ,10, 20));
-        addBtn(new Button("Levels", 2, 1, 2, 10, 20 ,10, 20));
-        addBtn(new Button("Credits", 3, 1, 3, 10, 20 ,10, 20));
-        addBtn(new Button("Quit", 4, 2, 3, 10, 20 ,10, 20));
+        int BLOCKHeight = blockHeight * 3;
+        int BLOCKWidth = blockWidth * 3;
+        int TOTALBLOCKHeight = totalBlockHeight * 3;
+        int TOTALBLOCKWidth = totalBlockWidth * 3;
+        int BLOCKPadding = blockPadding * 3;
+
+        addBtn(new Button("Game", 1, 1, 1, frameWidth / 2 - bigFontMetrics.stringWidth("Start Game") / 2 - bigFontHeight / 3,
+                TOTALBLOCKHeight * 5 - bigFontHeight,frameWidth / 2 + bigFontMetrics.stringWidth("Start Game") / 2 + bigFontHeight / 3,
+                TOTALBLOCKHeight * 5 + bigFontHeight / 3));
+        addBtn(new Button("Levels", 2, 1, 2, frameWidth / 2 - bigFontMetrics.stringWidth("Select Level") / 2 - bigFontHeight / 3,
+                TOTALBLOCKHeight * 6 - bigFontHeight,frameWidth / 2 + bigFontMetrics.stringWidth("Select Level") / 2 + bigFontHeight / 3,
+                TOTALBLOCKHeight * 6 + bigFontHeight / 3));
+        addBtn(new Button("Credits", 3, 1, 3, frameWidth / 2 - bigFontMetrics.stringWidth("Credits") / 2 - bigFontHeight / 3,
+                TOTALBLOCKHeight * 7 - bigFontHeight,frameWidth / 2 + bigFontMetrics.stringWidth("Credits") / 2 + bigFontHeight / 3,
+                TOTALBLOCKHeight * 7 + bigFontHeight / 3));
+        addBtn(new Button("Quit", 4, 2, 3, frameWidth - BLOCKWidth - fontMetrics.stringWidth("Quit") / 2 - fontHeight / 3,
+                TOTALBLOCKHeight * 7 - fontHeight,frameWidth - BLOCKWidth + fontMetrics.stringWidth("Quit") / 2 + fontHeight / 3,
+                TOTALBLOCKHeight * 7 + fontHeight / 3));
     }
 
     @Override
-    public void performAction() {
+    public void selectionAction() {
         switch (selection) {
             case 1 -> {
                 Render.Screen = RenderUtil.ScreenState.Game;
@@ -35,6 +49,11 @@ public class MainMenu extends Menu {
             }
             case 4 -> System.exit(0);
         }
+    }
+
+    @Override
+    public void exitAction() {
+        System.exit(0);
     }
 
     @Override

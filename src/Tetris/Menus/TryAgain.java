@@ -11,12 +11,18 @@ public class TryAgain extends Menu {
 
     @Override
     public void init() {
-        addBtn(new Button("Game", 1, 1, 1, 10, 20 ,10, 20));
-        addBtn(new Button("Menu", 2, 1, 2, 10, 20 ,10, 20));
+        int TOTALBLOCKHeight = totalBlockHeight * 3;
+
+        addBtn(new Button("Game", 1, 1, 1, (frameWidth / 2) - bigFontMetrics.stringWidth("Restart Game") / 2 - bigFontHeight / 3,
+                TOTALBLOCKHeight * 6 - bigFontHeight,(frameWidth / 2) + bigFontMetrics.stringWidth("Restart Game") / 2 + bigFontHeight / 3,
+                TOTALBLOCKHeight * 6 + bigFontHeight / 3));
+        addBtn(new Button("Menu", 2, 1, 2, (frameWidth / 2) - bigFontMetrics.stringWidth("Main Menu") / 2  - bigFontHeight / 3,
+                TOTALBLOCKHeight * 7 - bigFontHeight,(frameWidth / 2) + bigFontMetrics.stringWidth("Main Menu") / 2 + bigFontHeight / 3,
+                TOTALBLOCKHeight * 7 + bigFontHeight / 3));
     }
 
     @Override
-    public void performAction() {
+    public void selectionAction() {
         switch (selection) {
             case 1 -> {
                 Render.Screen = RenderUtil.ScreenState.Game;
@@ -30,9 +36,17 @@ public class TryAgain extends Menu {
     }
 
     @Override
+    public void exitAction() {
+        Render.Screen = RenderUtil.ScreenState.Menu;
+    }
+
+    @Override
     public void paint(Graphics g) {
+        int BLOCKHeight = blockHeight * 3;
+        int BLOCKWidth = blockWidth * 3;
         int TOTALBLOCKHeight = totalBlockHeight * 3;
         int TOTALBLOCKWidth = totalBlockWidth * 3;
+        int BLOCKPadding = blockPadding * 3;
 
         g.setColor(Primary);
         g.fillRect(0, 0, frameWidth, frameHeight);
@@ -44,9 +58,11 @@ public class TryAgain extends Menu {
 
         if(Board.GameOver) {
             g.drawString("Game Over", frameWidth / 2 - headerFontMetrics.stringWidth("Game Over") / 2, TOTALBLOCKHeight * 3);
-        }
-        if(Board.GameWon) {
+        } else if(Board.GameWon) {
             g.drawString("You Won!", frameWidth / 2 - headerFontMetrics.stringWidth("You Won!") / 2, TOTALBLOCKHeight * 3);
+        } else {
+            g.fillRect((int) (frameWidth / 2 - TOTALBLOCKWidth * 1.5f - BLOCKPadding), (int) (TOTALBLOCKHeight * 2.5f), TOTALBLOCKWidth * 3 - (BLOCKPadding * 2), BLOCKHeight);
+            g.fillRect((int) (frameWidth / 2 + TOTALBLOCKWidth * 0.5f - BLOCKPadding), (int) ((TOTALBLOCKHeight * 2.5f) - BLOCKHeight + BLOCKPadding ), BLOCKWidth, BLOCKHeight + BLOCKPadding);
         }
         g.setFont(textFont);
         g.drawString("Level: " + Scoring.getLevel(), frameWidth / 2 - TOTALBLOCKWidth - fontMetrics.stringWidth("Level: " + Scoring.getLevel()) / 2, TOTALBLOCKHeight * 4);
