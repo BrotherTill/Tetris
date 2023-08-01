@@ -11,7 +11,7 @@ import java.util.HashSet;
 
 public class GameInput extends KeyAdapter {
 
-    private HashSet<Integer> heldKeys = new HashSet<>();
+    private final HashSet<Integer> heldKeys = new HashSet<>();
 
     @Override
     public void keyPressed(KeyEvent e) {

@@ -54,6 +54,7 @@ public class Render extends JPanel implements ActionListener{
         switch (Screen) {
             case TitleScreen -> Menus.paintTitleScreen(g);
             case Menu -> Menus.paintMenu(g);
+            case LevelSelect -> Menus.paintLevelSelect(g);
             case Credits -> Menus.paintCredits(g);
             case Game -> DrawGame.paintGame(g);
             case TryAgain -> Menus.paintTryAgain(g);

@@ -12,7 +12,6 @@ import Tetris.Rendering.RenderUtil;
 import Tetris.Scoring;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.Duration;
@@ -24,7 +23,7 @@ public class Board implements ActionListener {
     private static final int fieldHeight = 20;
     private static final int fieldExtra = 20;
     private static final int fieldWidth = 10;
-    private static Block[][] field = new Block[fieldHeight + fieldExtra][fieldWidth];
+    private static final Block[][] field = new Block[fieldHeight + fieldExtra][fieldWidth];
 
     private static final int fallCallDivider = 20;
     private static int fallRate = 1000;
@@ -49,13 +48,13 @@ public class Board implements ActionListener {
     public static boolean GameWon = false;
 
 
-    public static void startGame() {
+    public static void startGame(int level) {
         fallingPiece = new FallingPiece(queueGenLength);
         holdSlot1 = PieceUtil.types.empty;
         holdSlot2 = PieceUtil.types.empty;
         generateNewPiece();
         Scoring.resetScore();
-        Scoring.resetLevel();
+        Scoring.setLevel(level);
         for(int i = 0; i < fieldHeight + fieldExtra; i++) {
             for(int j = 0; j < fieldWidth ; j++) {
                 field[i][j] = new Block();

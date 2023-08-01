@@ -5,19 +5,21 @@ import Tetris.Scoring;
 
 import java.awt.*;
 
+import static Tetris.Rendering.Render.Screen;
 import static Tetris.Rendering.Render.deltaTime;
+import static Tetris.Rendering.RenderUtil.ScreenState.LevelSelect;
 
 public class Menus {
 
-    private static Font textFont = RenderUtil.textFont;                         // = new Font("MinecraftRegular", Font.BOLD, 30);
-    private static Font textBigFont = RenderUtil.textBigFont;                   // = new Font("MinecraftRegular", Font.BOLD, 45);
-    private static Font textHeaderFont = RenderUtil.textHeaderFont;                   // = new Font("MinecraftRegular", Font.BOLD, 70);
-    private static FontMetrics fontMetrics = RenderUtil.fontMetrics;            // = getFontMetrics(textFont);
-    private static FontMetrics bigFontMetrics = RenderUtil.bigFontMetrics;      // = getFontMetrics(textBigFont);
-    private static FontMetrics headerFontMetrics = RenderUtil.headerFontMetrics;      // = getFontMetrics(textBigFont);
-    private static int fontHeight = RenderUtil.bigFontHeight;
-    private static int bigFontHeight = RenderUtil.bigFontHeight;
-    private static int headerFontHeight = RenderUtil.headerFontHeight;
+    private static final Font textFont = RenderUtil.textFont;                         // = new Font("MinecraftRegular", Font.BOLD, 30);
+    private static final Font textBigFont = RenderUtil.textBigFont;                   // = new Font("MinecraftRegular", Font.BOLD, 45);
+    private static final Font textHeaderFont = RenderUtil.textHeaderFont;                   // = new Font("MinecraftRegular", Font.BOLD, 70);
+    private static final FontMetrics fontMetrics = RenderUtil.fontMetrics;            // = getFontMetrics(textFont);
+    private static final FontMetrics bigFontMetrics = RenderUtil.bigFontMetrics;      // = getFontMetrics(textBigFont);
+    private static final FontMetrics headerFontMetrics = RenderUtil.headerFontMetrics;      // = getFontMetrics(textBigFont);
+    private static final int fontHeight = RenderUtil.bigFontHeight;
+    private static final int bigFontHeight = RenderUtil.bigFontHeight;
+    private static final int headerFontHeight = RenderUtil.headerFontHeight;
 
     private static final Color Background = RenderUtil.Background;
     private static final Color SELECTION = RenderUtil.SELECTION;
@@ -40,34 +42,47 @@ public class Menus {
     }
 
     public static void performSelection() {
-        switch(Render.Screen) {
+        switch (Render.Screen) {
             case TitleScreen:
-
+                Render.Screen = RenderUtil.ScreenState.Menu;
+                break;
             case Menu:
-                switch(selection) {
+                switch (selection) {
                     case 1 -> {
                         Render.Screen = RenderUtil.ScreenState.Game;
-                        Board.startGame();
+                        Board.startGame(1);
                     }
-                    case 2 ->   System.out.println("Placeholder Level Select");
-                    case 3 ->   {
+                    case 2 -> {
+                        switchScreen();
+                        Render.Screen = LevelSelect;
+                    }
+                    case 3 -> {
                         switchScreen();
                         Render.Screen = RenderUtil.ScreenState.Credits;
                     }
-                    case 4 ->   System.exit(0);
+                    case 4 -> System.exit(0);
+                }
+            break;
+            case LevelSelect:
+                if(selection != LevelSelect.getSelection()[0].length * LevelSelect.getSelection().length - 1) {
+                    Render.Screen = RenderUtil.ScreenState.Game;
+                    Board.startGame(selection);
+                } else {
+                    switchScreen();
+                    Render.Screen = RenderUtil.ScreenState.Menu;
                 }
                 break;
             case Credits:
                 switchScreen();
                 Render.Screen = RenderUtil.ScreenState.Menu;
-                break;
+            break;
             case TryAgain:
-                switch(selection) {
-                    case 1 ->   {
+                switch (selection) {
+                    case 1 -> {
                         Render.Screen = RenderUtil.ScreenState.Game;
-                        Board.startGame();
+                        Board.startGame(1);
                     }
-                    case 2 ->   {
+                    case 2 -> {
                         switchScreen();
                         Render.Screen = RenderUtil.ScreenState.Menu;
                     }
@@ -76,11 +91,11 @@ public class Menus {
     }
 
     public static void paintMenu(Graphics g) {
-        int BLOCKHeight = RenderUtil.blockHeight * 3;
-        int BLOCKWidth = RenderUtil.blockWidth * 3;
-        int TOTALBLOCKHeight = RenderUtil.totalBlockHeight * 3;
-        int TOTALBLOCKWidth = RenderUtil.totalBlockWidth * 3;
-        int BLOCKPadding = RenderUtil.blockPadding * 3;
+        int BLOCKHeight = blockHeight * 3;
+        int BLOCKWidth = blockWidth * 3;
+        int TOTALBLOCKHeight = totalBlockHeight * 3;
+        int TOTALBLOCKWidth = totalBlockWidth * 3;
+        int BLOCKPadding = blockPadding * 3;
 
         g.setColor(Primary);
         g.fillRect(0, 0, frameWidth, frameHeight);
@@ -115,12 +130,47 @@ public class Menus {
         }
     }
 
+    public static void paintLevelSelect(Graphics g) {
+        int BLOCKWidth = blockWidth * 3;
+        int TOTALBLOCKHeight = totalBlockHeight * 3;
+        int TOTALBLOCKWidth = totalBlockWidth * 3;
+
+        int MAXXSelection = LevelSelect.getSelection()[0].length;
+        int MAXYSelection = LevelSelect.getSelection().length - 1;
+
+        g.setColor(Primary);
+        g.fillRect(0, 0, frameWidth, frameHeight);
+
+        g.setColor(Background);
+
+        g.setFont(textHeaderFont);
+        g.drawString("Level Select", (frameWidth / 2) - (headerFontMetrics.stringWidth("Level Select") / 2), TOTALBLOCKHeight);
+
+        g.setFont(textBigFont);
+
+        for(int x=0; x <= MAXXSelection - 1; x++) {
+            for(int y=0; y <= MAXYSelection - 1; y++) {
+                g.setColor(Background);
+                int i = x * MAXYSelection + y + 1;
+                if(selection == i)
+                    g.setColor(SELECTION);
+                g.drawString(String.valueOf(i), (frameWidth - TOTALBLOCKWidth * 4) / (MAXXSelection - 1) * x + TOTALBLOCKWidth * 2 - bigFontMetrics.stringWidth(String.valueOf(i)), (frameHeight - TOTALBLOCKHeight * 3) / MAXYSelection * y + TOTALBLOCKHeight * 2);
+            }
+        }
+
+        g.setFont(textFont);
+        g.setColor(Color.BLACK);
+        if(selection == MAXXSelection * MAXYSelection + 1)
+            g.setColor(new Color(246, 46, 46, 255));
+        g.drawString("Main Menu", frameWidth - BLOCKWidth - fontMetrics.stringWidth("Main Menu") / 2, TOTALBLOCKHeight * 7);
+    }
+
     public static void paintTitleScreen(Graphics g) {
-        int BLOCKHeight = RenderUtil.blockHeight * 4;
-        int BLOCKWidth = RenderUtil.blockWidth * 4;
-        int TOTALBLOCKHeight = RenderUtil.totalBlockHeight * 4;
-        int TOTALBLOCKWidth = RenderUtil.totalBlockWidth * 4;
-        int BLOCKPadding = RenderUtil.blockPadding * 4;
+        int BLOCKHeight = blockHeight * 4;
+        int BLOCKWidth = blockWidth * 4;
+        int TOTALBLOCKHeight = totalBlockHeight * 4;
+        int TOTALBLOCKWidth = totalBlockWidth * 4;
+        int BLOCKPadding = blockPadding * 4;
 
         g.setColor(Primary);
         g.fillRect(0, 0, frameWidth, frameHeight);
@@ -143,11 +193,11 @@ public class Menus {
     }
 
     public static void paintCredits(Graphics g) {
-        int BLOCKHeight = RenderUtil.blockHeight * 4;
-        int BLOCKWidth = RenderUtil.blockWidth * 4;
-        int TOTALBLOCKHeight = RenderUtil.totalBlockHeight * 4;
-        int TOTALBLOCKWidth = RenderUtil.totalBlockWidth * 4;
-        int BLOCKPadding = RenderUtil.blockPadding * 4;
+        int BLOCKHeight = blockHeight * 4;
+        int BLOCKWidth = blockWidth * 4;
+        int TOTALBLOCKHeight = totalBlockHeight * 4;
+        int TOTALBLOCKWidth = totalBlockWidth * 4;
+        int BLOCKPadding = blockPadding * 4;
 
         g.setColor(Primary);
         g.fillRect(0, 0, frameWidth, frameHeight);
@@ -158,14 +208,15 @@ public class Menus {
         g.drawString("Tetris", (frameWidth / 2) - headerFontMetrics.stringWidth("Tetris") / 2, TOTALBLOCKHeight);
         g.setFont(textFont);
         g.drawString("by Till", (frameWidth / 2) - fontMetrics.stringWidth("by Till") / 2, TOTALBLOCKHeight * 5);
+        g.drawString("made with Java", (frameWidth / 2) - fontMetrics.stringWidth("made with Java") / 2, TOTALBLOCKHeight * 5 + fontHeight - BLOCKPadding * 3);
 
         g.fillRect((int) (frameWidth / 2 - TOTALBLOCKWidth * 1.5f - BLOCKPadding), (int) (TOTALBLOCKHeight * 2.5f), TOTALBLOCKWidth * 3 - (BLOCKPadding * 2), BLOCKHeight);
         g.fillRect((int) (frameWidth / 2 + TOTALBLOCKWidth * 0.5f - BLOCKPadding), (int) ((TOTALBLOCKHeight * 2.5f) - BLOCKHeight + BLOCKPadding ), BLOCKWidth, BLOCKHeight + BLOCKPadding);
     }
 
     public static void paintTryAgain(Graphics g) {
-        int TOTALBLOCKHeight = RenderUtil.totalBlockHeight * 3;
-        int TOTALBLOCKWidth = RenderUtil.totalBlockWidth * 3;
+        int TOTALBLOCKHeight = totalBlockHeight * 3;
+        int TOTALBLOCKWidth = totalBlockWidth * 3;
 
         g.setColor(Primary);
         g.fillRect(0, 0, frameWidth, frameHeight);

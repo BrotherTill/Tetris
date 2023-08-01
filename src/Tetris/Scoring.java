@@ -54,7 +54,7 @@ public class Scoring {
         score = 0;
     }
 
-    public static void resetLevel() {
-        level = 1;
+    public static void setLevel(int level) {
+        Scoring.level = level;
     }
 }

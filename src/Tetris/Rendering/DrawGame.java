@@ -10,18 +10,18 @@ import Tetris.Scoring;
 
 public class DrawGame {
 
-    private static Font textFont = RenderUtil.textFont;                         // = new Font("MinecraftRegular", Font.PLAIN, 30);
-    private static Font textBigFont = RenderUtil.textBigFont;                   // = new Font("MinecraftRegular", Font.PLAIN, 45);
-    private static FontMetrics fontMetrics = RenderUtil.fontMetrics;            // = getFontMetrics(textFont);
-    private static FontMetrics bigFontMetrics = RenderUtil.bigFontMetrics;      // = getFontMetrics(textBigFont);
-    private static int holdWidth = RenderUtil.holdWidth;                        // = fontMetrics.stringWidth("HOLD");
-    private static int nextWidth = RenderUtil.nextWidth;                        // = fontMetrics.stringWidth("NEXT");
-    private static int overWidth = RenderUtil.overWidth;                        // = bigFontMetrics.stringWidth("Game Over!");
-    private static int winWidth = RenderUtil.winWidth;                          // = bigFontMetrics.stringWidth("You Win!");
-    private static int scoreWidth = RenderUtil.scoreWidth;                      // = bigFontMetrics.stringWidth("SCORE:");
-    private static int linesWidth = RenderUtil.linesWidth;                      // = FontMetrics.stringWidth("lines:");
-    private static int fontHeight = RenderUtil.bigFontHeight;
-    private static int bigFontHeight = RenderUtil.bigFontHeight;
+    private static final Font textFont = RenderUtil.textFont;                         // = new Font("MinecraftRegular", Font.PLAIN, 30);
+    private static final Font textBigFont = RenderUtil.textBigFont;                   // = new Font("MinecraftRegular", Font.PLAIN, 45);
+    private static final FontMetrics fontMetrics = RenderUtil.fontMetrics;            // = getFontMetrics(textFont);
+    private static final FontMetrics bigFontMetrics = RenderUtil.bigFontMetrics;      // = getFontMetrics(textBigFont);
+    private static final int holdWidth = RenderUtil.holdWidth;                        // = fontMetrics.stringWidth("HOLD");
+    private static final int nextWidth = RenderUtil.nextWidth;                        // = fontMetrics.stringWidth("NEXT");
+    private static final int overWidth = RenderUtil.overWidth;                        // = bigFontMetrics.stringWidth("Game Over!");
+    private static final int winWidth = RenderUtil.winWidth;                          // = bigFontMetrics.stringWidth("You Win!");
+    private static final int scoreWidth = RenderUtil.scoreWidth;                      // = bigFontMetrics.stringWidth("SCORE:");
+    private static final int linesWidth = RenderUtil.linesWidth;                      // = FontMetrics.stringWidth("lines:");
+    private static final int fontHeight = RenderUtil.bigFontHeight;
+    private static final int bigFontHeight = RenderUtil.bigFontHeight;
 
     private static final Color Background = RenderUtil.Background;
     private static final Color Primary = RenderUtil.Primary;
@@ -60,7 +60,7 @@ public class DrawGame {
         g.setColor(new Color(14, 14, 14, (int) GameOverOpacity));
         g.fillRect(0, 0, frameWidth, frameHeight);
         if(GameOverOpacity <= GameOverAlpha) {              //increase the Opacity of the overlay depending on deltaTime
-            GameOverOpacity += (GameOverAlpha / fadeDuration) * (float) Render.deltaTime.toMillis();       //makes sure fadeDuration is consistent and correct
+            GameOverOpacity += (long) ((GameOverAlpha / fadeDuration) * (float) Render.deltaTime.toMillis());       //makes sure fadeDuration is consistent and correct
             return;                                         //return to skip the rest of the code
         }
         g.setColor(new Color(203, 5, 5));           //Text color
@@ -74,7 +74,7 @@ public class DrawGame {
         g.setColor(new Color(14, 14, 14, (int) GameOverOpacity));
         g.fillRect(0, 0, frameWidth, frameHeight);
         if(GameOverOpacity <= GameOverAlpha) {              //increase the Opacity of the overlay depending on deltaTime
-            GameOverOpacity += (GameOverAlpha / fadeDuration) * (float) Render.deltaTime.toMillis();       //makes sure fadeDuration is consistent and correct
+            GameOverOpacity += (long) ((GameOverAlpha / fadeDuration) * (float) Render.deltaTime.toMillis());       //makes sure fadeDuration is consistent and correct
             return;                                         //return to skip the rest of the code
         }
         g.setColor(new Color(81, 220, 11));         //Text color

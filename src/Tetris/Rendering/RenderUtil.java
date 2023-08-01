@@ -1,7 +1,7 @@
 package Tetris.Rendering;
 
 import Tetris.Game.Board;
-import Tetris.Pieces.Piece;
+import Tetris.Pieces.PieceUtil;
 
 import java.awt.*;
 import java.io.IOException;
@@ -44,8 +44,20 @@ public class RenderUtil {
     public static int frameHeight;                  //Calculated from the Tetris.Pieces.Block height and padding
     public static int frameWidth;                   //Calculated from the Tetris.Pieces.Block width and padding
 
+    private static final int LevelSelectionX = 3;
+    private static final int LevelSelectionY = 5;
+    private static final int[][] LevelSelectionPage = new int[LevelSelectionY + 1][LevelSelectionX];
+
 
     public static void init() {           //initialize Font Variables (in own method because I read form a File)
+        for(int x=0; x<LevelSelectionPage[0].length; x++){
+            for (int y=0; y<LevelSelectionPage.length; y++){
+                LevelSelectionPage[y][x] = -1;
+                if(x < LevelSelectionX && y < LevelSelectionY)
+                    LevelSelectionPage[y][x] = x * LevelSelectionY + y + 1;
+            }
+        }
+        LevelSelectionPage[LevelSelectionY][LevelSelectionX - 1] = LevelSelectionX * LevelSelectionY + 1;
         frameWidth = totalBlockWidth * fieldWidth + totalBlockWidth * 14;
         frameHeight = totalBlockHeight * fieldHeight + totalBlockHeight * 2;
         try {
@@ -74,20 +86,18 @@ public class RenderUtil {
     }
 
     public enum ScreenState {
-        TitleScreen(0 ,0),
-        Menu(3, 1),
-        Credits(0, 0),
-        Game(0, 0),
-        TryAgain(2, 0);
+        TitleScreen(new int[][]{{0}}),
+        Menu(new int[][]{{1, -1}, {2, -1}, {3, 4}}),
+        LevelSelect(LevelSelectionPage),
+        Credits(new int[][]{{0}}),
+        Game(new int[][]{{0}}),
+        TryAgain(new int[][]{{1}, {2}});
 
-        ScreenState(int maxXSelection, int maxYSelection) {
-            this.maxXSelection = maxXSelection;
-            this.maxYSelection = maxYSelection;
+        ScreenState(int[][] selection) {
+            this.selection = selection;
         }
-        private final int maxXSelection;
-        private final int maxYSelection;
+        private final int[][] selection;
 
-        public int getMaxXSelection() { return maxXSelection; }
-        public int getMaxYSelection() { return maxYSelection; }
+        public int[][] getSelection() { return selection; }
     }
 }
