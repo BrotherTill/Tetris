@@ -3,7 +3,7 @@ package Tetris.Game;
 import Tetris.Input.Game;
 import Tetris.Main;
 import Tetris.Input.Menu;
-import Tetris.Menus.Menus;
+import Tetris.Screens.Screens;
 import Tetris.Pieces.Block;
 import Tetris.Pieces.FallingPiece;
 import Tetris.Pieces.PieceUtil;
@@ -215,14 +215,14 @@ public class Board implements ActionListener {
 
     private static final Runnable endThread = () -> {
         fallCaller.stop();
+        Main.render.setCurrentListener(new Menu());
         try {
             Thread.sleep((long) (Render.fadeDuration + 2000));
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        Menus.mainMenu.selection = 0;
+        Screens.mainMenu.selection = 0;
         Render.Screen = RenderUtil.ScreenState.TryAgain;
-        Main.render.setCurrentListener(new Menu());
     };
 
     public static void stop() {

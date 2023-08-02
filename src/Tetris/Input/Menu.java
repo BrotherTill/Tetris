@@ -1,6 +1,7 @@
 package Tetris.Input;
 
-import Tetris.Menus.Menus;
+import Tetris.Screens.Screen;
+import Tetris.Screens.Screens;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -13,21 +14,20 @@ public class Menu extends KeyAdapter {
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
-        Tetris.Menus.Menu menu = Menus.getCurrent();
+        Screen screen = Screens.getCurrent();
 
-        if(heldKeys.contains(key))
+        if(heldKeys.contains(key) || screen == null)
             return;
         heldKeys.add(key);
 
         switch (key) {
-            case KeyEvent.VK_DOWN -> menu.selection = menu.getSelectionId("down", menu.selection);
-            case KeyEvent.VK_UP -> menu.selection = menu.getSelectionId("up", menu.selection);
-            case KeyEvent.VK_LEFT -> menu.selection = menu.getSelectionId("left", menu.selection);
-            case KeyEvent.VK_RIGHT -> menu.selection = menu.getSelectionId("right", menu.selection);
-            case KeyEvent.VK_ENTER, KeyEvent.VK_SPACE -> menu.selectionAction();
-            case KeyEvent.VK_ESCAPE -> menu.exitAction();
+            case KeyEvent.VK_DOWN -> screen.selection = screen.getSelectionId("down", screen.selection);
+            case KeyEvent.VK_UP -> screen.selection = screen.getSelectionId("up", screen.selection);
+            case KeyEvent.VK_LEFT -> screen.selection = screen.getSelectionId("left", screen.selection);
+            case KeyEvent.VK_RIGHT -> screen.selection = screen.getSelectionId("right", screen.selection);
+            case KeyEvent.VK_ENTER, KeyEvent.VK_SPACE -> screen.selectionAction();
+            case KeyEvent.VK_ESCAPE -> screen.exitAction();
         }
-        System.out.println(menu.selection);
     }
 
     @Override

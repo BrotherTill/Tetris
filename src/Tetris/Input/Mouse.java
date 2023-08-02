@@ -1,26 +1,25 @@
 package Tetris.Input;
 
-import Tetris.Game.Board;
-import Tetris.Main;
-import Tetris.Menus.Menus;
-import Tetris.Rendering.Render;
-import Tetris.Rendering.RenderUtil;
+import Tetris.Screens.Screen;
+import Tetris.Screens.Screens;
 
-import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Mouse extends MouseAdapter {
 
+    private int selection = 0;
+
     @Override
-    public void mouseClicked(MouseEvent e) {
-        if(Render.Screen == RenderUtil.ScreenState.Game) {
-            Board.stop();
-            Menus.mainMenu.selection = 0;
-            Render.Screen = RenderUtil.ScreenState.TryAgain;
-            Main.render.setCurrentListener(new Menu());
-        } else {
-            Menus.getCurrent().selectionAction();
-        }
+    public void mousePressed(MouseEvent e) {
+        selection = Screens.getCurrent().selection;
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        Screen screen = Screens.getCurrent();
+        if(selection == screen.selection)
+            screen.selectionAction();
     }
 
 }

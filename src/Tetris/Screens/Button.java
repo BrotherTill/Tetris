@@ -1,4 +1,4 @@
-package Tetris.Menus;
+package Tetris.Screens;
 
 public class Button {
 

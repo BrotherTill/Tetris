@@ -4,6 +4,7 @@ import Tetris.Input.Menu;
 import Tetris.Input.Mouse;
 import Tetris.Input.MouseHover;
 import Tetris.Rendering.RenderUtil.*;
+import Tetris.Screens.Screens;
 
 import javax.swing.*;
 import java.awt.*;
@@ -56,11 +57,7 @@ public class Render extends JPanel implements ActionListener{
 
     @Override
     public void paintComponent(Graphics g) {
-        if(Screen == ScreenState.Game) {
-            DrawGame.paintGame(g);
-            return;
-        }
-        Tetris.Menus.Menus.getCurrent().paint(g);
+        Screens.getCurrent().paint(g);
     }
 
     public void setCurrentListener(KeyListener newListener) {

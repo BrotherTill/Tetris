@@ -1,10 +1,7 @@
 package Tetris.Input;
 
 import Tetris.Game.Board;
-import Tetris.Main;
-import Tetris.Menus.Menus;
-import Tetris.Rendering.Render;
-import Tetris.Rendering.RenderUtil;
+import Tetris.Screens.Screens;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -47,12 +44,8 @@ public class Game extends KeyAdapter {
                     -> Board.HardDrop();
             case KeyEvent.VK_DOWN, KeyEvent.VK_NUMPAD2
                     -> Board.startSoftDrop();
-            case KeyEvent.VK_ESCAPE -> {
-                Board.stop();
-                Menus.mainMenu.selection = 0;
-                Render.Screen = RenderUtil.ScreenState.TryAgain;
-                Main.render.setCurrentListener(new Menu());
-            }
+            case KeyEvent.VK_ESCAPE
+                    -> Screens.game.exitAction();
         }
     }
 

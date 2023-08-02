@@ -1,12 +1,13 @@
-package Tetris.Menus;
+package Tetris.Screens;
 
 import Tetris.Game.Board;
 import Tetris.Rendering.Render;
 import Tetris.Rendering.RenderUtil;
+import Tetris.Rendering.Text;
 
 import java.awt.*;
 
-public class LevelSelect extends Menu {
+public class LevelSelect extends Screen {
 
     @Override
     public void init() {
@@ -23,16 +24,16 @@ public class LevelSelect extends Menu {
                 int xOrigin = (frameWidth - TOTALBLOCKWidth * 4) / (MAXXSelection - 1) * x + TOTALBLOCKWidth * 2;
                 int yOrigin = (frameHeight - TOTALBLOCKHeight * 3) / MAXYSelection * y + TOTALBLOCKHeight * 2;
                 addBtn(new Button(String.valueOf(i), i, x+1, y+1,
-                        xOrigin - bigFontMetrics.stringWidth(String.valueOf(i)) / 2 - bigFontHeight / 3,
-                        yOrigin - bigFontHeight,
-                        xOrigin + bigFontMetrics.stringWidth(String.valueOf(i)) / 2 + bigFontHeight / 3,
-                        yOrigin + bigFontHeight / 3));
+                        xOrigin - Text.bigFontMetrics.stringWidth(String.valueOf(i)) / 2 - Text.bigFontHeight / 3,
+                        yOrigin - Text.bigFontHeight,
+                        xOrigin + Text.bigFontMetrics.stringWidth(String.valueOf(i)) / 2 + Text.bigFontHeight / 3,
+                        yOrigin + Text.bigFontHeight / 3));
             }
         }
         addBtn(new Button("Quit", i + 1, RenderUtil.LevelSelectionX, RenderUtil.LevelSelectionY + 1,
-                frameWidth - BLOCKWidth - fontMetrics.stringWidth("Main Menu") / 2 - fontHeight / 3,
-                TOTALBLOCKHeight * 7 - fontHeight, frameWidth - BLOCKWidth + fontMetrics.stringWidth("Main Menu") / 2 + fontHeight / 3,
-                TOTALBLOCKHeight * 7 + fontHeight / 3));
+                frameWidth - BLOCKWidth - Text.fontMetrics.stringWidth("Main Menu") / 2 - Text.fontHeight / 3,
+                TOTALBLOCKHeight * 7 - Text.fontHeight, frameWidth - BLOCKWidth + Text.fontMetrics.stringWidth("Main Menu") / 2 + Text.fontHeight / 3,
+                TOTALBLOCKHeight * 7 + Text.fontHeight / 3));
     }
 
     @Override
@@ -60,30 +61,31 @@ public class LevelSelect extends Menu {
         int MAXXSelection = RenderUtil.LevelSelectionX;
         int MAXYSelection = RenderUtil.LevelSelectionY;
 
-        g.setColor(Primary);
+        g.setColor(RenderUtil.Primary);
         g.fillRect(0, 0, frameWidth, frameHeight);
 
-        g.setColor(Background);
+        g.setColor(RenderUtil.Background);
 
-        g.setFont(textHeaderFont);
-        g.drawString("Level Select", (frameWidth / 2) - (headerFontMetrics.stringWidth("Level Select") / 2), TOTALBLOCKHeight);
+        g.setFont(Text.textHeaderFont);
+        g.drawString("Level Select", (frameWidth / 2) - (Text.headerFontMetrics.stringWidth("Level Select") / 2), TOTALBLOCKHeight);
 
-        g.setFont(textBigFont);
+        g.setFont(Text.textBigFont);
 
         for(int x=0; x <= MAXXSelection - 1; x++) {
             for(int y=0; y <= MAXYSelection - 1; y++) {
-                g.setColor(Background);
+                g.setColor(RenderUtil.Background);
                 int i = x * MAXYSelection + y + 1;
                 if(selection == i)
-                    g.setColor(SELECTION);
-                g.drawString(String.valueOf(i), (frameWidth - TOTALBLOCKWidth * 4) / (MAXXSelection - 1) * x + TOTALBLOCKWidth * 2 - bigFontMetrics.stringWidth(String.valueOf(i)) / 2, (frameHeight - TOTALBLOCKHeight * 3) / MAXYSelection * y + TOTALBLOCKHeight * 2);
+                    g.setColor(RenderUtil.SELECTION);
+                g.drawString(String.valueOf(i), (frameWidth - TOTALBLOCKWidth * 4) / (MAXXSelection - 1) * x + TOTALBLOCKWidth * 2 - Text.bigFontMetrics.stringWidth(String.valueOf(i)) / 2,
+                        (frameHeight - TOTALBLOCKHeight * 3) / MAXYSelection * y + TOTALBLOCKHeight * 2);
             }
         }
 
-        g.setFont(textFont);
+        g.setFont(Text.textFont);
         g.setColor(Color.BLACK);
         if(selection == MAXXSelection * MAXYSelection + 1)
             g.setColor(new Color(246, 46, 46, 255));
-        g.drawString("Main Menu", frameWidth - BLOCKWidth - fontMetrics.stringWidth("Main Menu") / 2, TOTALBLOCKHeight * 7);
+        g.drawString(Text.exitMenu, frameWidth - BLOCKWidth - Text.exitMenuWidth / 2, TOTALBLOCKHeight * 7);
     }
 }

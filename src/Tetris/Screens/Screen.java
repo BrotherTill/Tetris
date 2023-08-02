@@ -1,4 +1,4 @@
-package Tetris.Menus;
+package Tetris.Screens;
 
 import Tetris.Rendering.RenderUtil;
 
@@ -7,30 +7,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Menu {
-
-    static final Font textFont = RenderUtil.textFont;                         // = new Font("MinecraftRegular", Font.BOLD, 30);
-    static final Font textBigFont = RenderUtil.textBigFont;                   // = new Font("MinecraftRegular", Font.BOLD, 45);
-    static final Font textHeaderFont = RenderUtil.textHeaderFont;                   // = new Font("MinecraftRegular", Font.BOLD, 70);
-    static final FontMetrics fontMetrics = RenderUtil.fontMetrics;            // = getFontMetrics(textFont);
-    static final FontMetrics bigFontMetrics = RenderUtil.bigFontMetrics;      // = getFontMetrics(textBigFont);
-    static final FontMetrics headerFontMetrics = RenderUtil.headerFontMetrics;      // = getFontMetrics(textBigFont);
-    static final int fontHeight = RenderUtil.bigFontHeight;
-    static final int bigFontHeight = RenderUtil.bigFontHeight;
-    static final int headerFontHeight = RenderUtil.headerFontHeight;
-
-    static final Color Background = RenderUtil.Background;
-    static final Color SELECTION = RenderUtil.SELECTION;
-    static final Color Primary = RenderUtil.Primary;
+public class Screen {
 
     //To modify these Variables goto Tetris.Logic.Board
-    static final int blockHeight = RenderUtil.blockHeight;
-    static final int blockWidth = RenderUtil.blockWidth;
-    static final int blockPadding = RenderUtil.blockPadding;
-    static final int totalBlockHeight = RenderUtil.totalBlockHeight;
-    static final int totalBlockWidth = RenderUtil.totalBlockWidth;
-    static final int frameHeight = RenderUtil.frameHeight;                  //Calculated from the Tetris.Pieces.Block height and padding
-    static final int frameWidth = RenderUtil.frameWidth;                    //Calculated from the Tetris.Pieces.Block width and padding
+    final int blockHeight = RenderUtil.blockHeight;
+    final int blockWidth = RenderUtil.blockWidth;
+    final int blockPadding = RenderUtil.blockPadding;
+    final int totalBlockHeight = RenderUtil.totalBlockHeight;
+    final int totalBlockWidth = RenderUtil.totalBlockWidth;
+    final int frameHeight = RenderUtil.frameHeight;                  //Calculated from the Tetris.Pieces.Block height and padding
+    final int frameWidth = RenderUtil.frameWidth;                    //Calculated from the Tetris.Pieces.Block width and padding
 
     public int selection = 0;
 
@@ -43,7 +29,7 @@ public class Menu {
     }
 
 
-    public Menu() {
+    public Screen() {
         init();
     }
 

@@ -1,39 +1,19 @@
-package Tetris.Rendering;
+package Tetris.Screens;
+
+import Tetris.Game.Board;
+import Tetris.Input.Menu;
+import Tetris.Main;
+import Tetris.Pieces.Block;
+import Tetris.Pieces.FallingPiece;
+import Tetris.Pieces.Piece;
+import Tetris.Rendering.Render;
+import Tetris.Rendering.RenderUtil;
+import Tetris.Rendering.Text;
+import Tetris.Scoring;
 
 import java.awt.*;
 
-import Tetris.Pieces.Block;
-import Tetris.Game.Board;
-import Tetris.Pieces.FallingPiece;
-import Tetris.Pieces.Piece;
-import Tetris.Scoring;
-
-public class DrawGame {
-
-    private static final Font textFont = RenderUtil.textFont;                         // = new Font("MinecraftRegular", Font.PLAIN, 30);
-    private static final Font textBigFont = RenderUtil.textBigFont;                   // = new Font("MinecraftRegular", Font.PLAIN, 45);
-    private static final FontMetrics fontMetrics = RenderUtil.fontMetrics;            // = getFontMetrics(textFont);
-    private static final FontMetrics bigFontMetrics = RenderUtil.bigFontMetrics;      // = getFontMetrics(textBigFont);
-    private static final int holdWidth = RenderUtil.holdWidth;                        // = fontMetrics.stringWidth("HOLD");
-    private static final int nextWidth = RenderUtil.nextWidth;                        // = fontMetrics.stringWidth("NEXT");
-    private static final int overWidth = RenderUtil.overWidth;                        // = bigFontMetrics.stringWidth("Game Over!");
-    private static final int winWidth = RenderUtil.winWidth;                          // = bigFontMetrics.stringWidth("You Win!");
-    private static final int scoreWidth = RenderUtil.scoreWidth;                      // = bigFontMetrics.stringWidth("SCORE:");
-    private static final int linesWidth = RenderUtil.linesWidth;                      // = FontMetrics.stringWidth("lines:");
-    private static final int fontHeight = RenderUtil.bigFontHeight;
-    private static final int bigFontHeight = RenderUtil.bigFontHeight;
-
-    private static final Color Background = RenderUtil.Background;
-    private static final Color Primary = RenderUtil.Primary;
-
-    //To modify these Variables goto Tetris.Logic.Board
-    private static final int blockHeight = RenderUtil.blockHeight;
-    private static final int blockWidth = RenderUtil.blockWidth;
-    private static final int blockPadding = RenderUtil.blockPadding;
-    private static final int totalBlockHeight = RenderUtil.totalBlockHeight;
-    private static final int totalBlockWidth = RenderUtil.totalBlockWidth;
-    private static final int frameHeight = RenderUtil.frameHeight;                  //Calculated from the Block height and padding
-    private static final int frameWidth = RenderUtil.frameWidth;                    //Calculated from the Block width and padding
+public class Game extends Screen {
 
     private static final int fieldHeight = Board.getFieldHeight();
     private static final int fieldWidth = Board.getFieldWidth();
@@ -44,7 +24,30 @@ public class DrawGame {
 
     private static FallingPiece fallingPiece;
 
-    public static void paintGame(Graphics g) {
+
+    @Override
+    public void init() {
+        addBtn(new Button("Exit", 1, 1, 1, totalBlockWidth + totalBlockWidth * 5 / 2 - Text.exitWidth - Text.fontHeight / 3,
+                totalBlockHeight * 21 - blockPadding * 3 - Text.fontHeight, totalBlockWidth + totalBlockWidth * 5 / 2 + Text.exitWidth + Text.fontHeight / 3,
+                totalBlockHeight * 21 - blockPadding * 3 + Text.fontHeight / 3));
+    }
+
+    @Override
+    public void selectionAction() {
+        if (selection == 1)
+            exitAction();
+    }
+
+    @Override
+    public void exitAction() {
+        selection = 0;
+        Main.render.setCurrentListener(new Menu());
+        Board.stop();
+        Render.Screen = RenderUtil.ScreenState.TryAgain;
+    }
+
+    @Override
+    public void paint(Graphics g) {
         //System.out.println("Starting paint");
         drawScreen(g);          //draw the whole Tetris.Logic.Board(Game Field, Score, Held pieces, and net queue)
 
@@ -56,7 +59,7 @@ public class DrawGame {
         }
     }
 
-    public static void drawGameOver(Graphics g) {
+    private void drawGameOver(Graphics g) {
         g.setColor(new Color(14, 14, 14, (int) GameOverOpacity));
         g.fillRect(0, 0, frameWidth, frameHeight);
         if(GameOverOpacity <= GameOverAlpha) {              //increase the Opacity of the overlay depending on deltaTime
@@ -64,13 +67,13 @@ public class DrawGame {
             return;                                         //return to skip the rest of the code
         }
         g.setColor(new Color(203, 5, 5));           //Text color
-        g.setFont(textBigFont);
-        g.drawString("GameOver!", (frameWidth / 2) - (overWidth / 2), (frameHeight / 2) - (frameHeight / 5) - blockPadding);
-        g.setFont(textFont);
-        g.drawString("Level: " + Scoring.getLevel(), (frameWidth / 2) - (RenderUtil.fontMetrics.stringWidth("Level: " + Scoring.getLevel()) / 2), (frameHeight / 2) - (fontHeight / 2) + blockPadding);
-        g.drawString("Score: " + Scoring.getScore(), (frameWidth / 2) - (RenderUtil.fontMetrics.stringWidth("Score: " + Scoring.getScore()) / 2), (frameHeight / 2) + (fontHeight / 2) + blockPadding);
+        g.setFont(Text.textHeaderFont);
+        g.drawString(Text.over, frameWidth / 2 - Text.overWidth / 2, frameHeight / 2 - frameHeight / 5 - blockPadding);
+        g.setFont(Text.textFont);
+        g.drawString(Text.overLevel + Scoring.getLevel(), frameWidth / 2 - (Text.overLevelWidth + Text.fontMetrics.stringWidth(String.valueOf(Scoring.getLevel()))) / 2, frameHeight / 2 - Text.fontHeight / 2 + blockPadding);
+        g.drawString(Text.overScore + Scoring.getScore(), frameWidth / 2 - (Text.overScoreWidth + Text.fontMetrics.stringWidth(String.valueOf(Scoring.getScore()))) / 2, frameHeight / 2 + Text.fontHeight / 2 + blockPadding);
     }
-    public static void drawGameWon(Graphics g) {
+    private void drawGameWon(Graphics g) {
         g.setColor(new Color(14, 14, 14, (int) GameOverOpacity));
         g.fillRect(0, 0, frameWidth, frameHeight);
         if(GameOverOpacity <= GameOverAlpha) {              //increase the Opacity of the overlay depending on deltaTime
@@ -78,21 +81,20 @@ public class DrawGame {
             return;                                         //return to skip the rest of the code
         }
         g.setColor(new Color(81, 220, 11));         //Text color
-        g.setFont(textBigFont);
-        g.drawString("You Win!", (frameWidth / 2) - (winWidth / 2), (frameHeight / 2) - (bigFontHeight / 2));
-
+        g.setFont(Text.textHeaderFont);
+        g.drawString(Text.win, frameWidth / 2 - Text.winWidth / 2, frameHeight / 2 - Text.headerFontHeight / 2);
     }
 
-    public static void drawScreen(Graphics g) {
+    private void drawScreen(Graphics g) {
         fallingPiece = Board.getFallingPiece();
         int nextLength = fallingPiece.getNextLength();          //get the Next queue Length
         Piece tempPiece;
 
-        g.setColor(Background);
+        g.setColor(RenderUtil.Background);
         g.fillRect(0,0,frameWidth,frameHeight);
 
         ///////////////////////// draw the borders of the Frame
-        g.setColor(Primary);
+        g.setColor(RenderUtil.Primary);
         g.fillRect(0,0, frameWidth, blockHeight + blockPadding);
         g.fillRect(0,0, blockWidth + blockPadding, frameHeight);
         g.fillRect(frameWidth - blockWidth - blockPadding,0, blockHeight + blockPadding, frameHeight);
@@ -104,26 +106,30 @@ public class DrawGame {
         if(nextLength > (fieldHeight - 8) / 3) {            //make sure Next queue Length isn't above 4
             nextLength = (fieldHeight - 8) / 3;
         }
-        g.fillRect(totalBlockWidth * 18 - blockPadding, (8 + (nextLength * 3)) * totalBlockHeight + blockPadding, totalBlockWidth * 6 - blockWidth, (13 - (nextLength * 3)) * totalBlockHeight);
+        g.fillRect(totalBlockWidth * 18 - blockPadding, (8 + (nextLength * 3)) * totalBlockHeight + blockPadding, totalBlockWidth * 6 - blockWidth, (13 - nextLength * 3) * totalBlockHeight);
 
         //////////////////////Draw Text     !!Important when changing the Displayed Text make sure to change the width variables in initFont() too!!
-        g.setColor(Background);
-        g.setFont(textFont);
-        g.drawString("HOLD",(totalBlockWidth) + (totalBlockWidth * 5 / 2) - (holdWidth / 2), blockHeight - blockPadding);
-        g.drawString("HOLD",(totalBlockWidth * 18) + (totalBlockWidth * 5 / 2) - (holdWidth / 2), blockHeight - blockPadding);
-        g.drawString("NEXT",(totalBlockWidth * 18) + (totalBlockWidth * 5 / 2) - (nextWidth / 2),totalBlockHeight * 7 - blockPadding * 3);
+        g.setColor(RenderUtil.Background);
+        g.setFont(Text.textFont);
+        g.drawString(Text.hold,totalBlockWidth + totalBlockWidth * 5 / 2 - Text.holdWidth / 2, blockHeight - blockPadding);
+        g.drawString(Text.hold,totalBlockWidth * 18 + totalBlockWidth * 5 / 2 - Text.holdWidth / 2, blockHeight - blockPadding);
+        g.drawString(Text.next,totalBlockWidth * 18 + totalBlockWidth * 5 / 2 - Text.nextWidth / 2,totalBlockHeight * 7 - blockPadding * 3);
         //draw Stats
-        g.drawString("lines:",(totalBlockWidth) + (totalBlockWidth * 5 / 2) - (linesWidth / 2),totalBlockHeight * 16 - blockPadding * 3);
-        g.setFont(textBigFont);
-        g.drawString("LEVEL " + Scoring.getLevel(),(totalBlockWidth) + (totalBlockWidth * 5 / 2) - (bigFontMetrics.stringWidth("LEVEL " + Scoring.getLevel()) / 2),totalBlockHeight * 9 - blockPadding * 3);
-        g.drawString("SCORE:",(totalBlockWidth) + (totalBlockWidth * 5 / 2) - (scoreWidth / 2),totalBlockHeight * 12 - blockPadding * 3);
-        g.drawString(String.valueOf(Scoring.getScore()),(totalBlockWidth) + (totalBlockWidth * 5 / 2) - (bigFontMetrics.stringWidth(String.valueOf(Scoring.getScore())) / 2),(int) (totalBlockHeight * 13.5 - blockPadding * 3));
-        g.setFont(textFont);
-        g.drawString(String.valueOf(Scoring.getLines()),(totalBlockWidth) + (totalBlockWidth * 5 / 2) - (fontMetrics.stringWidth(String.valueOf(Scoring.getLines())) / 2),totalBlockHeight * 17 - blockPadding * 3);
+        g.drawString(Text.lines,totalBlockWidth + totalBlockWidth * 5 / 2 - Text.linesWidth / 2, totalBlockHeight * 16 - blockPadding * 3);
+        g.setFont(Text.textBigFont);
+        g.drawString(Text.level + Scoring.getLevel(),totalBlockWidth + totalBlockWidth * 5 / 2 - (Text.bigFontMetrics.stringWidth("LEVEL " + Scoring.getLevel()) / 2),totalBlockHeight * 9 - blockPadding * 3);
+        g.drawString(Text.score,totalBlockWidth + totalBlockWidth * 5 / 2 - Text.scoreWidth / 2,totalBlockHeight * 12 - blockPadding * 3);
+        g.drawString(String.valueOf(Scoring.getScore()),totalBlockWidth + totalBlockWidth * 5 / 2 - Text.bigFontMetrics.stringWidth(String.valueOf(Scoring.getScore())) / 2,(int) (totalBlockHeight * 13.5 - blockPadding * 3));
+        g.setFont(Text.textFont);
+        g.drawString(String.valueOf(Scoring.getLines()),totalBlockWidth + totalBlockWidth * 5 / 2 - Text.fontMetrics.stringWidth(String.valueOf(Scoring.getLines())) / 2,totalBlockHeight * 17 - blockPadding * 3);
+
+        if(selection == 1)
+            g.setColor(new Color(246, 46, 46, 255));
+        g.drawString(Text.exit, totalBlockWidth + totalBlockWidth * 5 / 2 - Text.exitWidth / 2, totalBlockHeight * 21 - blockPadding * 3);
 
         //
 
-        g.setColor(Primary);
+        g.setColor(RenderUtil.Primary);
 
         drawField(Board.getField(), 7, -19, g);         //draw the Game Field in the middle
 
@@ -142,7 +148,7 @@ public class DrawGame {
 
     }
 
-    private static void drawField(Block[][] field, float x, float y, Graphics g) {
+    private void drawField(Block[][] field, float x, float y, Graphics g) {
         for(int rY=0; rY < field.length; rY++) {
             for(int rX=0; rX < field[0].length; rX++) {
                 if(field[rY][rX].isFilled()) {
@@ -152,7 +158,7 @@ public class DrawGame {
         }
     }
 
-    private static void drawFieldBlock(Block[][] field, float x, float y, int rX, int rY, Graphics g) {            //draw the Tetris.Pieces.Block of a field and connect it with adjacent ones
+    private void drawFieldBlock(Block[][] field, float x, float y, int rX, int rY, Graphics g) {            //draw the Tetris.Pieces.Block of a field and connect it with adjacent ones
         g.fillRect((int) ((x + rX) * totalBlockWidth + blockPadding),(int) ((y + rY) * totalBlockHeight + blockPadding), blockWidth, blockHeight);
 
         if(rX != field[0].length - 1) {             //make sure it's not out of bounds

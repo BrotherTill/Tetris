@@ -1,8 +1,7 @@
 package Tetris.Input;
 
-import Tetris.Menus.Menus;
-import Tetris.Rendering.Render;
-import Tetris.Rendering.RenderUtil;
+import Tetris.Screens.Screen;
+import Tetris.Screens.Screens;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -11,16 +10,26 @@ public class MouseHover extends MouseMotionAdapter {
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        if(Render.Screen == RenderUtil.ScreenState.Game)
-            return;
-        Tetris.Menus.Menu menu = Menus.getCurrent();
+        Screen screen = Screens.getCurrent();
 
-        int btn = menu.buttonAt(e.getX(), e.getY());
+        int btn = screen.buttonAt(e.getX(), e.getY());
 
         if(btn != -1)
-            menu.selection = menu.getBtnbyID(btn).getSelectionID();
+            screen.selection = screen.getBtnbyID(btn).getSelectionID();
         else
-            menu.selection = 0;
+            screen.selection = 0;
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        Screen screen = Screens.getCurrent();
+
+        int btn = screen.buttonAt(e.getX(), e.getY());
+
+        if(btn != -1)
+            screen.selection = screen.getBtnbyID(btn).getSelectionID();
+        else
+            screen.selection = 0;
     }
 
 }
