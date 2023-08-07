@@ -3,20 +3,22 @@ package Tetris.Game;
 import Tetris.Pieces.FallingPiece;
 import Tetris.Pieces.Piece;
 import Tetris.Pieces.PieceUtil;
+import Tetris.Pieces.PieceUtil.Direction;
+import Tetris.Pieces.PieceUtil.Type;
 
 public class RotationSystem {
 
     public static void rotateCW() {
         FallingPiece fallingPiece = Board.getFallingPiece();
         Piece piece = fallingPiece.getType().getPiece();
-        if(fallingPiece.getType() == PieceUtil.types.O)
+        if(fallingPiece.getType() == Type.O)
             return;
 
         int undoX = fallingPiece.getX();
         int undoY = fallingPiece.getY();
-        int undoRotation = loopAround(fallingPiece.getRotation(), 0, 3);
+        Direction undoRotation = fallingPiece.getDirection();
         fallingPiece.rotateCW();
-        int rotation = loopAround(fallingPiece.getRotation(), 0, 3);
+        Direction rotation = fallingPiece.getDirection();
 
         for (int i=0; i<5; i++) {
             int xOffset = 0;
@@ -39,14 +41,14 @@ public class RotationSystem {
     public static void rotateCCW() {
         FallingPiece fallingPiece = Board.getFallingPiece();
         Piece piece = fallingPiece.getType().getPiece();
-        if(fallingPiece.getType() == PieceUtil.types.O)
+        if(fallingPiece.getType() == Type.O)
             return;
 
         int undoX = fallingPiece.getX();
         int undoY = fallingPiece.getY();
-        int undoRotation = loopAround(fallingPiece.getRotation(), 0, 3);
+        Direction undoRotation = fallingPiece.getDirection();
         fallingPiece.rotateCCW();
-        int rotation = loopAround(fallingPiece.getRotation(), 0, 3);
+        Direction rotation = fallingPiece.getDirection();
 
         for (int i=0; i<5; i++) {
             int xOffset = 0;

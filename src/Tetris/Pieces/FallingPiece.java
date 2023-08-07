@@ -1,15 +1,18 @@
 package Tetris.Pieces;
 
+import Tetris.Pieces.PieceUtil.Direction;
+import Tetris.Pieces.PieceUtil.Type;
+
 public class FallingPiece {
 
     private int x;
     private int y;
-    private int rotation;
+    private Direction direction;
 
-    private PieceUtil.types type;
+    private Type type;
     private Block[][] field;
 
-    private PieceUtil.types[] nextTypes;
+    private Type[] nextTypes;
     private int nextLength;
 
     public int getX() {
@@ -36,19 +39,19 @@ public class FallingPiece {
         this.y += adder;
     }
 
-    public int getRotation() {
-        return rotation;
+    public Direction getDirection() {
+        return direction;
     }
 
-    public void setType(PieceUtil.types type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
-    public PieceUtil.types getType() {
+    public Type getType() {
         return type;
     }
 
-    public PieceUtil.types[] getNextTypes() {
+    public Type[] getNextTypes() {
         return nextTypes;
     }
 
@@ -60,15 +63,15 @@ public class FallingPiece {
         field = type.getPiece().getField();
         x = type.getPiece().getStartX();
         y = type.getPiece().getStartY();
-        rotation = 0;
+        direction = Direction.north;
     }
 
-    public PieceUtil.types nextType() {
+    public Type nextType() {
         type = nextTypes[0];
         for(int i=0; i < (nextLength - 1); i++) {
             nextTypes[i] = nextTypes[i + 1];
         }
-        nextTypes[nextLength - 1] = PieceUtil.types.randomType();
+        nextTypes[nextLength - 1] = Type.randomType();
 
         setStartPos();
         return type;
@@ -76,10 +79,10 @@ public class FallingPiece {
 
     private void initPiece(int queueGenLength) {
         nextLength = queueGenLength;
-        nextTypes = new PieceUtil.types[nextLength];
-        type = PieceUtil.types.randomType();
+        nextTypes = new Type[nextLength];
+        type = Type.randomType();
         for(int i=0; i < nextLength; i++) {
-            nextTypes[i] = PieceUtil.types.randomType();
+            nextTypes[i] = Type.randomType();
         }
         setStartPos();
     }
@@ -103,12 +106,12 @@ public class FallingPiece {
 
     public void rotateCW() {
         field = PieceUtil.rotate(field, 1);
-        rotation++;
+        direction = direction.getNextDirection();
     }
 
     public void rotateCCW() {
         field = PieceUtil.rotate(field, -1);
-        rotation--;
+        direction = direction.getPreviousDirection();
     }
 
     public Block[][] getPieceField() {

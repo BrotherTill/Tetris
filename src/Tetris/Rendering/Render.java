@@ -50,7 +50,7 @@ public class Render extends JPanel implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        repaint();
+        paintImmediately(0, 0, RenderUtil.frameWidth, RenderUtil.frameHeight);
         deltaTime = Duration.between(beginTime, Instant.now());         //deltaTime used so the Tetris.Logic.Board fades out in the correct time(not used for FrameRate)
         beginTime = Instant.now();
     }

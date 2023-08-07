@@ -1,5 +1,7 @@
 package Tetris.Pieces;
 
+import Tetris.Pieces.PieceUtil.Direction;
+
 public class Pieces {
 
     private static final Block filled = new Block(true);        //used to make writing of Tetris.Pieces.Tetris.Pieces easier
@@ -22,10 +24,10 @@ public class Pieces {
             setStartY(-2);
             setRxOffset(0.5F);
             setRyOffset(1F);
-            setRotationPoint(0, new int[][]{{1,1}, {0,1}, {3,1}, {0,1}, {3,1}});
-            setRotationPoint(1, new int[][]{{1,1}, {2,1}, {2,1}, {2,0}, {2,3}});
-            setRotationPoint(2, new int[][]{{1,1}, {3,1}, {0,1}, {3,2}, {0,2}});
-            setRotationPoint(3, new int[][]{{1,1}, {1,1}, {1,1}, {1,3}, {1,0}});
+            setRotationPoint(Direction.north, new int[][]{{1,1}, {0,1}, {3,1}, {0,1}, {3,1}});
+            setRotationPoint(Direction.east, new int[][]{{1,1}, {2,1}, {2,1}, {2,0}, {2,3}});
+            setRotationPoint(Direction.south, new int[][]{{1,1}, {3,1}, {0,1}, {3,2}, {0,2}});
+            setRotationPoint(Direction.west, new int[][]{{1,1}, {1,1}, {1,1}, {1,3}, {1,0}});
         }
     }
 
@@ -53,10 +55,10 @@ public class Pieces {
             setStartY(-2);
             setRxOffset(1);
             setRyOffset(1.5F);
-            setRotationPoint(0, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
-            setRotationPoint(1, new int[][]{{1,1}, {2,1}, {2,2}, {1,-1}, {2,-1}});
-            setRotationPoint(2, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
-            setRotationPoint(3, new int[][]{{1,1}, {0,1}, {0,2}, {1,-1}, {0,-1}});
+            setRotationPoint(Direction.north, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
+            setRotationPoint(Direction.east, new int[][]{{1,1}, {2,1}, {2,2}, {1,-1}, {2,-1}});
+            setRotationPoint(Direction.south, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
+            setRotationPoint(Direction.west, new int[][]{{1,1}, {0,1}, {0,2}, {1,-1}, {0,-1}});
         }
     }
 
@@ -71,10 +73,10 @@ public class Pieces {
             setStartY(-2);
             setRxOffset(1);
             setRyOffset(1.5F);
-            setRotationPoint(0, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
-            setRotationPoint(1, new int[][]{{1,1}, {2,1}, {2,2}, {1,-1}, {2,-1}});
-            setRotationPoint(2, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
-            setRotationPoint(3, new int[][]{{1,1}, {0,1}, {0,2}, {1,-1}, {0,-1}});
+            setRotationPoint(Direction.north, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
+            setRotationPoint(Direction.east, new int[][]{{1,1}, {2,1}, {2,2}, {1,-1}, {2,-1}});
+            setRotationPoint(Direction.south, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
+            setRotationPoint(Direction.west, new int[][]{{1,1}, {0,1}, {0,2}, {1,-1}, {0,-1}});
         }
     }
 
@@ -89,10 +91,10 @@ public class Pieces {
             setStartY(-2);
             setRxOffset(1);
             setRyOffset(1.5F);
-            setRotationPoint(0, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
-            setRotationPoint(1, new int[][]{{1,1}, {2,1}, {2,2}, {1,-1}, {2,-1}});
-            setRotationPoint(2, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
-            setRotationPoint(3, new int[][]{{1,1}, {0,1}, {0,2}, {1,-1}, {0,-1}});
+            setRotationPoint(Direction.north, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
+            setRotationPoint(Direction.east, new int[][]{{1,1}, {2,1}, {2,2}, {1,-1}, {2,-1}});
+            setRotationPoint(Direction.south, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
+            setRotationPoint(Direction.west, new int[][]{{1,1}, {0,1}, {0,2}, {1,-1}, {0,-1}});
         }
     }
 
@@ -107,10 +109,10 @@ public class Pieces {
             setStartY(-2);
             setRxOffset(1);
             setRyOffset(1.5F);
-            setRotationPoint(0, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
-            setRotationPoint(1, new int[][]{{1,1}, {2,1}, {2,2}, {1,-1}, {2,-1}});
-            setRotationPoint(2, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
-            setRotationPoint(3, new int[][]{{1,1}, {0,1}, {0,2}, {1,-1}, {0,-1}});
+            setRotationPoint(Direction.north, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
+            setRotationPoint(Direction.east, new int[][]{{1,1}, {2,1}, {2,2}, {1,-1}, {2,-1}});
+            setRotationPoint(Direction.south, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
+            setRotationPoint(Direction.west, new int[][]{{1,1}, {0,1}, {0,2}, {1,-1}, {0,-1}});
         }
     }
 
@@ -125,10 +127,10 @@ public class Pieces {
             setStartY(-2);
             setRxOffset(1);
             setRyOffset(1.5F);
-            setRotationPoint(0, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
-            setRotationPoint(1, new int[][]{{1,1}, {2,1}, {2,2}, {1,-1}, {2,-1}});
-            setRotationPoint(2, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
-            setRotationPoint(3, new int[][]{{1,1}, {0,1}, {0,2}, {1,-1}, {0,-1}});
+            setRotationPoint(Direction.north, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
+            setRotationPoint(Direction.east, new int[][]{{1,1}, {2,1}, {2,2}, {1,-1}, {2,-1}});
+            setRotationPoint(Direction.south, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
+            setRotationPoint(Direction.west, new int[][]{{1,1}, {0,1}, {0,2}, {1,-1}, {0,-1}});
         }
     }
     

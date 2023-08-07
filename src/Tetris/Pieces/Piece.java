@@ -1,5 +1,7 @@
 package Tetris.Pieces;
 
+import Tetris.Pieces.PieceUtil.Direction;
+
 public class Piece {
 
     private Block[][] pieceArray;
@@ -10,7 +12,7 @@ public class Piece {
     private float RxOffset;
     private float RyOffset;
 
-    private int startRotation;
+    private Direction startRotation;
 
     private int[][] rotationPointX = new int[4][5];
     private int[][] rotationPointY = new int[4][5];
@@ -33,23 +35,17 @@ public class Piece {
         RyOffset = ryOffset;
     }
 
-    void setStartRotation(int startRotation) {
+    void setStartRotation(Direction startRotation) {
         this.startRotation = startRotation;
     }
 
-    void setRotationPoint(int OrientationId, int[][] points) {
-        assert points.length == 5;
-        assert points[0].length == 2;
-        rotationPointX[OrientationId][0] = points[0][0];
-        rotationPointX[OrientationId][1] = points[1][0];
-        rotationPointX[OrientationId][2] = points[2][0];
-        rotationPointX[OrientationId][3] = points[3][0];
-        rotationPointX[OrientationId][4] = points[4][0];
-        rotationPointY[OrientationId][0] = points[0][1];
-        rotationPointY[OrientationId][1] = points[1][1];
-        rotationPointY[OrientationId][2] = points[2][1];
-        rotationPointY[OrientationId][3] = points[3][1];
-        rotationPointY[OrientationId][4] = points[4][1];
+    void setRotationPoint(Direction direction, int[][] points) {
+        int directionId = direction.ordinal();
+        assert points.length == rotationPointX[0].length && points[0].length == 2: "Invalid Rotation Points Table Size";
+        for(int i=0; i<rotationPointX[0].length; i++) {
+            rotationPointX[directionId][i] = points[i][0];
+            rotationPointY[directionId][i] = points[i][1];
+        }
     }
 
     public Piece() {
@@ -63,16 +59,16 @@ public class Piece {
         this.RyOffset = ryOffset;
     }
 
-    public int getRotationPointX(int OrientationId, int pointId) {
-        assert OrientationId <= 3 && OrientationId >= 0;
-        assert pointId <= 4 && pointId >= 0;
-        return rotationPointX[OrientationId][pointId];
+    public int getRotationPointX(Direction direction, int pointId) {
+        int diretionId = direction.ordinal();
+        assert pointId <= rotationPointX[0].length && pointId >= 0 : "PointId out of Range";
+        return rotationPointX[diretionId][pointId];
     }
 
-    public int getRotationPointY(int OrientationId, int pointId) {
-        assert OrientationId <= 3 && OrientationId >= 0;
-        assert pointId <= 5 && pointId >= 0;
-        return rotationPointY[OrientationId][pointId];
+    public int getRotationPointY(Direction direction, int pointId) {
+        int directionId = direction.ordinal();
+        assert pointId <= rotationPointY[0].length && pointId >= 0 : "PointId out of Range";
+        return rotationPointY[directionId][pointId];
     }
 
     public Block[][] getField() {
@@ -95,7 +91,7 @@ public class Piece {
         return RyOffset;
     }
 
-    public int getStartRotation() {
+    public Direction getStartRotation() {
         return startRotation;
     }
 

@@ -2,46 +2,33 @@ package Tetris.Game;
 
 import Tetris.Input.Game;
 import Tetris.Main;
-import Tetris.Input.Menu;
-import Tetris.Screens.Screens;
 import Tetris.Pieces.Block;
 import Tetris.Pieces.FallingPiece;
 import Tetris.Pieces.PieceUtil;
 import Tetris.Pieces.Pieces;
-import Tetris.Rendering.*;
 import Tetris.Scoring;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.Arrays;
 
-public class Board implements ActionListener {
+public class Board {
 
     private static final int fieldHeight = 20;
     private static final int fieldExtra = 20;
     private static final int fieldWidth = 10;
     private static final Block[][] field = new Block[fieldHeight + fieldExtra][fieldWidth];
 
-    private static final int fallCallDivider = 20;
-    private static int fallRate = 1000;
-    static Timer fallCaller;
+    private static long fallRate = 1000_000000;
     private static boolean softFall = false;
-    private static final int softFallRate = 50;
+    private static final long softFallRate = 50_000000;
     private static int softFallCounter = 0;
-
-    private static Duration deltaTime = Duration.ZERO;
-    private static Duration elapsedTime = Duration.ZERO;
-    private static Instant beginTime = Instant.now();
+    private static long elapsedTime = 0;
 
     private static FallingPiece fallingPiece;
     private static int queueGenLength;
 
-    private static PieceUtil.types holdSlot1 = PieceUtil.types.empty;
+    private static PieceUtil.Type holdSlot1 = PieceUtil.Type.empty;
     private static boolean hold1Used = false;
-    private static PieceUtil.types holdSlot2 = PieceUtil.types.empty;
+    private static PieceUtil.Type holdSlot2 = PieceUtil.Type.empty;
     private static boolean hold2Used = false;
 
     public static boolean GameOver = false;
@@ -50,10 +37,10 @@ public class Board implements ActionListener {
     public static boolean blockInput = false;
 
 
-    public static void startGame(int level) {
+    public static void initStart(int level) {
         fallingPiece = new FallingPiece(queueGenLength);
-        holdSlot1 = PieceUtil.types.empty;
-        holdSlot2 = PieceUtil.types.empty;
+        holdSlot1 = PieceUtil.Type.empty;
+        holdSlot2 = PieceUtil.Type.empty;
         generateNewPiece();
 
         Scoring.resetScore();
@@ -65,8 +52,7 @@ public class Board implements ActionListener {
         GameOver = false;
         GameWon = false;
         Main.render.setCurrentListener(new Game());
-        Board.setFallRate((int) Math.round(1000 * (Math.pow(0.8d - ((level - 1d) * 0.007d), (level - 1d)))));
-        fallCaller.start();
+        setFallRate((int) Math.round(1000 * (Math.pow(0.8d - ((level - 1d) * 0.007d), (level - 1d)))));
         blockInput = false;
     }
 
@@ -76,16 +62,13 @@ public class Board implements ActionListener {
         Pieces.fullLine = new Block[fieldWidth];
         for(int i = 0; i < fieldWidth ; i++)
             Pieces.fullLine[i] = new Block(true);
-
-        fallCaller = new Timer(fallRate / fallCallDivider, this);
     }
 
     public static void resetField() {
-        stop();
         blockInput = true;
         fallingPiece = new FallingPiece(queueGenLength);
-        holdSlot1 = PieceUtil.types.empty;
-        holdSlot2 = PieceUtil.types.empty;
+        holdSlot1 = PieceUtil.Type.empty;
+        holdSlot2 = PieceUtil.Type.empty;
         generateNewPiece();
 
         //Scoring.resetScore();
@@ -101,36 +84,36 @@ public class Board implements ActionListener {
             for(int j = 0; j < fieldWidth ; j++)
                 field[i][j] = new Block();
         }
-        fallCaller.start();
         blockInput = false;
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
+    public static void updateGame(long deltaLoopTime) {
         //System.out.println("action Performing");
-        elapsedTime = elapsedTime.plus(deltaTime);
-        if(softFall) {
-            if(elapsedTime.toMillis() >= softFallRate) {
-                if(pieceFall()) {
+        System.out.print("delta: " + deltaLoopTime + "     total: ");
+        elapsedTime += deltaLoopTime;
+        if (softFall) {
+            if (elapsedTime >= softFallRate) {
+                System.out.println(elapsedTime);
+                if (pieceFall()) {
                     Scoring.sendSoftDrop(softFallCounter);
                     softFallCounter = 0;
                 } else
                     softFallCounter++;
-                elapsedTime = Duration.ZERO;
-            }
+                elapsedTime = 0;
+            } else
+                System.out.println("--");
+
         } else {
-            if (elapsedTime.toMillis() >= fallRate) {
+            if (elapsedTime >= fallRate) {
+                System.out.println(elapsedTime);
                 if (pieceFall()) {
                     Scoring.sendSoftDrop(softFallCounter);
                     softFallCounter = 0;
                 }
-                elapsedTime = Duration.ZERO;
-            }
+                elapsedTime = 0;
+            } else
+                System.out.println("--");
         }
-
-        fallCaller.setDelay(fallRate / fallCallDivider);
-        deltaTime = Duration.between(beginTime, Instant.now());
-        beginTime = Instant.now();
     }
 
     private static boolean pieceFall() {
@@ -143,7 +126,7 @@ public class Board implements ActionListener {
             checkLines();
             generateNewPiece();
             if(collide(0,0))
-                GameOver();
+                GameLoop.game.GameOver();
         }
         return out;
     }
@@ -210,55 +193,15 @@ public class Board implements ActionListener {
         hold2Used = false;
     }
 
-    private static final Thread endThread = new Thread(() -> {
-        stop();
-        try {
-            Thread.sleep((long) (Render.fadeDuration + 2000));
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        Main.render.setCurrentListener(new Menu());
-        Screens.mainMenu.selection = 0;
-        Render.Screen = RenderUtil.ScreenState.TryAgain;
-    });
-
-    public static void stop() {
-        fallCaller.stop();
-    }
-
-    public static void GameOver() {
-        GameOver = true;
-        blockInput = true;
-        if(!endThread.isAlive())
-            endThread.start();
-    }
-
-    public static void GameWin() {
-        GameWon = true;
-        blockInput = true;
-        if(!endThread.isAlive())
-            endThread.start();
-    }
-
-    public static void Pause() {
-        if(fallCaller.isRunning()) {
-            fallCaller.stop();
-            blockInput = true;
-        } else {
-            fallCaller.start();
-            blockInput = false;
-        }
-    }
-
     public static void Hold1() {
         if(hold1Used | blockInput)
             return;
 
-        PieceUtil.types temp = holdSlot1;
+        PieceUtil.Type temp = holdSlot1;
         holdSlot1 = fallingPiece.getType();
 
         fallingPiece.setType(temp);
-        if(temp == PieceUtil.types.empty)
+        if(temp == PieceUtil.Type.empty)
             fallingPiece.nextType();
         fallingPiece.setStartPos();
 
@@ -268,11 +211,11 @@ public class Board implements ActionListener {
         if(hold2Used | blockInput)
             return;
 
-        PieceUtil.types temp = holdSlot2;
+        PieceUtil.Type temp = holdSlot2;
         holdSlot2 = fallingPiece.getType();
 
         fallingPiece.setType(temp);
-        if(temp == PieceUtil.types.empty)
+        if(temp == PieceUtil.Type.empty)
             fallingPiece.nextType();
         fallingPiece.setStartPos();
 
@@ -339,7 +282,7 @@ public class Board implements ActionListener {
 
     public static void setFallRate(int fallRate) {
         System.out.println(fallRate);
-        Board.fallRate = fallRate;
+        Board.fallRate = fallRate * 1000_000L;
     }
 
     public static FallingPiece getFallingPiece() {
@@ -357,10 +300,10 @@ public class Board implements ActionListener {
     public static int getFieldExtra() {
         return fieldExtra;
     }
-    public static PieceUtil.types getHoldSlot1() {
+    public static PieceUtil.Type getHoldSlot1() {
         return holdSlot1;
     }
-    public static PieceUtil.types getHoldSlot2() {
+    public static PieceUtil.Type getHoldSlot2() {
         return holdSlot2;
     }
 

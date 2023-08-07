@@ -1,6 +1,7 @@
 package Tetris.Input;
 
 import Tetris.Game.Board;
+import Tetris.Game.GameLoop;
 import Tetris.Screens.Screens;
 
 import java.awt.event.KeyAdapter;
@@ -33,9 +34,9 @@ public class Game extends KeyAdapter {
 
         switch (key) {
             case KeyEvent.VK_F1
-                    -> Board.Pause();
+                    -> GameLoop.game.togglePause();
             case KeyEvent.VK_F2
-                    -> Board.GameWin();
+                    -> GameLoop.game.GameWin();
             case KeyEvent.VK_SHIFT, KeyEvent.VK_LESS, KeyEvent.VK_NUMPAD0
                     -> Board.Hold1();
             case KeyEvent.VK_C, KeyEvent.VK_DECIMAL

@@ -1,6 +1,7 @@
 package Tetris;
 
 import Tetris.Game.Board;
+import Tetris.Game.GameLoop;
 import Tetris.Rendering.Render;
 
 import javax.swing.*;

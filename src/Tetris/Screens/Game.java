@@ -1,6 +1,7 @@
 package Tetris.Screens;
 
 import Tetris.Game.Board;
+import Tetris.Game.GameLoop;
 import Tetris.Input.Menu;
 import Tetris.Main;
 import Tetris.Pieces.Block;
@@ -42,7 +43,7 @@ public class Game extends Screen {
     public void exitAction() {
         selection = 0;
         Main.render.setCurrentListener(new Menu());
-        Board.stop();
+        GameLoop.game.stop();
         Render.Screen = RenderUtil.ScreenState.TryAgain;
     }
 

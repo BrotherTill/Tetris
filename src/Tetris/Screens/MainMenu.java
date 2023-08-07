@@ -1,6 +1,6 @@
 package Tetris.Screens;
 
-import Tetris.Game.Board;
+import Tetris.Game.GameLoop;
 import Tetris.Rendering.Render;
 import Tetris.Rendering.RenderUtil;
 import Tetris.Rendering.Text;
@@ -35,7 +35,7 @@ public class MainMenu extends Screen {
         switch (selection) {
             case 1 -> {
                 Render.Screen = RenderUtil.ScreenState.Game;
-                Board.startGame(1);
+                GameLoop.game.start();
             }
             case 2 -> {
                 selection = 0;

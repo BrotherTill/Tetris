@@ -1,6 +1,6 @@
 package Tetris.Screens;
 
-import Tetris.Game.Board;
+import Tetris.Game.GameLoop;
 import Tetris.Rendering.Render;
 import Tetris.Rendering.RenderUtil;
 import Tetris.Rendering.Text;
@@ -40,7 +40,7 @@ public class LevelSelect extends Screen {
     public void selectionAction() {
         if(selection >= 1 && selection <= RenderUtil.LevelSelectionX * RenderUtil.LevelSelectionY) {
             Render.Screen = RenderUtil.ScreenState.Game;
-            Board.startGame(selection);
+            GameLoop.game.startLevel(selection);
         } else {
             selection = 0;
             Render.Screen = RenderUtil.ScreenState.Menu;

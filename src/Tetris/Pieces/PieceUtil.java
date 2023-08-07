@@ -1,14 +1,16 @@
 package Tetris.Pieces;
 
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Timer;
 
 public class PieceUtil {
 
-    private static ArrayList<types> GenBag = new ArrayList<>();
+    private static ArrayList<Type> GenBag = new ArrayList<>();
 
-    public enum types {     //the types of pieces that exist(you can add you own)
+    public enum Type {     //the types of pieces that exist(you can add you own)
         O(Pieces.OPiece),
         I(Pieces.IPiece),
         L(Pieces.LPiece),
@@ -18,20 +20,34 @@ public class PieceUtil {
         T(Pieces.TPiece),
         empty(Pieces.EmptyPiece);           //used for the Hold Slot
 
-        types(Piece piece) { this.obj = piece; }        //store the corresponding Tetris.Pieces.Piece
+        Type(Piece piece) { this.obj = piece; }        //store the corresponding Tetris.Pieces.Piece
         private final Piece obj;
 
         public Piece getPiece() { return obj; }
 
-        public static types randomType()  {     //generate a random Tetris.Pieces.Piece according to the Tetris Guidelines
+        public static Type randomType()  {     //generate a random Tetris.Pieces.Piece according to the Tetris Guidelines
             if(GenBag.isEmpty()) {
-                GenBag = new ArrayList<>(List.of(types.values()));
+                GenBag = new ArrayList<>(List.of(Type.values()));
                 GenBag.remove(empty);
                 Collections.shuffle(GenBag);
             }
-            types out = GenBag.get(0);
+            Type out = GenBag.get(0);
             GenBag.remove(0);
             return out;
+        }
+    }
+
+    public enum Direction {
+        north,
+        east,
+        south,
+        west;
+
+        public Direction getNextDirection() {
+            return values()[(ordinal() + 1) % 4];
+        }
+        public Direction getPreviousDirection() {
+            return values()[Math.abs((ordinal() - 1) % 4)];
         }
     }
 

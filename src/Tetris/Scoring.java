@@ -1,6 +1,7 @@
 package Tetris;
 
 import Tetris.Game.Board;
+import Tetris.Game.GameLoop;
 
 public class Scoring {
 
@@ -18,7 +19,7 @@ public class Scoring {
         }
         if(Scoring.lines >= level * 5) {
             if(level == 15) {
-                Board.GameWin();
+                GameLoop.game.GameWin();
             }
             nextLevel();
             Board.resetField();
