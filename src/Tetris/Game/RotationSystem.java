@@ -68,7 +68,7 @@ public class RotationSystem {
     }
 
     private static int loopAround(int i, int min, int max) {
-        return i % (max + 1) + min;
+        return Math.abs((i - min) % (max - min + 1)) + min;
     }
 
 }
