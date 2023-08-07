@@ -4,52 +4,79 @@ public class Piece {
 
     private Block[][] pieceArray;
 
-    private final int startX;
-    private final int startY;
+    private int startX;
+    private int startY;
 
-    private final float RxOffset;
-    private final float RyOffset;
+    private float RxOffset;
+    private float RyOffset;
 
     private int startRotation;
 
-    /**
-     * create a Tetris.Pieces.Piece with a Field in the pieceArray. Make sure that the number of rows matches the number of lines.
-     * the start Position Values are offsets for the 0 | 0 point(top left corner)
-     * The Tetris.Rendering.Render Offsets are for the next queue and are also offsets from the top-left corner
-     *
-     * @author me
-     */
-    public Piece(Block[][] pieceArray, int startX, int startY, float RxOffset, float RyOffset) {
+    private int[][] rotationPointX = new int[4][5];
+    private int[][] rotationPointY = new int[4][5];
+
+    void setField(Block[][] pieceArray) {
         this.pieceArray = pieceArray;
-        this.startX = startX;
-        this.startY = startY;
-        this.RxOffset = RxOffset;
-        this.RyOffset = RyOffset;
-        this.startRotation = 0;
     }
 
-    /**
-     * create a Tetris.Pieces.Piece with a Field in the pieceArray. Make sure that the number of rows matches the number of lines.
-     * the start Position Values are offsets for the 0 | 0 point(top left corner)
-     * The Tetris.Rendering.Render Offsets are for the next queue and are also offsets from the top-left corner
-     *
-     * @author me
-     */
-    public Piece(Block[][] pieceArray, int startX, int startY, float RxOffset, float RyOffset, int startRotation) {
+    void setStartX(int startX) {
+        this.startX = startX;
+    }
+    void setStartY(int startY) {
+        this.startY = startY;
+    }
+
+    void setRxOffset(float rxOffset) {
+        RxOffset = rxOffset;
+    }
+    void setRyOffset(float ryOffset) {
+        RyOffset = ryOffset;
+    }
+
+    void setStartRotation(int startRotation) {
+        this.startRotation = startRotation;
+    }
+
+    void setRotationPoint(int OrientationId, int[][] points) {
+        assert points.length == 5;
+        assert points[0].length == 2;
+        rotationPointX[OrientationId][0] = points[0][0];
+        rotationPointX[OrientationId][1] = points[1][0];
+        rotationPointX[OrientationId][2] = points[2][0];
+        rotationPointX[OrientationId][3] = points[3][0];
+        rotationPointX[OrientationId][4] = points[4][0];
+        rotationPointY[OrientationId][0] = points[0][1];
+        rotationPointY[OrientationId][1] = points[1][1];
+        rotationPointY[OrientationId][2] = points[2][1];
+        rotationPointY[OrientationId][3] = points[3][1];
+        rotationPointY[OrientationId][4] = points[4][1];
+    }
+
+    public Piece() {
+    }
+
+    public Piece(Block[][] pieceArray, int startX, int startY, int rxOffset, int ryOffset) {
         this.pieceArray = pieceArray;
         this.startX = startX;
         this.startY = startY;
-        this.RxOffset = RxOffset;
-        this.RyOffset = RyOffset;
-        this.startRotation = startRotation;
+        this.RxOffset = rxOffset;
+        this.RyOffset = ryOffset;
+    }
+
+    public int getRotationPointX(int OrientationId, int pointId) {
+        assert OrientationId <= 3 && OrientationId >= 0;
+        assert pointId <= 4 && pointId >= 0;
+        return rotationPointX[OrientationId][pointId];
+    }
+
+    public int getRotationPointY(int OrientationId, int pointId) {
+        assert OrientationId <= 3 && OrientationId >= 0;
+        assert pointId <= 5 && pointId >= 0;
+        return rotationPointY[OrientationId][pointId];
     }
 
     public Block[][] getField() {
         return pieceArray;
-    }
-
-    public void setPiece(Block[][] pieceArray) {
-        this.pieceArray = pieceArray;
     }
 
     public int getStartX() {
@@ -70,10 +97,6 @@ public class Piece {
 
     public int getStartRotation() {
         return startRotation;
-    }
-
-    public void setStartRotation(int startRotation) {
-        this.startRotation = startRotation;
     }
 
 }

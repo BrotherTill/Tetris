@@ -52,6 +52,7 @@ public class Scoring {
 
     public static void resetScore() {
         score = 0;
+        lines = 0;
     }
 
     public static void setLevel(int level) {

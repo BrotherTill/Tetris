@@ -30,7 +30,7 @@ public class Board implements ActionListener {
     static Timer fallCaller;
     private static boolean softFall = false;
     private static final int softFallRate = 50;
-    private static int fallCounter = 0;
+    private static int softFallCounter = 0;
 
     private static Duration deltaTime = Duration.ZERO;
     private static Duration elapsedTime = Duration.ZERO;
@@ -46,6 +46,8 @@ public class Board implements ActionListener {
 
     public static boolean GameOver = false;
     public static boolean GameWon = false;
+    public static boolean hardDropping = false;
+    public static boolean blockInput = false;
 
 
     public static void startGame(int level) {
@@ -53,39 +55,40 @@ public class Board implements ActionListener {
         holdSlot1 = PieceUtil.types.empty;
         holdSlot2 = PieceUtil.types.empty;
         generateNewPiece();
+
         Scoring.resetScore();
         Scoring.setLevel(level);
         for(int i = 0; i < fieldHeight + fieldExtra; i++) {
-            for(int j = 0; j < fieldWidth ; j++) {
+            for(int j = 0; j < fieldWidth ; j++)
                 field[i][j] = new Block();
-            }
         }
         GameOver = false;
         GameWon = false;
         Main.render.setCurrentListener(new Game());
         Board.setFallRate((int) Math.round(1000 * (Math.pow(0.8d - ((level - 1d) * 0.007d), (level - 1d)))));
         fallCaller.start();
+        blockInput = false;
     }
 
     public Board(int queueGenLength) {
         Board.queueGenLength = queueGenLength;
 
         Pieces.fullLine = new Block[fieldWidth];
-        for(int i = 0; i < fieldWidth ; i++) {
+        for(int i = 0; i < fieldWidth ; i++)
             Pieces.fullLine[i] = new Block(true);
-        }
 
         fallCaller = new Timer(fallRate / fallCallDivider, this);
     }
 
     public static void resetField() {
-        fallCaller.stop();
+        stop();
+        blockInput = true;
         fallingPiece = new FallingPiece(queueGenLength);
         holdSlot1 = PieceUtil.types.empty;
         holdSlot2 = PieceUtil.types.empty;
         generateNewPiece();
 
-        //Tetris.Scoring.resetScore();
+        //Scoring.resetScore();
         for(int i=0; i < fieldHeight; i++) {
             clear_line(fieldHeight - 1);
             try {
@@ -95,11 +98,11 @@ public class Board implements ActionListener {
             }
         }
         for(int i = 0; i < fieldHeight + fieldExtra; i++) {
-            for(int j = 0; j < fieldWidth ; j++) {
+            for(int j = 0; j < fieldWidth ; j++)
                 field[i][j] = new Block();
-            }
         }
         fallCaller.start();
+        blockInput = false;
     }
 
     @Override
@@ -109,18 +112,17 @@ public class Board implements ActionListener {
         if(softFall) {
             if(elapsedTime.toMillis() >= softFallRate) {
                 if(pieceFall()) {
-                    Scoring.sendSoftDrop(fallCounter);
-                    fallCounter = 0;
-                } else {
-                    fallCounter++;
-                }
+                    Scoring.sendSoftDrop(softFallCounter);
+                    softFallCounter = 0;
+                } else
+                    softFallCounter++;
                 elapsedTime = Duration.ZERO;
             }
         } else {
             if (elapsedTime.toMillis() >= fallRate) {
                 if (pieceFall()) {
-                    Scoring.sendSoftDrop(fallCounter);
-                    fallCounter = 0;
+                    Scoring.sendSoftDrop(softFallCounter);
+                    softFallCounter = 0;
                 }
                 elapsedTime = Duration.ZERO;
             }
@@ -140,14 +142,13 @@ public class Board implements ActionListener {
             placePiece();
             checkLines();
             generateNewPiece();
-            if(collide(0,0)) {
+            if(collide(0,0))
                 GameOver();
-            }
         }
         return out;
     }
 
-    private static boolean collide(int xOffset, int yOffset) {
+    public static boolean collide(int xOffset, int yOffset) {
         Block[][] pieceField = fallingPiece.getPieceField();
         int length = pieceField.length;
 
@@ -157,13 +158,11 @@ public class Board implements ActionListener {
                     continue;
 
                 if(     fallingPiece.getY() + y + fieldExtra + yOffset >= fieldHeight + fieldExtra ||
-                        !PieceUtil.inRange(x + fallingPiece.getX() + xOffset, 0, fieldWidth)) {
+                        !inRange(x + fallingPiece.getX() + xOffset, 0, fieldWidth))
                     return true;
-                }
-                if(field[fallingPiece.getY() + y + fieldExtra + yOffset][fallingPiece.getX() + x + xOffset].isFilled()) {
-                    return true;
-                }
 
+                if(field[fallingPiece.getY() + y + fieldExtra + yOffset][fallingPiece.getX() + x + xOffset].isFilled())
+                    return true;
             }
         }
         return false;
@@ -172,19 +171,17 @@ public class Board implements ActionListener {
     private static void placePiece() {
         Block[][] pieceField = fallingPiece.getPieceField();
         for(int y=0; y < pieceField.length; y++) {
-            for(int x=0; x < pieceField[0].length; x++) {
-                if(pieceField[y][x].isFilled()) {
+            for(int x=0; x < pieceField.length; x++) {
+                if(pieceField[y][x].isFilled())
                     field[fallingPiece.getY() + y + fieldExtra][fallingPiece.getX() + x].setFilled(true);
-                }
             }
         }
     }
 
     private static void checkLines() {
         int lines = 0;
-        int length = fallingPiece.getPieceField().length;
         int y = fallingPiece.getY();
-        for(int i=0; i < length; i++) {
+        for(int i=0; i < fallingPiece.getPieceField().length; i++) {
             if(y + i + fieldExtra < fieldHeight + fieldExtra) {
                 //System.out.println(Arrays.toString(Game_field[y + i + 20]));
                 if (Arrays.equals(field[y + i + fieldExtra], Pieces.fullLine)) {
@@ -193,15 +190,15 @@ public class Board implements ActionListener {
                 }
             }
         }
-        if(lines != 0) {
+        if(lines != 0)
             Scoring.sendLines(lines);
-        }
     }
 
     private static void clear_line(int line) {
         for (int y = line; y > 0; y--) {
             for(int i=0; i < fieldWidth; i++) {
-                field[y + fieldExtra][i].setFilled(field[y + fieldExtra - 1][i].isFilled());
+                field[y + fieldExtra][i].setFilled(
+                        field[y + fieldExtra - 1][i].isFilled());
             }
         }
     }
@@ -213,17 +210,17 @@ public class Board implements ActionListener {
         hold2Used = false;
     }
 
-    private static final Runnable endThread = () -> {
-        fallCaller.stop();
-        Main.render.setCurrentListener(new Menu());
+    private static final Thread endThread = new Thread(() -> {
+        stop();
         try {
             Thread.sleep((long) (Render.fadeDuration + 2000));
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        Main.render.setCurrentListener(new Menu());
         Screens.mainMenu.selection = 0;
         Render.Screen = RenderUtil.ScreenState.TryAgain;
-    };
+    });
 
     public static void stop() {
         fallCaller.stop();
@@ -231,72 +228,69 @@ public class Board implements ActionListener {
 
     public static void GameOver() {
         GameOver = true;
-        Thread mythread = new Thread(endThread);
-        mythread.start();
+        blockInput = true;
+        if(!endThread.isAlive())
+            endThread.start();
     }
 
     public static void GameWin() {
         GameWon = true;
-        Thread mythread = new Thread(endThread);
-        mythread.start();
+        blockInput = true;
+        if(!endThread.isAlive())
+            endThread.start();
     }
 
     public static void Pause() {
         if(fallCaller.isRunning()) {
             fallCaller.stop();
+            blockInput = true;
         } else {
             fallCaller.start();
+            blockInput = false;
         }
     }
 
     public static void Hold1() {
-        if(hold1Used)
+        if(hold1Used | blockInput)
             return;
 
         PieceUtil.types temp = holdSlot1;
         holdSlot1 = fallingPiece.getType();
 
-        if(temp != PieceUtil.types.empty) {
-            fallingPiece.setType(temp);
-        } else {
+        fallingPiece.setType(temp);
+        if(temp == PieceUtil.types.empty)
             fallingPiece.nextType();
-        }
         fallingPiece.setStartPos();
+
         hold1Used = true;
     }
     public static void Hold2() {
-        if(hold2Used)
+        if(hold2Used | blockInput)
             return;
 
         PieceUtil.types temp = holdSlot2;
         holdSlot2 = fallingPiece.getType();
 
-        if(temp != PieceUtil.types.empty) {
-            fallingPiece.setType(temp);
-        } else {
+        fallingPiece.setType(temp);
+        if(temp == PieceUtil.types.empty)
             fallingPiece.nextType();
-        }
         fallingPiece.setStartPos();
+
         hold2Used = true;
     }
 
     public static void rotateCCW() {
-        fallingPiece.addtoRotation(1);
-        if(collide(0,0)) {
-            fallingPiece.addtoRotation(-1);
-        }
+        RotationSystem.rotateCCW();
     }
     public static void rotateCW() {
-        fallingPiece.addtoRotation(-1);
-        if(collide(0,0)) {
-            fallingPiece.addtoRotation(1);
-        }
+        RotationSystem.rotateCW();
     }
 
-    private static final Runnable dropThread = () -> {
+    private static final Runnable dropRunnable = () -> {
         for (int i = 0; i < 50; i++) {
             if (pieceFall()) {
                 Scoring.sendHardDrop(i + 1);
+                hardDropping = false;
                 return;
             }
             try {
@@ -307,19 +301,27 @@ public class Board implements ActionListener {
         }
         generateNewPiece();
         System.out.println("failed Drop");
+        hardDropping = false;
     };
 
     public static void HardDrop() {
-        Thread myThread = new Thread(dropThread);
-        myThread.start();
+        if(!hardDropping && !blockInput) {
+            Thread myThread = new Thread(dropRunnable);
+            myThread.start();
+            hardDropping = true;
+        }
     }
 
     public static void MoveLeft() {
+        if(blockInput)
+            return;
         if(!collide(-1,0)) {
             fallingPiece.addtoX(-1);
         }
     }
     public static void MoveRight() {
+        if(blockInput)
+            return;
         if(!collide(1,0)) {
             fallingPiece.addtoX(1);
         }
@@ -329,6 +331,10 @@ public class Board implements ActionListener {
     }
     public static void stopSoftDrop() {
         softFall = false;
+    }
+
+    public static boolean inRange(int value, int min, int max) {
+        return (value>= min) && (value< max);
     }
 
     public static void setFallRate(int fallRate) {

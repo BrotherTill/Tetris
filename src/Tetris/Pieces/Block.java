@@ -23,7 +23,7 @@ public class Block {
     }
 
     @Override
-    public boolean equals(Object o) {       //not from StackOverflow wink wink
+    public boolean equals(Object o) {       //not from StackOverflow *wink wink*
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass())

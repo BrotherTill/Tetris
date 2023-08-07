@@ -10,46 +10,126 @@ public class Pieces {
     public static final Piece EmptyPiece = new Piece(new Block[0][0], 0, 0, 0, 0);
 
     //add your own pieces to the pool(also add them to Tetris.Pieces.PieceUtil.types)
-    public static final Piece OPiece = new Piece(new Block[][]{
-            {filled, filled},
-            {filled, filled}
-    }, 4, -2, 1.5F, 1.5F);
+    public static final Piece IPiece = new iPiece();
+    private static class iPiece extends Piece {
+        public iPiece() {
+            setField(new Block[][]{
+                    { empty,  empty,  empty,  empty},
+                    {filled, filled, filled, filled},
+                    { empty,  empty,  empty,  empty},
+                    { empty,  empty,  empty,  empty}});
+            setStartX(3);
+            setStartY(-2);
+            setRxOffset(0.5F);
+            setRyOffset(1F);
+            setRotationPoint(0, new int[][]{{1,1}, {0,1}, {3,1}, {0,1}, {3,1}});
+            setRotationPoint(1, new int[][]{{1,1}, {2,1}, {2,1}, {2,0}, {2,3}});
+            setRotationPoint(2, new int[][]{{1,1}, {3,1}, {0,1}, {3,2}, {0,2}});
+            setRotationPoint(3, new int[][]{{1,1}, {1,1}, {1,1}, {1,3}, {1,0}});
+        }
+    }
 
-    public static final Piece IPiece = new Piece(new Block[][]{
-            { empty,  empty,  empty,  empty},
-            { empty,  empty,  empty,  empty},
-            {filled, filled, filled, filled},
-            { empty,  empty,  empty,  empty}
-    }, 3, -3, 0.5F, 0);
+    public static final Piece OPiece = new oPiece();
+    private static class oPiece extends Piece {
+        public oPiece() {
+            setField(new Block[][]{
+                    {filled, filled},
+                    {filled, filled}});
+            setStartX(4);
+            setStartY(-2);
+            setRxOffset(1.5F);
+            setRyOffset(1.5F);
+        }
+    }
 
-    public static final Piece LPiece = new Piece(new Block[][]{
-            { empty,  empty, filled},
-            {filled, filled, filled},
-            { empty,  empty,  empty}
-    }, 3, -2, 1, 1.5F);
+    public static final Piece LPiece = new lPiece();
+    private static class lPiece extends Piece {
+        public lPiece() {
+            setField(new Block[][]{
+                    { empty,  empty, filled},
+                    {filled, filled, filled},
+                    { empty,  empty,  empty}});
+            setStartX(3);
+            setStartY(-2);
+            setRxOffset(1);
+            setRyOffset(1.5F);
+            setRotationPoint(0, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
+            setRotationPoint(1, new int[][]{{1,1}, {2,1}, {2,2}, {1,-1}, {2,-1}});
+            setRotationPoint(2, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
+            setRotationPoint(3, new int[][]{{1,1}, {0,1}, {0,2}, {1,-1}, {0,-1}});
+        }
+    }
 
-    public static final Piece JPiece = new Piece(new Block[][]{
-            {filled,  empty,  empty},
-            {filled, filled, filled},
-            { empty,  empty,  empty}
-    }, 3, -2, 1, 1.5F);
+    public static final Piece JPiece = new jPiece();
+    private static class jPiece extends Piece {
+        public jPiece() {
+            setField(new Block[][]{
+                    {filled,  empty,  empty},
+                    {filled, filled, filled},
+                    { empty,  empty,  empty}});
+            setStartX(3);
+            setStartY(-2);
+            setRxOffset(1);
+            setRyOffset(1.5F);
+            setRotationPoint(0, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
+            setRotationPoint(1, new int[][]{{1,1}, {2,1}, {2,2}, {1,-1}, {2,-1}});
+            setRotationPoint(2, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
+            setRotationPoint(3, new int[][]{{1,1}, {0,1}, {0,2}, {1,-1}, {0,-1}});
+        }
+    }
 
-    public static final Piece SPiece = new Piece(new Block[][]{
-            { empty, filled, filled},
-            {filled, filled,  empty},
-            { empty,  empty,  empty}
-    }, 3, -2, 1, 1.5F);
+    public static final Piece SPiece = new sPiece();
+    private static class sPiece extends Piece {
+        public sPiece() {
+            setField(new Block[][]{
+                    { empty, filled, filled},
+                    {filled, filled,  empty},
+                    { empty,  empty,  empty}});
+            setStartX(3);
+            setStartY(-2);
+            setRxOffset(1);
+            setRyOffset(1.5F);
+            setRotationPoint(0, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
+            setRotationPoint(1, new int[][]{{1,1}, {2,1}, {2,2}, {1,-1}, {2,-1}});
+            setRotationPoint(2, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
+            setRotationPoint(3, new int[][]{{1,1}, {0,1}, {0,2}, {1,-1}, {0,-1}});
+        }
+    }
 
-    public static final Piece ZPiece = new Piece(new Block[][]{
-            {filled, filled,  empty},
-            { empty, filled, filled},
-            { empty,  empty,  empty}
-    }, 3, -2, 1, 1.5F);
+    public static final Piece ZPiece = new zPiece();
+    private static class zPiece extends Piece {
+        public zPiece() {
+            setField(new Block[][]{
+                    {filled, filled,  empty},
+                    { empty, filled, filled},
+                    { empty,  empty,  empty}});
+            setStartX(3);
+            setStartY(-2);
+            setRxOffset(1);
+            setRyOffset(1.5F);
+            setRotationPoint(0, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
+            setRotationPoint(1, new int[][]{{1,1}, {2,1}, {2,2}, {1,-1}, {2,-1}});
+            setRotationPoint(2, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
+            setRotationPoint(3, new int[][]{{1,1}, {0,1}, {0,2}, {1,-1}, {0,-1}});
+        }
+    }
 
-    public static final Piece TPiece = new Piece(new Block[][]{
-            { empty, filled,  empty},
-            {filled, filled, filled},
-            { empty,  empty,  empty}
-    }, 3, -2, 1, 1.5F);
+    public static final Piece TPiece = new tPiece();
+    private static class tPiece extends Piece {
+        public tPiece() {
+            setField(new Block[][]{
+                    { empty, filled,  empty},
+                    {filled, filled, filled},
+                    { empty,  empty,  empty}});
+            setStartX(3);
+            setStartY(-2);
+            setRxOffset(1);
+            setRyOffset(1.5F);
+            setRotationPoint(0, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
+            setRotationPoint(1, new int[][]{{1,1}, {2,1}, {2,2}, {1,-1}, {2,-1}});
+            setRotationPoint(2, new int[][]{{1,1}, {1,1}, {1,1}, {1,1}, {1,1}});
+            setRotationPoint(3, new int[][]{{1,1}, {0,1}, {0,2}, {1,-1}, {0,-1}});
+        }
+    }
     
 }

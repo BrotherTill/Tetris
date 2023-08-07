@@ -59,7 +59,7 @@ public class PieceUtil {
 
         for(int y=0; y < length; y++) {
             for(int x=0; x < length; x++) {
-                switch (Math.abs(rotation % 4)) {
+                switch (Math.abs(Math.floorMod(rotation, 4))) {
                     case 0 -> {
                         return piece;
                     }
@@ -71,10 +71,6 @@ public class PieceUtil {
         }
 
         return out;
-    }
-
-    public static boolean inRange(int value, int min, int max) {
-        return (value>= min) && (value< max);
     }
 
 }

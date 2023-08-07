@@ -7,6 +7,7 @@ public class FallingPiece {
     private int rotation;
 
     private PieceUtil.types type;
+    private Block[][] field;
 
     private PieceUtil.types[] nextTypes;
     private int nextLength;
@@ -39,14 +40,6 @@ public class FallingPiece {
         return rotation;
     }
 
-    public void setRotation(int rotation) {
-        this.rotation = rotation;
-    }
-
-    public void addtoRotation(int adder) {
-        this.rotation += adder;
-    }
-
     public void setType(PieceUtil.types type) {
         this.type = type;
     }
@@ -64,9 +57,10 @@ public class FallingPiece {
     }
 
     public void setStartPos() {
+        field = type.getPiece().getField();
         x = type.getPiece().getStartX();
         y = type.getPiece().getStartY();
-        rotation = type.getPiece().getStartRotation();
+        rotation = 0;
     }
 
     public PieceUtil.types nextType() {
@@ -96,29 +90,33 @@ public class FallingPiece {
     public FallingPiece(int queueGenLength) {
         initPiece(queueGenLength);
     }
-    public FallingPiece(int x, int y, int rotation) {
+    public FallingPiece(int x, int y) {
         initPiece(10);
         setX(x);
         setY(y);
-        setRotation(rotation);
     }
-    public FallingPiece(int queueGenLength, int x, int y, int rotation) {
+    public FallingPiece(int queueGenLength, int x, int y) {
         initPiece(queueGenLength);
         setX(x);
         setY(y);
-        setRotation(rotation);
+    }
+
+    public void rotateCW() {
+        field = PieceUtil.rotate(field, 1);
+        rotation++;
+    }
+
+    public void rotateCCW() {
+        field = PieceUtil.rotate(field, -1);
+        rotation--;
     }
 
     public Block[][] getPieceField() {
-        return getPieceFieldbyIndex(0);
+        return field;
     }
 
     public Block[][] getPieceFieldbyIndex(int index) {
-        if(index == 0) {
-            return PieceUtil.rotate(type.getPiece().getField(), rotation);
-        } else {
-            return nextTypes[index - 1].getPiece().getField();
-        }
+        return nextTypes[index - 1].getPiece().getField();
     }
 
 }
