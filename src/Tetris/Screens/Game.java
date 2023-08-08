@@ -118,7 +118,10 @@ public class Game extends Screen {
         //draw Stats
         g.drawString(Text.lines,totalBlockWidth + totalBlockWidth * 5 / 2 - Text.linesWidth / 2, totalBlockHeight * 16 - blockPadding * 3);
         g.setFont(Text.textBigFont);
-        g.drawString(Text.level + Scoring.getLevel(),totalBlockWidth + totalBlockWidth * 5 / 2 - (Text.bigFontMetrics.stringWidth("LEVEL " + Scoring.getLevel()) / 2),totalBlockHeight * 9 - blockPadding * 3);
+        if(Scoring.getLevel() == -1)
+            g.drawString(Text.endless, totalBlockWidth + totalBlockWidth * 5 / 2 - Text.endlessWidth / 2,totalBlockHeight * 9 - blockPadding * 3);
+        else
+            g.drawString(Text.level + Scoring.getLevel(),totalBlockWidth + totalBlockWidth * 5 / 2 - (Text.levelWidth + Text.bigFontMetrics.stringWidth(String.valueOf(Scoring.getLevel()))) / 2,totalBlockHeight * 9 - blockPadding * 3);
         g.drawString(Text.score,totalBlockWidth + totalBlockWidth * 5 / 2 - Text.scoreWidth / 2,totalBlockHeight * 12 - blockPadding * 3);
         g.drawString(String.valueOf(Scoring.getScore()),totalBlockWidth + totalBlockWidth * 5 / 2 - Text.bigFontMetrics.stringWidth(String.valueOf(Scoring.getScore())) / 2,(int) (totalBlockHeight * 13.5 - blockPadding * 3));
         g.setFont(Text.textFont);
@@ -129,6 +132,15 @@ public class Game extends Screen {
         g.drawString(Text.exit, totalBlockWidth + totalBlockWidth * 5 / 2 - Text.exitWidth / 2, totalBlockHeight * 21 - blockPadding * 3);
 
         //
+
+        if(!Board.blockInput)
+            g.setColor(RenderUtil.SELECTION);
+        for(int i=0; i<fieldHeight + 3; i++) {
+            if(Board.collide(0, i+1)) {
+                drawField(fallingPiece.getPieceField(), 7 + fallingPiece.getX(), 1 + fallingPiece.getY() + i, g);
+                break;
+            }
+        }
 
         g.setColor(RenderUtil.Primary);
 

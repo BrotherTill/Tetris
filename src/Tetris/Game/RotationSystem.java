@@ -2,7 +2,6 @@ package Tetris.Game;
 
 import Tetris.Pieces.FallingPiece;
 import Tetris.Pieces.Piece;
-import Tetris.Pieces.PieceUtil;
 import Tetris.Pieces.PieceUtil.Direction;
 import Tetris.Pieces.PieceUtil.Type;
 

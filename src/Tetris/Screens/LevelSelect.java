@@ -31,9 +31,13 @@ public class LevelSelect extends Screen {
             }
         }
         addBtn(new Button("Quit", i + 1, RenderUtil.LevelSelectionX, RenderUtil.LevelSelectionY + 1,
-                frameWidth - BLOCKWidth - Text.fontMetrics.stringWidth("Main Menu") / 2 - Text.fontHeight / 3,
-                TOTALBLOCKHeight * 7 - Text.fontHeight, frameWidth - BLOCKWidth + Text.fontMetrics.stringWidth("Main Menu") / 2 + Text.fontHeight / 3,
+                frameWidth - BLOCKWidth - Text.exitMenuWidth / 2 - Text.fontHeight / 3,
+                TOTALBLOCKHeight * 7 - Text.fontHeight, frameWidth - BLOCKWidth + Text.exitMenuWidth / 2 + Text.fontHeight / 3,
                 TOTALBLOCKHeight * 7 + Text.fontHeight / 3));
+        addBtn(new Button("Endless", -1, RenderUtil.LevelSelectionX / 2, RenderUtil.LevelSelectionY + 1,
+                frameWidth / 2 - Text.endlessMdWidth / 2 - Text.fontHeight / 3,
+                (int) (TOTALBLOCKHeight * 6.5F) - Text.bigFontHeight, frameWidth / 2 + Text.endlessMdWidth / 2 + Text.fontHeight / 3,
+                (int) (TOTALBLOCKHeight * 6.5F) + Text.bigFontHeight / 3));
     }
 
     @Override
@@ -41,9 +45,16 @@ public class LevelSelect extends Screen {
         if(selection >= 1 && selection <= RenderUtil.LevelSelectionX * RenderUtil.LevelSelectionY) {
             Render.Screen = RenderUtil.ScreenState.Game;
             GameLoop.game.startLevel(selection);
-        } else {
+            selection = 0;
+        } else
+        if(selection == RenderUtil.LevelSelectionX * RenderUtil.LevelSelectionY + 1){
             selection = 0;
             Render.Screen = RenderUtil.ScreenState.Menu;
+        }
+        if(selection == -1) {
+            selection = 0;
+            Render.Screen = RenderUtil.ScreenState.Game;
+            GameLoop.game.startLevel(-1);
         }
     }
 
@@ -64,7 +75,7 @@ public class LevelSelect extends Screen {
         g.setColor(RenderUtil.Primary);
         g.fillRect(0, 0, frameWidth, frameHeight);
 
-        g.setColor(RenderUtil.Background);
+        g.setColor(Text.color);
 
         g.setFont(Text.textHeaderFont);
         g.drawString("Level Select", (frameWidth / 2) - (Text.headerFontMetrics.stringWidth("Level Select") / 2), TOTALBLOCKHeight);
@@ -82,10 +93,15 @@ public class LevelSelect extends Screen {
             }
         }
 
+        g.setColor(Text.color);
+        if(selection == -1)
+            g.setColor(Text.selectionColor);
+        g.drawString(Text.endlessMd, frameWidth / 2 - Text.endlessMdWidth / 2, (int) (TOTALBLOCKHeight * 6.5F));
+
+        g.setColor(Text.exitColor);
         g.setFont(Text.textFont);
-        g.setColor(Color.BLACK);
         if(selection == MAXXSelection * MAXYSelection + 1)
-            g.setColor(new Color(246, 46, 46, 255));
+            g.setColor(Text.exitSelectionColor);
         g.drawString(Text.exitMenu, frameWidth - BLOCKWidth - Text.exitMenuWidth / 2, TOTALBLOCKHeight * 7);
     }
 }

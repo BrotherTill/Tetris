@@ -33,7 +33,7 @@ public class Board {
 
     public static boolean GameOver = false;
     public static boolean GameWon = false;
-    public static boolean hardDropping = false;
+    public static boolean hardDrop = false;
     public static boolean blockInput = false;
 
 
@@ -89,30 +89,35 @@ public class Board {
 
     public static void updateGame(long deltaLoopTime) {
         //System.out.println("action Performing");
-        System.out.print("delta: " + deltaLoopTime + "     total: ");
+        //System.out.print("delta: " + deltaLoopTime + "     total: ");
         elapsedTime += deltaLoopTime;
+        if(hardDrop) {
+            pieceDrop();
+            hardDrop = false;
+            return;
+        }
         if (softFall) {
             if (elapsedTime >= softFallRate) {
-                System.out.println(elapsedTime);
+                //System.out.println(elapsedTime);
                 if (pieceFall()) {
                     Scoring.sendSoftDrop(softFallCounter);
                     softFallCounter = 0;
                 } else
                     softFallCounter++;
                 elapsedTime = 0;
-            } else
-                System.out.println("--");
+            } //else
+                //System.out.println("--");
 
         } else {
             if (elapsedTime >= fallRate) {
-                System.out.println(elapsedTime);
+                //System.out.println(elapsedTime);
                 if (pieceFall()) {
                     Scoring.sendSoftDrop(softFallCounter);
                     softFallCounter = 0;
                 }
                 elapsedTime = 0;
-            } else
-                System.out.println("--");
+            } //else
+                //System.out.println("--");
         }
     }
 
@@ -129,6 +134,23 @@ public class Board {
                 GameLoop.game.GameOver();
         }
         return out;
+    }
+
+    private static void pieceDrop() {
+        for (int i = 0; i < 50; i++) {
+            if (pieceFall()) {
+                Scoring.sendHardDrop(i + 1);
+                Scoring.sendHardDrop(i + 1);
+                return;
+            }
+            try {
+                Thread.sleep(4);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        generateNewPiece();
+        System.out.println("failed Drop");
     }
 
     public static boolean collide(int xOffset, int yOffset) {
@@ -223,36 +245,17 @@ public class Board {
     }
 
     public static void rotateCCW() {
-        RotationSystem.rotateCCW();
+        if(!blockInput)
+            RotationSystem.rotateCCW();
     }
     public static void rotateCW() {
-        RotationSystem.rotateCW();
+        if(!blockInput)
+            RotationSystem.rotateCW();
     }
 
-    private static final Runnable dropRunnable = () -> {
-        for (int i = 0; i < 50; i++) {
-            if (pieceFall()) {
-                Scoring.sendHardDrop(i + 1);
-                hardDropping = false;
-                return;
-            }
-            try {
-                Thread.sleep(4);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        generateNewPiece();
-        System.out.println("failed Drop");
-        hardDropping = false;
-    };
-
     public static void HardDrop() {
-        if(!hardDropping && !blockInput) {
-            Thread myThread = new Thread(dropRunnable);
-            myThread.start();
-            hardDropping = true;
-        }
+        if(!hardDrop && !blockInput)
+            hardDrop = true;
     }
 
     public static void MoveLeft() {
@@ -283,6 +286,7 @@ public class Board {
     public static void setFallRate(int fallRate) {
         System.out.println(fallRate);
         Board.fallRate = fallRate * 1000_000L;
+        GameLoop.game.setFrameTime(fallRate * 1000_000L);
     }
 
     public static FallingPiece getFallingPiece() {

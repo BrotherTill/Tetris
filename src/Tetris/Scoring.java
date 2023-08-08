@@ -10,6 +10,13 @@ public class Scoring {
     private static int lines = 0;
 
     public static void sendLines(int lines) {
+        if(level == -1)
+            sendEndLines(lines);
+        else
+            sendLevLines(lines);
+    }
+
+    private static void sendLevLines(int lines) {
         Scoring.lines += lines;
         switch (lines) {
             case 1 -> score += 100 * level;
@@ -23,6 +30,16 @@ public class Scoring {
             }
             nextLevel();
             Board.resetField();
+        }
+    }
+
+    private static void sendEndLines(int lines) {
+        Scoring.lines += lines;
+        switch (lines) {
+            case 1 -> score += 100;
+            case 2 -> score += 300;
+            case 3 -> score += 500;
+            case 4 -> score += 800;
         }
     }
 

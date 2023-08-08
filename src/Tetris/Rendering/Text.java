@@ -40,6 +40,8 @@ public class Text {
     public static int quitWidth;
     public static int menuWidth;
     public static int exitMenuWidth;
+    public static int endlessMdWidth;
+    public static int endlessWidth;
 
     public static String hold = "HOLD";
     public static String next = "NEXT";
@@ -60,6 +62,8 @@ public class Text {
     public static String quit = "Quit";
     public static String menu = "Main Menu";
     public static String exitMenu = "Main Menu";
+    public static String endlessMd = "Endless Mode";
+    public static String endless = "Endless";
 
     public static void init() {
         try {
@@ -99,6 +103,8 @@ public class Text {
         menuWidth = bigFontMetrics.stringWidth(menu);
         quitWidth = fontMetrics.stringWidth(quit);
         exitMenuWidth = fontMetrics.stringWidth(exitMenu);
+        endlessMdWidth = bigFontMetrics.stringWidth(endlessMd);
+        endlessWidth = bigFontMetrics.stringWidth(endless);
     }
 
 }

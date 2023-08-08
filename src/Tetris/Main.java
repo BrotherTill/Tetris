@@ -1,7 +1,6 @@
 package Tetris;
 
 import Tetris.Game.Board;
-import Tetris.Game.GameLoop;
 import Tetris.Rendering.Render;
 
 import javax.swing.*;
@@ -27,12 +26,14 @@ public class Main extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
+    public static JFrame ex;
+
     public static void main(String[] args) {
 
         new Board(7);       //initialize The Game Tetris.Logic.Board with a next queue Generation Length of 7(cannot be 0)
 
         EventQueue.invokeLater(() -> {
-            JFrame ex = new Main();
+            ex = new Main();
             ex.setVisible(true);
         });
 

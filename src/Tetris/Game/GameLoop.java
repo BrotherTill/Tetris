@@ -9,15 +9,11 @@ import Tetris.Screens.Screens;
 public class GameLoop {
 
     private static final int fallCallDivider = 20;
-    private static int fallRate = 1000;
-    private static boolean softFall = false;
-    private static final int softFallRate = 50;
-    private static int softFallCounter = 0;
 
     // if the game is running, default = true
     // if the game is paused, default = false
     private boolean isRunning;
-    private boolean isPaused;
+    private volatile boolean isPaused;
 
     // execution time for the last cycle of game loop
     private long lastLoopTime;
@@ -25,13 +21,8 @@ public class GameLoop {
     private long deltaLoopTime;
     private double deltaTime;
 
-    // if a second has passed since last execution
-    private boolean secondPassed;
-    private long secondTimer;
-
     // nanoseconds spent per frame
-    private final int OPTIMAL_FPS = 20;
-    private final int OPTIMAL_TIME = 1000000000 / OPTIMAL_FPS;
+    private long OPTIMAL_TIME = 1000_000000 / fallCallDivider;
 
     /**
      * Main Function, instantiating Game
@@ -45,43 +36,31 @@ public class GameLoop {
             throw new RuntimeException(e);
         }
     };
-    Runnable GameRunnable = () -> {
-        Board.updateGame(deltaLoopTime);
-    };
+    Runnable GameRunnable = () -> Board.updateGame(deltaLoopTime);
     Thread LoopThread;
-    Thread GameThread = new Thread();;
-
-    /**
-     *
-     */
-    public GameLoop () {
-        // the game is on and not paused
-        isRunning = false;
-        isPaused = false;
-
-        // a second has not yet passed
-        secondPassed = false;
-        secondTimer = System.currentTimeMillis();
-
-        // begin with current time
-        lastLoopTime = System.nanoTime();
-    }
+    Thread GameThread = new Thread();
 
     /**
      * Game Loop
      */
     public void RunLoop() throws InterruptedException {
-        while (isRunning == true) {
+        System.out.println("start");
+        while (isRunning) {
 
             // if the game is paused
-            if (isPaused == true) {
+            if (isPaused) {
                 // wait for user to unpause
-                while (isPaused == true) {
+                while (isPaused) {
+                    Thread.onSpinWait();
                 }
+                System.out.println("continue");
 
-                // reset time synching
+                // reset time syncing
                 lastLoopTime = System.nanoTime();
+                continue;
             }
+            if(Board.GameOver | Board.GameWon)
+                endGame();
 
             // get delta time
             currentLoopTime = System.nanoTime();
@@ -90,15 +69,30 @@ public class GameLoop {
             // set last to current
             lastLoopTime = currentLoopTime;
 
-            if(GameThread.isAlive())
-                GameThread.join();
-            GameThread = new Thread(GameRunnable);
-            // update game
-            GameThread.start();
+            if(!GameThread.isAlive()) {
+                GameThread = new Thread(GameRunnable);
+                // update game
+                GameThread.start();
+            }
 
             // wait for game to catch up (if loop execution was too fast)
-            Thread.sleep( (lastLoopTime - System.nanoTime() + OPTIMAL_TIME)/1000_000 );
+            if(System.nanoTime() - lastLoopTime  < OPTIMAL_TIME)
+                Thread.sleep( (lastLoopTime - System.nanoTime() + OPTIMAL_TIME)/1000_000 );
+            else
+                System.out.println("Dropping Frames");
         }
+    }
+
+    public void endGame() {
+        stop();
+        try {
+            Thread.sleep((long) (Render.fadeDuration + 2000));
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        Main.render.setCurrentListener(new Menu());
+        Screens.mainMenu.selection = 0;
+        Render.Screen = RenderUtil.ScreenState.TryAgain;
     }
 
     public void init(int level) {
@@ -141,35 +135,27 @@ public class GameLoop {
     public void GameOver() {
         Board.GameOver = true;
         Board.blockInput = true;
-        endGame();
     }
 
     public void GameWin() {
         Board.GameWon = true;
         Board.blockInput = true;
-        endGame();
-    }
-
-    public void endGame() {
-        stop();
-        try {
-            Thread.sleep((long) (Render.fadeDuration + 2000));
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        Main.render.setCurrentListener(new Menu());
-        Screens.mainMenu.selection = 0;
-        Render.Screen = RenderUtil.ScreenState.TryAgain;
     }
 
     public void togglePause() {
-        if(isRunning) {
+        if(!isPaused) {
             pause();
             Board.blockInput = true;
         } else {
             resume();
             Board.blockInput = false;
         }
+    }
+
+    public void setFrameTime(long millis) {
+        OPTIMAL_TIME = 1000_000000 / fallCallDivider;
+        if(millis < OPTIMAL_TIME)
+            OPTIMAL_TIME = millis;
     }
 
     public boolean isRunning() {
