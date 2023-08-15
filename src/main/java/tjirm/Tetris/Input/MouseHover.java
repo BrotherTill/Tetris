@@ -12,10 +12,10 @@ public class MouseHover extends MouseMotionAdapter {
     public void mouseMoved(MouseEvent e) {
         Screen screen = Screens.getCurrent();
 
-        int btn = screen.buttonAt(e.getX(), e.getY());
+        int btn = screen.elementAt(e.getX(), e.getY());
 
         if(btn != -1)
-            screen.selection = screen.getBtnbyID(btn).getSelectionID();
+            screen.selection = screen.getElembyID(btn).getSelectionID();
         else
             screen.selection = 0;
     }
@@ -24,10 +24,10 @@ public class MouseHover extends MouseMotionAdapter {
     public void mouseDragged(MouseEvent e) {
         Screen screen = Screens.getCurrent();
 
-        int btn = screen.buttonAt(e.getX(), e.getY());
+        int btn = screen.elementAt(e.getX(), e.getY());
 
         if(btn != -1)
-            screen.selection = screen.getBtnbyID(btn).getSelectionID();
+            screen.selection = screen.getElembyID(btn).getSelectionID();
         else
             screen.selection = 0;
     }

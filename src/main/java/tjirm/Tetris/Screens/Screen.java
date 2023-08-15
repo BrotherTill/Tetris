@@ -4,6 +4,7 @@ import main.java.tjirm.Tetris.Pieces.PieceUtil.Direction;
 import main.java.tjirm.Tetris.Rendering.RenderUtil;
 import main.java.tjirm.Tetris.Screens.Elements.Button;
 import main.java.tjirm.Tetris.Screens.Elements.Element;
+import main.java.tjirm.Tetris.Screens.Elements.Toggle;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -41,54 +42,32 @@ public abstract class Screen {
         init();
     }
 
-    private List<Button> buttonList = new ArrayList<>();
     private List<Element> elementList = new ArrayList<>();
 
-    private int maxX = 0;
-    private int maxY = 0;
-
-    private HashMap<Integer, HashMap<Integer, Integer>> IdMap = new HashMap<>();
-
     public void addBtn(Button newButton) {
-        buttonList.add(newButton);
         elementList.add(newButton);
-        if(newButton.getX() > maxX)
-            maxX = newButton.getX();
-        if(newButton.getY() > maxY)
-            maxY = newButton.getY();
-        addToMap(newButton.getX(), newButton.getY(), newButton.getSelectionID());
     }
 
-    private void addToMap(int x, int y, int value) {
-        if(!IdMap.containsKey(y))
-            IdMap.put(y, new HashMap<>());
-        IdMap.get(y).put(x, value);
+    public void addTgl(Toggle newToggle) {
+        elementList.add(newToggle);
     }
 
-    private int getFromMap(int x, int y) {
-        if(!IdMap.containsKey(y))
-            return -1;
-        if(!IdMap.get(y).containsKey(x))
-            return -1;
-        return IdMap.get(y).get(x);
-    }
-
-    public int buttonAt(int x, int y) {
-        for(int i=0; i< buttonList.size(); i++) {
-            if(buttonList.get(i).inBoundingBox(x,y))
+    public int elementAt(int x, int y) {
+        for(int i=0; i< elementList.size(); i++) {
+            if(elementList.get(i).inBoundingBox(x,y))
                 return i;
         }
         return -1;
     }
 
     public int getSelectionId(Direction direction, int currentId) {
-        if(buttonList.isEmpty())
+        if(elementList.isEmpty())
             return 0;
-        Button currentBtn = null;
-        for (Button button : buttonList)
-            if (button.getSelectionID() == currentId)
-                currentBtn = button;
-        if(currentBtn == null) {
+        Element currentElem = null;
+        for (Element elem : elementList)
+            if (elem.getSelectionID() == currentId)
+                currentElem = elem;
+        if(currentElem == null) {
             switch (direction) {
                 case north -> { return findValid(direction, 1, 1); }
                 case south -> { return findValid(direction, 1, frameHeight); }
@@ -96,7 +75,7 @@ public abstract class Screen {
                 case east -> { return findValid(direction, frameWidth , 1); }
             }
         }
-        return findValid(direction, currentBtn.getX(), currentBtn.getY());
+        return findValid(direction, currentElem.getX(), currentElem.getY());
     }
 
     private int findValid(Direction direction, int x, int y) {
@@ -130,8 +109,8 @@ public abstract class Screen {
         return product.getSelectionID();
     }
 
-    public Button getBtnbyID(int Id) {
-        return buttonList.get(Id);
+    public Element getElembyID(int Id) {
+        return elementList.get(Id);
     }
 
     private int loopAround(int i, int max) {

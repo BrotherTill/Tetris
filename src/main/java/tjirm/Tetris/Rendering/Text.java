@@ -22,6 +22,8 @@ public class Text {
 
     public static Color color = Color.DARK_GRAY;
     public static Color selectionColor = Color.GRAY;
+    public static Color activeColor = new Color(12, 159, 38);
+    public static Color activeSelectionColor = new Color(22, 206, 43);
     public static Color exitColor = Color.BLACK;
     public static Color exitSelectionColor = new Color(246, 46, 46, 255);
 
@@ -77,6 +79,7 @@ public class Text {
         strings.put("color", "Color");
         strings.put("pattern", "Pattern");
         strings.put("retro", "Retro");
+        strings.put("ghost", "Ghost Piece");
 
         fontMetrics = Toolkit.getDefaultToolkit().getFontMetrics(textFont);
         bigFontMetrics = Toolkit.getDefaultToolkit().getFontMetrics(textBigFont);

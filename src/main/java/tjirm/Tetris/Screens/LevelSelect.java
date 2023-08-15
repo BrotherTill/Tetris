@@ -29,10 +29,8 @@ public class LevelSelect extends Screen {
                 addBtn(new Button(String.valueOf(i), Button.bigFontSize, i, xOrigin, yOrigin, true));
             }
         }
-        addBtn(new Button("endlessMd", Button.bigFontSize, i + 1, frameWidth / 2,
-                (int) (TOTALBLOCKHeight * 6.5F), true, false));
-        addBtn(new Button("menu", Button.normalFontSize, i + 2, frameWidth - BLOCKWidth,
-                TOTALBLOCKHeight * 7, true, true));
+        addBtn(new Button("endlessMd", Button.bigFontSize, i + 1, frameWidth / 2, (int) (TOTALBLOCKHeight * 6.5F), true, false));
+        addBtn(new Button("menu", Button.normalFontSize, i + 2, frameWidth - BLOCKWidth, TOTALBLOCKHeight * 7, true, true));
     }
 
     @Override
