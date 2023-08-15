@@ -1,5 +1,6 @@
 package main.java.tjirm.Tetris.Input;
 
+import main.java.tjirm.Tetris.Pieces.PieceUtil;
 import main.java.tjirm.Tetris.Screens.Screen;
 import main.java.tjirm.Tetris.Screens.Screens;
 
@@ -21,10 +22,10 @@ public class Menu extends KeyAdapter {
         heldKeys.add(key);
 
         switch (key) {
-            case KeyEvent.VK_DOWN -> screen.selection = screen.getSelectionId("down", screen.selection);
-            case KeyEvent.VK_UP -> screen.selection = screen.getSelectionId("up", screen.selection);
-            case KeyEvent.VK_LEFT -> screen.selection = screen.getSelectionId("left", screen.selection);
-            case KeyEvent.VK_RIGHT -> screen.selection = screen.getSelectionId("right", screen.selection);
+            case KeyEvent.VK_DOWN -> screen.selection = screen.getSelectionId(PieceUtil.Direction.south, screen.selection);
+            case KeyEvent.VK_UP -> screen.selection = screen.getSelectionId(PieceUtil.Direction.north, screen.selection);
+            case KeyEvent.VK_LEFT -> screen.selection = screen.getSelectionId(PieceUtil.Direction.west, screen.selection);
+            case KeyEvent.VK_RIGHT -> screen.selection = screen.getSelectionId(PieceUtil.Direction.east, screen.selection);
             case KeyEvent.VK_ENTER, KeyEvent.VK_SPACE -> screen.selectionAction();
             case KeyEvent.VK_ESCAPE -> screen.exitAction();
         }

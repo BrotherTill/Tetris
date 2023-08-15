@@ -24,7 +24,7 @@ public class TitleScreen extends Screen {
     }
 
     @Override
-    public void paint(Graphics g) {
+    public void draw(Graphics g) {
         int BLOCKHeight = blockHeight * 4;
         int BLOCKWidth = blockWidth * 4;
         int TOTALBLOCKHeight = totalBlockHeight * 4;
@@ -40,9 +40,9 @@ public class TitleScreen extends Screen {
 
         g.setColor(Text.color);
         g.setFont(Text.textHeaderFont);
-        g.drawString(Text.tetris, (frameWidth / 2) - Text.tetrisWidth / 2, TOTALBLOCKHeight);
+        g.drawString(Text.getStr("tetris"), (frameWidth / 2) - Text.getHeadWidth("tetris") / 2, TOTALBLOCKHeight);
         g.setFont(Text.textFont);
-        g.drawString("by Till", (frameWidth / 2) - Text.fontMetrics.stringWidth("by Till") / 2, TOTALBLOCKHeight * 5);
+        g.drawString("by Till", (frameWidth / 2) - Text.getTextWidth("by Till") / 2, TOTALBLOCKHeight * 5);
 
 
         elapsedTime += deltaTime.toMillis();

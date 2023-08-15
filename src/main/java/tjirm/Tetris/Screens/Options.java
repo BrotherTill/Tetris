@@ -2,6 +2,7 @@ package main.java.tjirm.Tetris.Screens;
 
 import main.java.tjirm.Tetris.Preferences;
 import main.java.tjirm.Tetris.Rendering.Text;
+import main.java.tjirm.Tetris.Screens.Elements.Button;
 
 import java.awt.*;
 
@@ -12,11 +13,16 @@ public class Options extends Screen {
         int BLOCKWidth = blockWidth * 3;
         int TOTALBLOCKHeight = totalBlockHeight * 3;
 
-        addBtn(new Button("minimalistic", 1, 1, 1, 0,0,0,0));
+        addBtn(new main.java.tjirm.Tetris.Screens.Elements.Button("mini", Button.bigFontSize, 1, 0, 0,true,false));
+        addBtn(new main.java.tjirm.Tetris.Screens.Elements.Button("color", Button.bigFontSize, 2, 0, 0,true,false));
+        addBtn(new main.java.tjirm.Tetris.Screens.Elements.Button("pattern", Button.bigFontSize, 3, 0, 0,true,false));
+        addBtn(new main.java.tjirm.Tetris.Screens.Elements.Button("retro", Button.bigFontSize, 4, 0, 0,true,false));
+        addBtn(new main.java.tjirm.Tetris.Screens.Elements.Button("Ghost", Button.bigFontSize, 5, 0, 0,true,false));
+        addBtn(new Button("menu", Button.normalFontSize, 6, 0, 0,true,true));
     }
 
     @Override
-    public void paint(Graphics g) {
+    public void draw(Graphics g) {
         int BLOCKHeight = blockHeight * 3;
         int BLOCKWidth = blockWidth * 3;
         int TOTALBLOCKHeight = totalBlockHeight * 3;
@@ -28,35 +34,8 @@ public class Options extends Screen {
 
         g.setColor(Text.color);
         g.setFont(Text.textHeaderFont);
-        g.drawString(Text.options, frameWidth / 2 - Text.headOptionsWidth / 2, TOTALBLOCKHeight);
+        g.drawString(Text.getStr("options"), frameWidth / 2 - Text.getHeadWidth("options") / 2, TOTALBLOCKHeight);
 
-        g.setFont(Text.textBigFont);
-        g.drawString(Text.start, frameWidth / 2 - Text.startWidth / 2, (int) (TOTALBLOCKHeight * 4.5F));
-        g.drawString(Text.endlessMd, frameWidth / 2 - Text.endlessMdWidth / 2, (int) (TOTALBLOCKHeight * (4.5F + 2.5F / 3F)));
-        g.drawString(Text.levels, frameWidth / 2 - Text.levelsWidth / 2, (int) (TOTALBLOCKHeight * (4.5F + (2.5F / 3F) * 2)));
-        g.drawString(Text.options, frameWidth / 2 - Text.optionsWidth / 2, TOTALBLOCKHeight * 7);
-        g.setFont(Text.textFont);
-        g.drawString(Text.credits, BLOCKWidth - Text.creditsWidth / 3, TOTALBLOCKHeight * 7);
-        g.setColor(Text.exitColor);
-        g.drawString(Text.quit, frameWidth - BLOCKWidth - Text.quitWidth / 2, TOTALBLOCKHeight * 7);
-        g.setFont(Text.textBigFont);
-
-        g.setColor(Text.selectionColor);
-        switch (selection) {
-            case 1 ->   g.drawString(Text.start, frameWidth / 2 - Text.startWidth / 2, (int) (TOTALBLOCKHeight * 4.5F));
-            case 2 ->   g.drawString(Text.endlessMd, frameWidth / 2 - Text.endlessMdWidth / 2, (int) (TOTALBLOCKHeight * (4.5F + 2.5F / 3F)));
-            case 3 ->   g.drawString(Text.levels, frameWidth / 2 - Text.levelsWidth / 2, (int) (TOTALBLOCKHeight * (4.5F + (2.5F / 3F) * 2)));
-            case 4 ->   g.drawString(Text.options, frameWidth / 2 - Text.optionsWidth / 2, TOTALBLOCKHeight * 7);
-            case 5 -> {
-                g.setFont(Text.textFont);
-                g.drawString(Text.credits, BLOCKWidth - Text.creditsWidth / 3, TOTALBLOCKHeight * 7);
-            }
-            case 6 -> {
-                g.setColor(Text.exitSelectionColor);
-                g.setFont(Text.textFont);
-                g.drawString(Text.quit, frameWidth - BLOCKWidth - Text.quitWidth / 2, TOTALBLOCKHeight * 7);
-            }
-        }
     }
 
 }

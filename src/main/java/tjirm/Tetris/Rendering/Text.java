@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Text {
 
@@ -11,9 +13,9 @@ public class Text {
     public static Font textFont;                        // = new Font("MinecraftRegular", Font.BOLD, 30);
     public static Font textBigFont;                     // = new Font("MinecraftRegular", Font.BOLD, 45);
     public static Font textHeaderFont;                 // = new Font("MinecraftRegular", Font.BOLD, 70);
-    public static FontMetrics fontMetrics;              // = getFontMetrics(textFont);
-    public static FontMetrics bigFontMetrics;           // = getFontMetrics(textBigFont);
-    public static FontMetrics headerFontMetrics;       // = getFontMetrics(textBigFont);
+    private static FontMetrics fontMetrics;              // = getFontMetrics(textFont);
+    private static FontMetrics bigFontMetrics;           // = getFontMetrics(textBigFont);
+    private static FontMetrics headerFontMetrics;       // = getFontMetrics(textBigFont);
     public static int fontHeight;
     public static int bigFontHeight;
     public static int headerFontHeight;
@@ -23,54 +25,10 @@ public class Text {
     public static Color exitColor = Color.BLACK;
     public static Color exitSelectionColor = new Color(246, 46, 46, 255);
 
-    public static int holdWidth;
-    public static int nextWidth;
-    public static int overWidth;
-    public static int winWidth;
-    public static int levelWidth;
-    public static int overLevelWidth;
-    public static int scoreWidth;
-    public static int overScoreWidth;
-    public static int bigOverScoreWidth;
-    public static int linesWidth;
-    public static int overLinesWidth;
-    public static int exitWidth;
-    public static int tetrisWidth;
-    public static int startWidth;
-    public static int restartWidth;
-    public static int levelsWidth;
-    public static int creditsWidth;
-    public static int quitWidth;
-    public static int menuWidth;
-    public static int exitMenuWidth;
-    public static int endlessMdWidth;
-    public static int endlessWidth;
-    public static int optionsWidth;
-    public static int headOptionsWidth;
-
-    public static String hold = "HOLD";
-    public static String next = "NEXT";
-    public static String over = "Game Over!";
-    public static String win = "You Win";
-    public static String level = "Level ";
-    public static String overLevel = "Level: ";
-    public static String score = "Score";
-    public static String overScore = "Score: ";
-    public static String bigOverScore = "Score: ";
-    public static String lines = "lines";
-    public static String overLines = "lines: ";
-    public static String tetris = "Tetris";
-    public static String exit = "Exit(Esc)";
-    public static String start = "Start Game";
-    public static String restart = "Restart Game";
-    public static String levels = "Level Select";
-    public static String credits = "Credits";
-    public static String quit = "Quit";
-    public static String menu = "Main Menu";
-    public static String exitMenu = "Main Menu";
-    public static String endlessMd = "Endless Mode";
-    public static String endless = "Endless";
-    public static String options = "Options";
+    private static final HashMap<String, String> strings = new HashMap<>();
+    private static final HashMap<String, Integer> width = new HashMap<>();
+    private static final HashMap<String, Integer> bigWidth = new HashMap<>();
+    private static final HashMap<String, Integer> headWidth = new HashMap<>();
 
     public static void init() {
         try {
@@ -92,36 +50,86 @@ public class Text {
             throw new RuntimeException(e);                      //catch exception if the File is missing
         }                                                       //initialize other Font Variables(you can modify them if you want)
 
+        strings.put("default", "MISSING");
+
+        strings.put("hold", "HOLD");
+        strings.put("next", "NEXT");
+        strings.put("over", "Game Over!");
+        strings.put("win", "You Win");
+        strings.put("level", "Level ");
+        strings.put("overLevel", "Level: ");
+        strings.put("score", "Score");
+        strings.put("overScore", "Score: ");
+        strings.put("lines", "lines");
+        strings.put("overLines", "lines: ");
+        strings.put("tetris", "Tetris");
+        strings.put("exit", "Exit(Esc)");
+        strings.put("start", "Start game");
+        strings.put("restart", "Restart Game");
+        strings.put("levels", "Level Select");
+        strings.put("credits", "Credits");
+        strings.put("quit", "Quit");
+        strings.put("menu", "Main Menu");
+        strings.put("endlessMd", "Endless Mode");
+        strings.put("endless", "Endless");
+        strings.put("options", "Options");
+        strings.put("mini", "Minimalistic");
+        strings.put("color", "Color");
+        strings.put("pattern", "Pattern");
+        strings.put("retro", "Retro");
+
         fontMetrics = Toolkit.getDefaultToolkit().getFontMetrics(textFont);
         bigFontMetrics = Toolkit.getDefaultToolkit().getFontMetrics(textBigFont);
         headerFontMetrics = Toolkit.getDefaultToolkit().getFontMetrics(textHeaderFont);
         fontHeight = fontMetrics.getHeight();
         bigFontHeight = bigFontMetrics.getHeight();
         headerFontHeight = headerFontMetrics.getHeight();
-        holdWidth = fontMetrics.stringWidth(hold);
-        nextWidth = fontMetrics.stringWidth(next);
-        overWidth = headerFontMetrics.stringWidth(over);
-        winWidth = headerFontMetrics.stringWidth(win);
-        levelWidth = bigFontMetrics.stringWidth(level);
-        overLevelWidth = fontMetrics.stringWidth(overLevel);
-        scoreWidth = bigFontMetrics.stringWidth(score);
-        overScoreWidth = fontMetrics.stringWidth(overScore);
-        bigOverScoreWidth = bigFontMetrics.stringWidth(bigOverScore);
-        linesWidth = fontMetrics.stringWidth(lines);
-        overLinesWidth = fontMetrics.stringWidth(overLines);
-        exitWidth = fontMetrics.stringWidth(exit);
-        tetrisWidth = headerFontMetrics.stringWidth(tetris);
-        startWidth = bigFontMetrics.stringWidth(start);
-        restartWidth = bigFontMetrics.stringWidth(restart);
-        levelsWidth = bigFontMetrics.stringWidth(levels);
-        creditsWidth = fontMetrics.stringWidth(credits);
-        menuWidth = bigFontMetrics.stringWidth(menu);
-        quitWidth = fontMetrics.stringWidth(quit);
-        exitMenuWidth = fontMetrics.stringWidth(exitMenu);
-        endlessMdWidth = bigFontMetrics.stringWidth(endlessMd);
-        endlessWidth = bigFontMetrics.stringWidth(endless);
-        optionsWidth = bigFontMetrics.stringWidth(options);
-        headOptionsWidth = headerFontMetrics.stringWidth(options);
+
+        for(Map.Entry<String, String> entry : strings.entrySet()) {
+            String text = entry.getValue();
+            width.put(entry.getKey(), fontMetrics.stringWidth(text));
+            bigWidth.put(entry.getKey(), bigFontMetrics.stringWidth(text));
+            headWidth.put(entry.getKey(), headerFontMetrics.stringWidth(text));
+        }
+    }
+
+    public static String getStr(String name) {
+        if(!strings.containsKey(name))
+            return strings.get("default");
+        return strings.get(name);
+    }
+    public static int getWidth(String name) {
+        if(!width.containsKey(name))
+            return width.get("default");
+        return width.get(name);
+    }
+    public static int getBigWidth(String name) {
+        if(!bigWidth.containsKey(name))
+            return bigWidth.get("default");
+        return bigWidth.get(name);
+    }
+    public static int getHeadWidth(String name) {
+        if(!headWidth.containsKey(name))
+            return headWidth.get("default");
+        return headWidth.get(name);
+    }
+    public static int getTextWidth(String name) {
+        return fontMetrics.stringWidth(name);
+    }
+    public static int getBigTextWidth(String name) {
+        return bigFontMetrics.stringWidth(name);
+    }
+    public static int getHeadTextWidth(String name) {
+        return headerFontMetrics.stringWidth(name);
+    }
+    public static int getTextWidth(int name) {
+        return fontMetrics.stringWidth(String.valueOf(name));
+    }
+    public static int getBigTextWidth(int name) {
+        return bigFontMetrics.stringWidth(String.valueOf(name));
+    }
+    public static int getHeadTextWidth(int name) {
+        return headerFontMetrics.stringWidth(String.valueOf(name));
     }
 
 }

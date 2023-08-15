@@ -12,6 +12,7 @@ import main.java.tjirm.Tetris.Rendering.Render;
 import main.java.tjirm.Tetris.Rendering.RenderUtil;
 import main.java.tjirm.Tetris.Rendering.Text;
 import main.java.tjirm.Tetris.Scoring;
+import main.java.tjirm.Tetris.Screens.Elements.Button;
 
 import java.awt.*;
 
@@ -29,9 +30,7 @@ public class Game extends Screen {
 
     @Override
     public void init() {
-        addBtn(new Button("Exit", 1, 1, 1, totalBlockWidth + totalBlockWidth * 5 / 2 - Text.exitWidth / 2 - Text.fontHeight / 3,
-                totalBlockHeight * 21 - blockPadding * 3 - Text.fontHeight, totalBlockWidth + totalBlockWidth * 5 / 2 + Text.exitWidth / 2 + Text.fontHeight / 3,
-                totalBlockHeight * 21 - blockPadding * 3 + Text.fontHeight / 3));
+        addBtn(new Button("exit", Button.normalFontSize, 1, totalBlockWidth + totalBlockWidth * 5 / 2, totalBlockHeight * 21 - blockPadding * 3, true, true));
     }
 
     @Override
@@ -49,7 +48,7 @@ public class Game extends Screen {
     }
 
     @Override
-    public void paint(Graphics g) {
+    protected void draw(Graphics g) {
         //System.out.println("Starting paint");
         drawScreen(g);          //draw the whole Tetris.Logic.Board(Game Field, Score, Held pieces, and net queue)
 
@@ -70,14 +69,14 @@ public class Game extends Screen {
         }
         g.setColor(new Color(203, 5, 5));           //Text color
         g.setFont(Text.textHeaderFont);
-        g.drawString(Text.over, frameWidth / 2 - Text.overWidth / 2, frameHeight / 2 - frameHeight / 5 - blockPadding);
+        g.drawString(Text.getStr("over"), frameWidth / 2 - Text.getHeadWidth("over") / 2, frameHeight / 2 - frameHeight / 5 - blockPadding);
         if(Scoring.getLevel() == Scoring.endlessLevel) {
             g.setFont(Text.textBigFont);
-            g.drawString(Text.bigOverScore + Scoring.getScore(), frameWidth / 2 - (Text.bigOverScoreWidth + Text.bigFontMetrics.stringWidth(String.valueOf(Scoring.getScore()))) / 2, frameHeight / 2 + blockPadding);
+            g.drawString(Text.getStr("overScore") + Scoring.getScore(), frameWidth / 2 - (Text.getBigWidth("overScore") + Text.getBigTextWidth(Scoring.getScore())) / 2, frameHeight / 2 + blockPadding);
         } else {
             g.setFont(Text.textFont);
-            g.drawString(Text.overLevel + Scoring.getLevel(), frameWidth / 2 - (Text.overLevelWidth + Text.fontMetrics.stringWidth(String.valueOf(Scoring.getLevel()))) / 2, frameHeight / 2 - Text.fontHeight / 2 + blockPadding);
-            g.drawString(Text.overScore + Scoring.getScore(), frameWidth / 2 - (Text.overScoreWidth + Text.fontMetrics.stringWidth(String.valueOf(Scoring.getScore()))) / 2, frameHeight / 2 + Text.fontHeight / 2 + blockPadding);
+            g.drawString(Text.getStr("overLevel") + Scoring.getLevel(), frameWidth / 2 - (Text.getWidth("overLevel") + Text.getTextWidth(Scoring.getLevel())) / 2, frameHeight / 2 - Text.fontHeight / 2 + blockPadding);
+            g.drawString(Text.getStr("overScore") + Scoring.getScore(), frameWidth / 2 - (Text.getWidth("overScore") + Text.getTextWidth(Scoring.getScore())) / 2, frameHeight / 2 + Text.fontHeight / 2 + blockPadding);
         }
     }
     private void drawGameWon(Graphics g) {
@@ -89,7 +88,7 @@ public class Game extends Screen {
         }
         g.setColor(new Color(81, 220, 11));         //Text color
         g.setFont(Text.textHeaderFont);
-        g.drawString(Text.win, frameWidth / 2 - Text.winWidth / 2, frameHeight / 2 - Text.headerFontHeight / 2);
+        g.drawString(Text.getStr("win"), frameWidth / 2 - Text.getHeadWidth("win") / 2, frameHeight / 2 - Text.headerFontHeight / 2);
     }
 
     private void drawScreen(Graphics g) {
@@ -135,24 +134,20 @@ public class Game extends Screen {
         //////////////////////Draw Text     !!Important when changing the Displayed Text make sure to change the width variables in initFont() too!!
         g.setColor(Text.color);
         g.setFont(Text.textFont);
-        g.drawString(Text.hold,totalBlockWidth + totalBlockWidth * 5 / 2 - Text.holdWidth / 2, blockHeight - blockPadding);
-        g.drawString(Text.hold,totalBlockWidth * 18 + totalBlockWidth * 5 / 2 - Text.holdWidth / 2, blockHeight - blockPadding);
-        g.drawString(Text.next,totalBlockWidth * 18 + totalBlockWidth * 5 / 2 - Text.nextWidth / 2,totalBlockHeight * 7 - blockPadding * 3);
+        g.drawString(Text.getStr("hold"),totalBlockWidth + totalBlockWidth * 5 / 2 - Text.getWidth("hold") / 2, blockHeight - blockPadding);
+        g.drawString(Text.getStr("hold"),totalBlockWidth * 18 + totalBlockWidth * 5 / 2 - Text.getWidth("hold") / 2, blockHeight - blockPadding);
+        g.drawString(Text.getStr("next"),totalBlockWidth * 18 + totalBlockWidth * 5 / 2 - Text.getWidth("next") / 2,totalBlockHeight * 7 - blockPadding * 3);
         //draw Stats
-        g.drawString(Text.lines,totalBlockWidth + totalBlockWidth * 5 / 2 - Text.linesWidth / 2, totalBlockHeight * 16 - blockPadding * 3);
+        g.drawString(Text.getStr("lines"),totalBlockWidth + totalBlockWidth * 5 / 2 - Text.getWidth("lines") / 2, totalBlockHeight * 16 - blockPadding * 3);
         g.setFont(Text.textBigFont);
         if(Scoring.getLevel() == -1)
-            g.drawString(Text.endless, totalBlockWidth + totalBlockWidth * 5 / 2 - Text.endlessWidth / 2,totalBlockHeight * 9 - blockPadding * 3);
+            g.drawString(Text.getStr("endless"), totalBlockWidth + totalBlockWidth * 5 / 2 - Text.getBigWidth("endless") / 2,totalBlockHeight * 9 - blockPadding * 3);
         else
-            g.drawString(Text.level + Scoring.getLevel(),totalBlockWidth + totalBlockWidth * 5 / 2 - (Text.levelWidth + Text.bigFontMetrics.stringWidth(String.valueOf(Scoring.getLevel()))) / 2,totalBlockHeight * 9 - blockPadding * 3);
-        g.drawString(Text.score,totalBlockWidth + totalBlockWidth * 5 / 2 - Text.scoreWidth / 2,totalBlockHeight * 12 - blockPadding * 3);
-        g.drawString(String.valueOf(Scoring.getScore()),totalBlockWidth + totalBlockWidth * 5 / 2 - Text.bigFontMetrics.stringWidth(String.valueOf(Scoring.getScore())) / 2,(int) (totalBlockHeight * 13.5 - blockPadding * 3));
+            g.drawString(Text.getStr("level") + Scoring.getLevel(),totalBlockWidth + totalBlockWidth * 5 / 2 - (Text.getBigWidth("level") + Text.getBigTextWidth(Scoring.getLevel())) / 2,totalBlockHeight * 9 - blockPadding * 3);
+        g.drawString(Text.getStr("score"),totalBlockWidth + totalBlockWidth * 5 / 2 - Text.getBigWidth("score") / 2,totalBlockHeight * 12 - blockPadding * 3);
+        g.drawString(String.valueOf(Scoring.getScore()),totalBlockWidth + totalBlockWidth * 5 / 2 - Text.getBigTextWidth(Scoring.getScore()) / 2,(int) (totalBlockHeight * 13.5 - blockPadding * 3));
         g.setFont(Text.textFont);
-        g.drawString(String.valueOf(Scoring.getLines()),totalBlockWidth + totalBlockWidth * 5 / 2 - Text.fontMetrics.stringWidth(String.valueOf(Scoring.getLines())) / 2,totalBlockHeight * 17 - blockPadding * 3);
-
-        if(selection == 1)
-            g.setColor(Text.exitSelectionColor);
-        g.drawString(Text.exit, totalBlockWidth + totalBlockWidth * 5 / 2 - Text.exitWidth / 2, totalBlockHeight * 21 - blockPadding * 3);
+        g.drawString(String.valueOf(Scoring.getLines()),totalBlockWidth + totalBlockWidth * 5 / 2 - Text.getTextWidth(Scoring.getLines()) / 2,totalBlockHeight * 17 - blockPadding * 3);
 
         //
 
