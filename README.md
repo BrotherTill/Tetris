@@ -1,4 +1,4 @@
-# Main.Java.tjirm.Tetris
+# main.java.tjirm.Tetris
 Java
 
 I am sorry for any discomfort while reading my Code
