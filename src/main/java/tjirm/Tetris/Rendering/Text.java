@@ -75,7 +75,7 @@ public class Text {
         strings.put("endlessMd", "Endless Mode");
         strings.put("endless", "Endless");
         strings.put("options", "Options");
-        strings.put("mini", "Minimalistic");
+        strings.put("minimalistic", "Minimalistic");
         strings.put("color", "Color");
         strings.put("pattern", "Pattern");
         strings.put("retro", "Retro");

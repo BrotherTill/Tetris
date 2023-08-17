@@ -2,8 +2,6 @@ package main.java.tjirm.Tetris.Screens;
 
 import main.java.tjirm.Tetris.Game.GameLoop;
 import main.java.tjirm.Tetris.Preferences;
-import main.java.tjirm.Tetris.Rendering.Render;
-import main.java.tjirm.Tetris.Rendering.RenderUtil;
 import main.java.tjirm.Tetris.Rendering.Text;
 import main.java.tjirm.Tetris.Scoring;
 import main.java.tjirm.Tetris.Screens.Elements.Button;
@@ -17,38 +15,38 @@ public class MainMenu extends Screen {
         int BLOCKWidth = blockWidth * 3;
         int TOTALBLOCKHeight = totalBlockHeight * 3;
 
-        addBtn(new Button("start", Button.bigFontSize, 1, frameWidth / 2, (int) (TOTALBLOCKHeight * 4.5F), true,false));
-        addBtn(new Button("endlessMd", Button.bigFontSize, 2, frameWidth / 2,  (int) (TOTALBLOCKHeight * (4.5F + 2.5F / 3F)), true, false));
-        addBtn(new Button("levels", Button.bigFontSize, 3, frameWidth / 2, (int) (TOTALBLOCKHeight * (4.5F + (2.5F / 3F) * 2)), true, false));
-        addBtn(new Button("options", Button.bigFontSize, 4, frameWidth / 2, TOTALBLOCKHeight * 7, true, false));
-        addBtn(new Button("credits", Button.normalFontSize, 5, BLOCKWidth / 2, TOTALBLOCKHeight * 7, false, false));
-        addBtn(new Button("quit", Button.normalFontSize, 6, frameWidth - BLOCKWidth, TOTALBLOCKHeight * 7, true, true));
+        addBtn("Start", "start", Button.bigFontSize, frameWidth / 2, (int) (TOTALBLOCKHeight * 4.5F), true,false);
+        addBtn("Endless", "endlessMd", Button.bigFontSize, frameWidth / 2,  (int) (TOTALBLOCKHeight * (4.5F + 2.5F / 3F)), true, false);
+        addBtn("Levels", "levels", Button.bigFontSize, frameWidth / 2, (int) (TOTALBLOCKHeight * (4.5F + (2.5F / 3F) * 2)), true, false);
+        addBtn("Options", "options", Button.bigFontSize, frameWidth / 2, TOTALBLOCKHeight * 7, true, false);
+        addBtn("Credits", "credits", Button.normalFontSize, BLOCKWidth / 2, TOTALBLOCKHeight * 7, false, false);
+        addBtn("Quit", "quit", Button.normalFontSize, frameWidth - BLOCKWidth, TOTALBLOCKHeight * 7, true, true);
     }
 
     @Override
-    public void selectionAction() {
+    protected void selectionAction() {
         switch (selection) {
-            case 1 -> {
-                Render.Screen = RenderUtil.ScreenState.Game;
+            case "Start" -> {
+                Screens.setScreen(Screens.ScreenState.Game);
                 GameLoop.game.start();
             }
-            case 2 -> {
-                Render.Screen = RenderUtil.ScreenState.Game;
+            case "Endless" -> {
+                Screens.setScreen(Screens.ScreenState.Game);
                 GameLoop.game.startLevel(Scoring.endlessLevel);
             }
-            case 3 -> {
-                selection = 0;
-                Render.Screen = RenderUtil.ScreenState.LevelSelect;
+            case "Levels" -> {
+                selection = "null";
+                Screens.setScreen(Screens.ScreenState.LevelSelect);
             }
-            case 4 -> {
-                selection = 0;
-                Render.Screen = RenderUtil.ScreenState.Options;
+            case "Options" -> {
+                selection = "null";
+                Screens.setScreen(Screens.ScreenState.Options);
             }
-            case 5 -> {
-                selection = 0;
-                Render.Screen = RenderUtil.ScreenState.Credits;
+            case "Credits" -> {
+                selection = "null";
+                Screens.setScreen(Screens.ScreenState.Credits);
             }
-            case 6 -> exitAction();
+            case "Quit" -> exitAction();
         }
     }
 
@@ -65,7 +63,7 @@ public class MainMenu extends Screen {
         int TOTALBLOCKWidth = totalBlockWidth * 3;
         int BLOCKPadding = blockPadding * 3;
 
-        g.setColor(Preferences.Primary);
+        g.setColor(Preferences.Frame);
         g.fillRect(0, 0, frameWidth, frameHeight);
 
         g.setColor(Preferences.Background);

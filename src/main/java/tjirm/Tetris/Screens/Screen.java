@@ -2,14 +2,12 @@ package main.java.tjirm.Tetris.Screens;
 
 import main.java.tjirm.Tetris.Pieces.PieceUtil.Direction;
 import main.java.tjirm.Tetris.Rendering.RenderUtil;
+import main.java.tjirm.Tetris.Screens.Elements.*;
 import main.java.tjirm.Tetris.Screens.Elements.Button;
-import main.java.tjirm.Tetris.Screens.Elements.Element;
-import main.java.tjirm.Tetris.Screens.Elements.Toggle;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 public abstract class Screen {
 
@@ -22,17 +20,27 @@ public abstract class Screen {
     final int frameHeight = RenderUtil.frameHeight;                  //Calculated from the Tetris.Pieces.Block height and padding
     final int frameWidth = RenderUtil.frameWidth;                    //Calculated from the Tetris.Pieces.Block width and padding
 
-    public int selection = 0;
+    public String selection = "null";
+    public String Mselection = "null";
+    public String Kselection = "null";
 
-    public void selectionAction() {
+    public void clickAction() {
+        selectionAction();
+    }
+    public void pressAction() {
+        selectionAction();
+    }
+
+    protected void selectionAction() {
     }
 
     public void exitAction() {}
 
     public void paint(Graphics g) {
         draw(g);
-        for(Element elem : elementList) {
-            elem.paint(g, selection);
+        for(Map.Entry<String, Element> entry : elementMap.entrySet()) {
+            if(entry.getValue().doPaint())
+                entry.getValue().paint(g, selection, Mselection, Kselection);
         }
     }
 
@@ -42,31 +50,46 @@ public abstract class Screen {
         init();
     }
 
-    private List<Element> elementList = new ArrayList<>();
+    private Map<String, Element> elementMap = new HashMap<>();
 
-    public void addBtn(Button newButton) {
-        elementList.add(newButton);
+    public void addBtn(String name, String text, int fontSize, int x, int y, boolean middle, boolean quit) {
+        elementMap.put(name, new Button(name, text, fontSize, x, y, middle, quit));
     }
 
-    public void addTgl(Toggle newToggle) {
-        elementList.add(newToggle);
+    public void addBtn(String text, int fontSize, int x, int y, boolean middle) {
+        elementMap.put("Special" + text, new Button(text, fontSize, x, y, middle));
     }
 
-    public int elementAt(int x, int y) {
-        for(int i=0; i< elementList.size(); i++) {
-            if(elementList.get(i).inBoundingBox(x,y))
-                return i;
+    public void addTgl(String name, String text, int fontSize, int x, int y, boolean middle, boolean active) {
+        elementMap.put(name, new Toggle(name, text, fontSize, x, y, middle, active));
+    }
+    public <Value> void addDropDown(DropDown<Value> newDropDown) {
+        elementMap.put(newDropDown.getName(), newDropDown);
+        newDropDown.getOptions().forEach((key, value) -> elementMap.put(value.getName(), value));
+    }
+
+    public Element elementAt(int x, int y) {
+        for(Map.Entry<String, Element> entry : elementMap.entrySet()) {
+            Element elem = entry.getValue();
+            if(elem.isActive() && elem.inBoundingBox(x,y))
+                return elem;
         }
-        return -1;
+        return null;
     }
 
-    public int getSelectionId(Direction direction, int currentId) {
-        if(elementList.isEmpty())
-            return 0;
-        Element currentElem = null;
-        for (Element elem : elementList)
-            if (elem.getSelectionID() == currentId)
-                currentElem = elem;
+    public String nameAt(int x, int y) {
+        for(Map.Entry<String, Element> entry : elementMap.entrySet()) {
+            Element elem = entry.getValue();
+            if(elem.isActive() && elem.inBoundingBox(x,y))
+                return entry.getKey();
+        }
+        return "null";
+    }
+
+    public String getName(Direction direction, String currentName) {
+        if(elementMap.isEmpty())
+            return "null";
+        Element currentElem = elementMap.get(currentName);
         if(currentElem == null) {
             switch (direction) {
                 case north -> { return findValid(direction, 1, 1); }
@@ -75,30 +98,33 @@ public abstract class Screen {
                 case east -> { return findValid(direction, frameWidth , 1); }
             }
         }
-        return findValid(direction, currentElem.getX(), currentElem.getY());
+        return findValid(direction, currentElem.getMidX(), currentElem.getY());
     }
 
-    private int findValid(Direction direction, int x, int y) {
+    private String findValid(Direction direction, int x, int y) {
         Element product = null;
         double minDistance = -1;
-        for(Element elem : elementList) {
+        for(Map.Entry<String, Element> entry : elementMap.entrySet()) {
+            Element elem = entry.getValue();
+            if(!elem.doPaint() || !elem.isActive())
+                continue;
             double distance = 0;
             switch (direction) {
                 case north -> {
                     distance = y > elem.getY() ? y - elem.getY() : y + frameHeight - elem.getY();
-                    distance = Math.sqrt(Math.abs(x - elem.getX()) * 2 + distance);
+                    distance = Math.sqrt(Math.abs(x - elem.getMidX()) + distance);
                 }
                 case south -> {
                     distance = y < elem.getY() ? elem.getY() - y : frameHeight - y + elem.getY();
-                    distance = Math.sqrt(Math.abs(x - elem.getX()) * 2 + distance);
+                    distance = Math.sqrt(Math.abs(x - elem.getMidX()) + distance);
                 }
                 case east -> {
-                    distance = x < elem.getX() ? elem.getX() - x : frameHeight - x + elem.getX();
-                    distance = Math.sqrt(Math.abs(y - elem.getY()) * 3 + distance);
+                    distance = x < elem.getMidX() ? elem.getMidX() - x : frameHeight - x + elem.getMidX();
+                    distance = Math.sqrt(Math.abs(y - elem.getY()) * 2 + distance);
                 }
                 case west -> {
-                    distance = x > elem.getX() ? x - elem.getX() : x + frameHeight - elem.getX();
-                    distance = Math.sqrt(Math.abs(y - elem.getY()) * 3 + distance);
+                    distance = x > elem.getMidX() ? x - elem.getMidX() : x + frameHeight - elem.getMidX();
+                    distance = Math.sqrt(Math.abs(y - elem.getY()) * 2 + distance);
                 }
             }
             if(product == null || distance < minDistance)
@@ -106,11 +132,20 @@ public abstract class Screen {
             if(minDistance == -1 || distance < minDistance)
                 minDistance = distance;
         }
-        return product.getSelectionID();
+        return product.getName();
     }
 
-    public Element getElembyID(int Id) {
-        return elementList.get(Id);
+    public Element getElementbyName(String name) {
+        return elementMap.get(name);
+    }
+    public Button getButtonbyName(String name) {
+        return (Button) elementMap.get(name);
+    }
+    public Toggle getTogglebyName(String name) {
+        return (Toggle) elementMap.get(name);
+    }
+    public DropDown getDropDownbyName(String name) {
+        return (DropDown) elementMap.get(name);
     }
 
     private int loopAround(int i, int max) {

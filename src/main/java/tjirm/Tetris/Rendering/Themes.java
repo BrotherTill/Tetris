@@ -96,7 +96,13 @@ public class Themes {
         return Patterns.size();
     }
     public static Image getPattern(String name) {
-        assert Patterns.containsKey(name) : "hi";
+        if(!Patterns.containsKey(name)) {
+            JOptionPane.showMessageDialog(null,
+                    "The Image for this Theme is missing",
+                    "Critical Error",
+                    JOptionPane.ERROR_MESSAGE);
+            throw new NullPointerException("Looked for a Theme for which the File does not Exist");
+        }
         return Patterns.get(name);
     }
 

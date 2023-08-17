@@ -28,6 +28,7 @@ public class Scoring {
         if(Scoring.lines >= level * 5) {
             if(level == 15) {
                 GameLoop.game.GameWin();
+                return;
             }
             nextLevel();
             Board.resetField();

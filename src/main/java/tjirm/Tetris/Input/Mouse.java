@@ -8,7 +8,7 @@ import java.awt.event.MouseEvent;
 
 public class Mouse extends MouseAdapter {
 
-    private int selection = 0;
+    private String selection = "null";
 
     @Override
     public void mousePressed(MouseEvent e) {
@@ -18,8 +18,8 @@ public class Mouse extends MouseAdapter {
     @Override
     public void mouseReleased(MouseEvent e) {
         Screen screen = Screens.getCurrent();
-        if(selection == screen.selection)
-            screen.selectionAction();
+        if(selection.equals(screen.selection))
+            screen.clickAction();
     }
 
 }

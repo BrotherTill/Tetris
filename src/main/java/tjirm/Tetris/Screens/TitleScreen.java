@@ -1,8 +1,6 @@
 package main.java.tjirm.Tetris.Screens;
 
 import main.java.tjirm.Tetris.Preferences;
-import main.java.tjirm.Tetris.Rendering.Render;
-import main.java.tjirm.Tetris.Rendering.RenderUtil;
 import main.java.tjirm.Tetris.Rendering.Text;
 
 import java.awt.*;
@@ -14,13 +12,17 @@ public class TitleScreen extends Screen {
     public static long elapsedTime = 0;
 
     @Override
-    public void selectionAction() {
-        Render.Screen = RenderUtil.ScreenState.Menu;
+    public void clickAction() {
+        exitAction();
+    }
+    @Override
+    public void pressAction() {
+        exitAction();
     }
 
     @Override
     public void exitAction() {
-        Render.Screen = RenderUtil.ScreenState.Menu;
+        Screens.setScreen(Screens.ScreenState.Menu);
     }
 
     @Override
@@ -31,7 +33,7 @@ public class TitleScreen extends Screen {
         int TOTALBLOCKWidth = totalBlockWidth * 4;
         int BLOCKPadding = blockPadding * 4;
 
-        g.setColor(Preferences.Primary);
+        g.setColor(Preferences.Frame);
         g.fillRect(0, 0, frameWidth, frameHeight);
 
         g.setColor(Preferences.Background);
@@ -48,7 +50,7 @@ public class TitleScreen extends Screen {
         elapsedTime += deltaTime.toMillis();
         if(elapsedTime <= 3000)
             return;
-        Render.Screen = RenderUtil.ScreenState.Menu;
+        Screens.setScreen(Screens.ScreenState.Menu);
     }
 
     @Override

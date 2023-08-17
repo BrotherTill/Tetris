@@ -9,7 +9,6 @@ import main.java.tjirm.Tetris.Pieces.FallingPiece;
 import main.java.tjirm.Tetris.Pieces.Piece;
 import main.java.tjirm.Tetris.Preferences;
 import main.java.tjirm.Tetris.Rendering.Render;
-import main.java.tjirm.Tetris.Rendering.RenderUtil;
 import main.java.tjirm.Tetris.Rendering.Text;
 import main.java.tjirm.Tetris.Scoring;
 import main.java.tjirm.Tetris.Screens.Elements.Button;
@@ -27,24 +26,23 @@ public class Game extends Screen {
 
     private static FallingPiece fallingPiece;
 
-
     @Override
     public void init() {
-        addBtn(new Button("exit", Button.normalFontSize, 1, totalBlockWidth + totalBlockWidth * 5 / 2, totalBlockHeight * 21 - blockPadding * 3, true, true));
+        addBtn("Exit", "exit", Button.normalFontSize, totalBlockWidth + totalBlockWidth * 5 / 2, totalBlockHeight * 21 - blockPadding * 3, true, true);
     }
 
     @Override
-    public void selectionAction() {
-        if (selection == 1)
+    protected void selectionAction() {
+        if (selection.equals("Exit"))
             exitAction();
     }
 
     @Override
     public void exitAction() {
-        selection = 0;
+        selection = "null";
         Main.render.setCurrentListener(new Menu());
         GameLoop.game.stop();
-        Render.Screen = RenderUtil.ScreenState.TryAgain;
+        Screens.setScreen(Screens.ScreenState.TryAgain);
     }
 
     @Override
@@ -53,9 +51,11 @@ public class Game extends Screen {
         drawScreen(g);          //draw the whole Tetris.Logic.Board(Game Field, Score, Held pieces, and net queue)
 
         if(Board.GameOver) {
+            ((Button) getElementbyName("Exit")).setActive(false);
             drawGameOver(g);
         }
         if(Board.GameWon) {
+            ((Button) getElementbyName("Exit")).setActive(false);
             drawGameWon(g);
         }
     }
@@ -117,7 +117,7 @@ public class Game extends Screen {
         drawField(tempPiece.getField(), 18 + tempPiece.getRxOffset(), 1 + tempPiece.getRyOffset(), g);
 
         ///////////////////////// draw the borders of the Frame
-        g.setColor(Preferences.Primary);
+        g.setColor(Preferences.Frame);
         g.fillRect(0,0, frameWidth, blockHeight + blockPadding);
         g.fillRect(0,0, blockWidth + blockPadding, frameHeight);
         g.fillRect(frameWidth - blockWidth - blockPadding,0, blockHeight + blockPadding, frameHeight);

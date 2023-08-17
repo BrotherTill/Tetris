@@ -2,6 +2,7 @@ package main.java.tjirm.Tetris.Input;
 
 import main.java.tjirm.Tetris.Game.Board;
 import main.java.tjirm.Tetris.Game.GameLoop;
+import main.java.tjirm.Tetris.Scoring;
 import main.java.tjirm.Tetris.Screens.Screens;
 
 import java.awt.event.KeyAdapter;
@@ -37,6 +38,8 @@ public class Game extends KeyAdapter {
                     -> GameLoop.game.togglePause();
             case KeyEvent.VK_F2
                     -> GameLoop.game.GameWin();
+            case KeyEvent.VK_F3
+                    -> Scoring.sendLines(10);
             case KeyEvent.VK_SHIFT, KeyEvent.VK_LESS, KeyEvent.VK_NUMPAD0
                     -> Board.Hold1();
             case KeyEvent.VK_C, KeyEvent.VK_DECIMAL

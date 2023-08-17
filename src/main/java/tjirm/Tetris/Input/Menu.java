@@ -22,11 +22,11 @@ public class Menu extends KeyAdapter {
         heldKeys.add(key);
 
         switch (key) {
-            case KeyEvent.VK_DOWN -> screen.selection = screen.getSelectionId(PieceUtil.Direction.south, screen.selection);
-            case KeyEvent.VK_UP -> screen.selection = screen.getSelectionId(PieceUtil.Direction.north, screen.selection);
-            case KeyEvent.VK_LEFT -> screen.selection = screen.getSelectionId(PieceUtil.Direction.west, screen.selection);
-            case KeyEvent.VK_RIGHT -> screen.selection = screen.getSelectionId(PieceUtil.Direction.east, screen.selection);
-            case KeyEvent.VK_ENTER, KeyEvent.VK_SPACE -> screen.selectionAction();
+            case KeyEvent.VK_DOWN -> screen.selection = screen.getName(PieceUtil.Direction.south, screen.selection);
+            case KeyEvent.VK_UP -> screen.selection = screen.getName(PieceUtil.Direction.north, screen.selection);
+            case KeyEvent.VK_LEFT -> screen.selection = screen.getName(PieceUtil.Direction.west, screen.selection);
+            case KeyEvent.VK_RIGHT -> screen.selection = screen.getName(PieceUtil.Direction.east, screen.selection);
+            case KeyEvent.VK_ENTER, KeyEvent.VK_SPACE -> screen.pressAction();
             case KeyEvent.VK_ESCAPE -> screen.exitAction();
         }
     }

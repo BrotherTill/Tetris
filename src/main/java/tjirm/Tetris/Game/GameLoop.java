@@ -3,7 +3,6 @@ package main.java.tjirm.Tetris.Game;
 import main.java.tjirm.Tetris.Input.Menu;
 import main.java.tjirm.Tetris.Main;
 import main.java.tjirm.Tetris.Rendering.Render;
-import main.java.tjirm.Tetris.Rendering.RenderUtil;
 import main.java.tjirm.Tetris.Screens.Screens;
 
 public class GameLoop {
@@ -36,7 +35,18 @@ public class GameLoop {
             throw new RuntimeException(e);
         }
     };
-    Runnable GameRunnable = () -> Board.updateGame(deltaLoopTime);
+    private class GameRunnable implements Runnable {
+        private long deltaTime;
+        public void setDeltaTime(long deltaTime) {
+            this.deltaTime = deltaTime;
+        }
+        @Override
+        public void run() {
+            Board.updateGame(deltaTime);
+        }
+    }
+    GameRunnable gameRunnable = new GameRunnable() {
+    };
     Thread LoopThread;
     Thread GameThread = new Thread();
 
@@ -69,14 +79,10 @@ public class GameLoop {
             // set last to current
             lastLoopTime = currentLoopTime;
 
-            if(!GameThread.isAlive()) {
-                GameThread = new Thread(GameRunnable);
-                // update game
-                GameThread.start();
-            }
+            Board.updateGame(deltaLoopTime);
 
             // wait for game to catch up (if loop execution was too fast)
-            if(System.nanoTime() - lastLoopTime  < OPTIMAL_TIME)
+            if(System.nanoTime() - lastLoopTime < OPTIMAL_TIME)
                 Thread.sleep( (lastLoopTime - System.nanoTime() + OPTIMAL_TIME)/1000_000 );
             else
                 System.out.println("Dropping Frames");
@@ -91,8 +97,8 @@ public class GameLoop {
             throw new RuntimeException(e);
         }
         Main.render.setCurrentListener(new Menu());
-        Screens.mainMenu.selection = 0;
-        Render.Screen = RenderUtil.ScreenState.TryAgain;
+        Screens.mainMenu.selection = "null";
+        Screens.setScreen(Screens.ScreenState.TryAgain);
     }
 
     public void init(int level) {
@@ -153,9 +159,7 @@ public class GameLoop {
     }
 
     public void setFrameTime(long millis) {
-        OPTIMAL_TIME = 1000_000000 / fallCallDivider;
-        if(millis < OPTIMAL_TIME)
-            OPTIMAL_TIME = millis;
+        OPTIMAL_TIME = millis;
     }
 
     public boolean isRunning() {

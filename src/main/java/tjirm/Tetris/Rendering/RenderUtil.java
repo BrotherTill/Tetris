@@ -48,13 +48,4 @@ public class RenderUtil {
         Screens.init();
     }
 
-    public enum ScreenState {
-        TitleScreen,
-        Menu,
-        LevelSelect,
-        Options,
-        Credits,
-        Game,
-        TryAgain
-    }
 }

@@ -3,7 +3,6 @@ package main.java.tjirm.Tetris.Rendering;
 import main.java.tjirm.Tetris.Input.Menu;
 import main.java.tjirm.Tetris.Input.Mouse;
 import main.java.tjirm.Tetris.Input.MouseHover;
-import main.java.tjirm.Tetris.Rendering.RenderUtil.ScreenState;
 import main.java.tjirm.Tetris.Screens.Screens;
 
 import javax.swing.*;
@@ -30,7 +29,6 @@ public class Render extends JPanel implements ActionListener{
     public static final float GameOverAlpha = 218;         //The final Value of the Opacity when the game ends in Alpha
     public static final float fadeDuration = 1000L;        //The time to fade out the Tetris.Logic.Board in Milliseconds
 
-    public static ScreenState Screen = ScreenState.TitleScreen;
     public static KeyListener currentListener = new Menu();
 
 

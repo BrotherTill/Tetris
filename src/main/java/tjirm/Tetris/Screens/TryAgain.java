@@ -3,8 +3,6 @@ package main.java.tjirm.Tetris.Screens;
 import main.java.tjirm.Tetris.Game.Board;
 import main.java.tjirm.Tetris.Game.GameLoop;
 import main.java.tjirm.Tetris.Preferences;
-import main.java.tjirm.Tetris.Rendering.Render;
-import main.java.tjirm.Tetris.Rendering.RenderUtil;
 import main.java.tjirm.Tetris.Rendering.Text;
 import main.java.tjirm.Tetris.Scoring;
 import main.java.tjirm.Tetris.Screens.Elements.Button;
@@ -17,30 +15,28 @@ public class TryAgain extends Screen {
     public void init() {
         int TOTALBLOCKHeight = totalBlockHeight * 3;
 
-        addBtn(new Button("restart", Button.bigFontSize, 1, frameWidth / 2, TOTALBLOCKHeight * 6, true, false));
-        addBtn(new Button("menu", Button.bigFontSize, 2, frameWidth / 2, TOTALBLOCKHeight * 7, true, false));
+        addBtn("Restart", "restart", Button.bigFontSize, frameWidth / 2, TOTALBLOCKHeight * 6, true, false);
+        addBtn("Menu", "menu", Button.bigFontSize, frameWidth / 2, TOTALBLOCKHeight * 7, true, false);
     }
 
     @Override
-    public void selectionAction() {
+    protected void selectionAction() {
         switch (selection) {
-            case 1 -> {
-                Render.Screen = RenderUtil.ScreenState.Game;
+            case "Restart" -> {
+                Screens.setScreen(Screens.ScreenState.Game);
                 if(Scoring.getLevel() == Scoring.endlessLevel)
                     GameLoop.game.startLevel(Scoring.endlessLevel);
                 else
                     GameLoop.game.start();
             }
-            case 2 -> {
-                selection = 0;
-                Render.Screen = RenderUtil.ScreenState.Menu;
-            }
+            case "Menu" -> exitAction();
         }
     }
 
     @Override
     public void exitAction() {
-        Render.Screen = RenderUtil.ScreenState.Menu;
+        selection = "null";
+        Screens.setScreen(Screens.ScreenState.Menu);
     }
 
     @Override
@@ -51,7 +47,7 @@ public class TryAgain extends Screen {
         int TOTALBLOCKWidth = totalBlockWidth * 3;
         int BLOCKPadding = blockPadding * 3;
 
-        g.setColor(Preferences.Primary);
+        g.setColor(Preferences.Frame);
         g.fillRect(0, 0, frameWidth, frameHeight);
 
         g.setColor(Text.color);

@@ -1,8 +1,7 @@
 package main.java.tjirm.Tetris.Screens;
-
-import main.java.tjirm.Tetris.Rendering.Render;
-
 public class Screens {
+
+    private static ScreenState Screen = ScreenState.TitleScreen;
 
     public static Screen titleScreen;
     public static Screen mainMenu;
@@ -25,7 +24,7 @@ public class Screens {
 
     public static Screen getCurrent() {
         Screen out = null;
-        switch(Render.Screen) {
+        switch(Screen) {
             case TitleScreen -> out = titleScreen;
             case Menu -> out = mainMenu;
             case Game -> out = game;
@@ -35,6 +34,24 @@ public class Screens {
             case TryAgain -> out = tryAgain;
         }
         return out;
+    }
+
+    public static void setScreen(ScreenState screen) {
+        Screen = screen;
+    }
+
+    public static ScreenState getScreen() {
+        return Screen;
+    }
+
+    public enum ScreenState {
+        TitleScreen,
+        Menu,
+        LevelSelect,
+        Options,
+        Credits,
+        Game,
+        TryAgain
     }
 
 }

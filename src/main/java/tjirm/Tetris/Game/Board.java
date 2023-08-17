@@ -16,7 +16,7 @@ public class Board {
 
     private static long fallRate = 1000_000000;
     private static boolean softFall = false;
-    private static final long softFallRate = 50_000000;
+    private static long softFallRate = 50_000000;
     private static int softFallCounter = 0;
     private static long elapsedTime = 0;
 
@@ -280,9 +280,10 @@ public class Board {
     }
 
     public static void setFallRate(int fallRate) {
-        System.out.println(fallRate);
         Board.fallRate = fallRate * 1000_000L;
-        GameLoop.game.setFrameTime(fallRate * 1000_000L);
+        Board.softFallRate = fallRate * 50_000L;
+        System.out.println("drop: " + Board.fallRate + "  soft drop: " + Board.softFallRate);
+        GameLoop.game.setFrameTime(fallRate * 50_000L);
     }
 
     public static FallingPiece getFallingPiece() {

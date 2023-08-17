@@ -6,50 +6,16 @@ import java.awt.*;
 
 public class Button extends Element {
 
-    public static final int normalFontSize = 0;
-    public static final int bigFontSize = 1;
-    public static final int headerFontSize = 2;
-
-    private final String name;
     private final String text;
-    private final Font font;
-    private final int selectionID;
     private Color color;
     private Color selColor;
 
-    private int boundingBoxX1;
-    private int boundingBoxX2;
-    private int boundingBoxY1;
-    private int boundingBoxY2;
+    private boolean active = true;
 
-    private int x;
-    private int y;
-    private final int width;
-    private final int height;
-
-    public Button(String name, int fontSize, int selectID, int x, int y, boolean middle, boolean quit) {
+    public Button(String name, String text, int fontSize, int x, int y, boolean middle, boolean quit) {
         this.name = name;
-        this.selectionID = selectID;
-        this.text = Text.getStr(name);
-        switch (fontSize) {
-            case bigFontSize:
-                font = Text.textBigFont;
-                width = Text.getBigWidth(name);
-                height = Text.bigFontHeight;
-                break;
-            case headerFontSize:
-                font = Text.textHeaderFont;
-                width = Text.getHeadWidth(name);
-                height = Text.headerFontHeight;
-                break;
-            default:
-                System.out.println("Gave Illegal fontSize defaulting to \"normal\" Font Size");
-            case normalFontSize:
-                font = Text.textFont;
-                width = Text.getWidth(name);
-                height = Text.fontHeight;
-                break;
-        }
+        this.text = Text.getStr(text);
+        initFont(fontSize, text);
         init(x, y, middle, quit);
     }
 
@@ -72,9 +38,8 @@ public class Button extends Element {
         }
     }
 
-    public Button(String text, int fontSize, int selectID, int x, int y, boolean middle) {
+    public Button(String text, int fontSize, int x, int y, boolean middle) {
         this.name = "Special" + text;
-        this.selectionID = selectID;
         this.text = text;
         switch (fontSize) {
             case bigFontSize:
@@ -98,31 +63,23 @@ public class Button extends Element {
         init(x, y, middle, false);
     }
 
+    public boolean isActive() {
+        return active;
+    }
+    public boolean doPaint() {
+        return true;
+    }
     @Override
-    public void paint(Graphics g, int selection) {
+    public void paint(Graphics g, String selection) {
         g.setFont(font);
-        if(selection == selectionID)
+        if(selection.equals(name))
             g.setColor(selColor);
         else
             g.setColor(color);
         g.drawString(text, x, y);
     }
 
-    public boolean inBoundingBox(int x, int y) {
-        return      boundingBoxX1 < x && boundingBoxX2 > x
-                &&  boundingBoxY1 < y && boundingBoxY2 > y;
-    }
-
-    public String getName() {
-        return name;
-    }
-    public int getSelectionID() {
-        return selectionID;
-    }
-    public int getX() {
-        return x;
-    }
-    public int getY() {
-        return y;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

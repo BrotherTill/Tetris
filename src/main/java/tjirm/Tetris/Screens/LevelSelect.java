@@ -2,7 +2,6 @@ package main.java.tjirm.Tetris.Screens;
 
 import main.java.tjirm.Tetris.Game.GameLoop;
 import main.java.tjirm.Tetris.Preferences;
-import main.java.tjirm.Tetris.Rendering.Render;
 import main.java.tjirm.Tetris.Rendering.RenderUtil;
 import main.java.tjirm.Tetris.Rendering.Text;
 import main.java.tjirm.Tetris.Scoring;
@@ -20,40 +19,41 @@ public class LevelSelect extends Screen {
         int MAXXSelection = RenderUtil.LevelSelectionX;
         int MAXYSelection = RenderUtil.LevelSelectionY;
 
-        int i = 0;
+        int i;
         for(int x=0; x <= MAXXSelection - 1; x++) {
             for(int y=0; y <= MAXYSelection - 1; y++) {
                 i = x * MAXYSelection + y + 1;
                 int xOrigin = (frameWidth - TOTALBLOCKWidth * 4) / (MAXXSelection - 1) * x + TOTALBLOCKWidth * 2;
                 int yOrigin = (frameHeight - TOTALBLOCKHeight * 3) / MAXYSelection * y + TOTALBLOCKHeight * 2;
-                addBtn(new Button(String.valueOf(i), Button.bigFontSize, i, xOrigin, yOrigin, true));
+                addBtn(String.valueOf(i), Button.bigFontSize, xOrigin, yOrigin, true);
             }
         }
-        addBtn(new Button("endlessMd", Button.bigFontSize, i + 1, frameWidth / 2, (int) (TOTALBLOCKHeight * 6.5F), true, false));
-        addBtn(new Button("menu", Button.normalFontSize, i + 2, frameWidth - BLOCKWidth, TOTALBLOCKHeight * 7, true, true));
+        addBtn("Endless", "endlessMd", Button.bigFontSize, frameWidth / 2, (int) (TOTALBLOCKHeight * 6.5F), true, false);
+        addBtn("Menu", "menu", Button.normalFontSize, frameWidth - BLOCKWidth, TOTALBLOCKHeight * 7, true, true);
     }
 
     @Override
-    public void selectionAction() {
-        if(selection >= 1 && selection <= RenderUtil.LevelSelectionX * RenderUtil.LevelSelectionY) {
-            Render.Screen = RenderUtil.ScreenState.Game;
-            GameLoop.game.startLevel(selection);
-            selection = 0;
-        } else
-        if(selection == RenderUtil.LevelSelectionX * RenderUtil.LevelSelectionY + 1){
-            selection = 0;
-            Render.Screen = RenderUtil.ScreenState.Game;
+    protected void selectionAction() {
+        if(selection.startsWith("Special")) {
+            Screens.setScreen(Screens.ScreenState.Game);
+            GameLoop.game.startLevel(Integer.parseInt(selection.substring(7)));
+            selection = "null";
+            return;
+        }
+        if(selection.equals("Endless")){
+            selection = "null";
+            Screens.setScreen(Screens.ScreenState.Game);
             GameLoop.game.startLevel(Scoring.endlessLevel);
+            return;
         }
-        if(selection == RenderUtil.LevelSelectionX * RenderUtil.LevelSelectionY + 2) {
-            selection = 0;
-            Render.Screen = RenderUtil.ScreenState.Menu;
-        }
+        if(selection.equals("Menu"))
+            exitAction();
     }
 
     @Override
     public void exitAction() {
-        Render.Screen = RenderUtil.ScreenState.Menu;
+        selection = "null";
+        Screens.setScreen(Screens.ScreenState.Menu);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class LevelSelect extends Screen {
         int MAXXSelection = RenderUtil.LevelSelectionX;
         int MAXYSelection = RenderUtil.LevelSelectionY;
 
-        g.setColor(Preferences.Primary);
+        g.setColor(Preferences.Frame);
         g.fillRect(0, 0, frameWidth, frameHeight);
 
         g.setColor(Text.color);
