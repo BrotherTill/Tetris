@@ -2,8 +2,10 @@ package main.java.tjirm.Tetris.Screens;
 
 import main.java.tjirm.Tetris.Pieces.PieceUtil.Direction;
 import main.java.tjirm.Tetris.Rendering.RenderUtil;
-import main.java.tjirm.Tetris.Screens.Elements.*;
 import main.java.tjirm.Tetris.Screens.Elements.Button;
+import main.java.tjirm.Tetris.Screens.Elements.DropDown;
+import main.java.tjirm.Tetris.Screens.Elements.Element;
+import main.java.tjirm.Tetris.Screens.Elements.Toggle;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -51,20 +53,27 @@ public abstract class Screen {
     }
 
     private Map<String, Element> elementMap = new HashMap<>();
+    private Map<String, Button> buttonMap = new HashMap<>();
+    private Map<String, Toggle> toggleMap = new HashMap<>();
+    private Map<String, DropDown> dropDownMap = new HashMap<>();
 
     public void addBtn(String name, String text, int fontSize, int x, int y, boolean middle, boolean quit) {
         elementMap.put(name, new Button(name, text, fontSize, x, y, middle, quit));
+        buttonMap.put(name, new Button(name, text, fontSize, x, y, middle, quit));
     }
 
     public void addBtn(String text, int fontSize, int x, int y, boolean middle) {
         elementMap.put("Special" + text, new Button(text, fontSize, x, y, middle));
+        buttonMap.put("Special" + text, new Button(text, fontSize, x, y, middle));
     }
 
     public void addTgl(String name, String text, int fontSize, int x, int y, boolean middle, boolean active) {
         elementMap.put(name, new Toggle(name, text, fontSize, x, y, middle, active));
+        toggleMap.put(name, new Toggle(name, text, fontSize, x, y, middle, active));
     }
     public <Value> void addDropDown(DropDown<Value> newDropDown) {
         elementMap.put(newDropDown.getName(), newDropDown);
+        dropDownMap.put(newDropDown.getName(), newDropDown);
         newDropDown.getOptions().forEach((key, value) -> elementMap.put(value.getName(), value));
     }
 
@@ -139,13 +148,13 @@ public abstract class Screen {
         return elementMap.get(name);
     }
     public Button getButtonbyName(String name) {
-        return (Button) elementMap.get(name);
+        return buttonMap.get(name);
     }
     public Toggle getTogglebyName(String name) {
-        return (Toggle) elementMap.get(name);
+        return toggleMap.get(name);
     }
     public DropDown getDropDownbyName(String name) {
-        return (DropDown) elementMap.get(name);
+        return dropDownMap.get(name);
     }
 
     private int loopAround(int i, int max) {

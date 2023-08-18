@@ -3,15 +3,12 @@ package main.java.tjirm.Tetris.Game;
 import main.java.tjirm.Tetris.Pieces.FallingPiece;
 import main.java.tjirm.Tetris.Pieces.Piece;
 import main.java.tjirm.Tetris.Pieces.PieceUtil.Direction;
-import main.java.tjirm.Tetris.Pieces.PieceUtil.Type;
 
 public class RotationSystem {
 
     public static void rotateCW() {
         FallingPiece fallingPiece = Board.getFallingPiece();
         Piece piece = fallingPiece.getType().getPiece();
-        if(fallingPiece.getType() == Type.O)
-            return;
 
         int undoX = fallingPiece.getX();
         int undoY = fallingPiece.getY();
@@ -40,8 +37,6 @@ public class RotationSystem {
     public static void rotateCCW() {
         FallingPiece fallingPiece = Board.getFallingPiece();
         Piece piece = fallingPiece.getType().getPiece();
-        if(fallingPiece.getType() == Type.O)
-            return;
 
         int undoX = fallingPiece.getX();
         int undoY = fallingPiece.getY();

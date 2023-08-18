@@ -12,13 +12,26 @@ public class Piece {
     private float RxOffset;
     private float RyOffset;
 
-    private Direction startRotation;
+    private Direction startRotation = Direction.north;
 
     private int[][] rotationPointX = new int[4][5];
     private int[][] rotationPointY = new int[4][5];
 
-    void setField(Block[][] pieceArray) {
-        this.pieceArray = pieceArray;
+    void setField(String[][] pieceArray) {
+        Block[][] out = new Block[pieceArray.length][pieceArray.length];
+        for(int y=0; y < pieceArray.length; y++)
+            for (int x=0; x < pieceArray.length; x++)
+                out[y][x] = Blocks.get(pieceArray[y][x]);
+        switch (startRotation) {
+            case east -> out = PieceUtil.rotateCopy(out, -1);
+            case west -> out = PieceUtil.rotateCopy(out, 1);
+            case south -> out = PieceUtil.rotateCopy(out, 2);
+        }
+        this.pieceArray = out;
+    }
+
+    protected void init() {
+
     }
 
     void setStartX(int startX) {
@@ -49,10 +62,11 @@ public class Piece {
     }
 
     public Piece() {
+        init();
     }
 
-    public Piece(Block[][] pieceArray, int startX, int startY, int rxOffset, int ryOffset) {
-        this.pieceArray = pieceArray;
+    public Piece(String[][] pieceArray, int startX, int startY, int rxOffset, int ryOffset) {
+        setField(pieceArray);
         this.startX = startX;
         this.startY = startY;
         this.RxOffset = rxOffset;
@@ -72,6 +86,14 @@ public class Piece {
     }
 
     public Block[][] getField() {
+        Block[][] out = new Block[pieceArray.length][pieceArray.length];
+        for(int y=0; y<pieceArray.length; y++)
+            for(int x=0; x<pieceArray.length; x++)
+                out[y][x] = pieceArray[y][x].clone();
+        return out;
+    }
+
+    public Block[][] getLook() {
         return pieceArray;
     }
 
@@ -94,5 +116,4 @@ public class Piece {
     public Direction getStartRotation() {
         return startRotation;
     }
-
 }

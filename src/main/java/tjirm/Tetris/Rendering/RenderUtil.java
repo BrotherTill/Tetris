@@ -1,6 +1,8 @@
 package main.java.tjirm.Tetris.Rendering;
 
 import main.java.tjirm.Tetris.Game.Board;
+import main.java.tjirm.Tetris.Pieces.Blocks;
+import main.java.tjirm.Tetris.Pieces.Pieces;
 import main.java.tjirm.Tetris.Screens.Screens;
 
 import java.awt.*;
@@ -44,8 +46,11 @@ public class RenderUtil {
         frameHeight = totalBlockHeight * fieldHeight + totalBlockHeight * 2;
 
         Themes.init();
+        Blocks.init();
+        Pieces.init();
         Text.init();
         Screens.init();
+        System.out.println("finished");
     }
 
 }

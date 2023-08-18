@@ -9,21 +9,43 @@ public class PieceUtil {
     private static ArrayList<Type> GenBag = new ArrayList<>();
 
     public enum Type {     //the types of pieces that exist(you can add you own)
-        O(Pieces.OPiece),
-        I(Pieces.IPiece),
-        L(Pieces.LPiece),
-        J(Pieces.JPiece),
-        S(Pieces.SPiece),
-        Z(Pieces.ZPiece),
-        T(Pieces.TPiece),
-        empty(Pieces.EmptyPiece);           //used for the Hold Slot
+        O,
+        I,
+        L,
+        J,
+        S,
+        Z,
+        T,
+        empty;           //used for the Hold Slot
 
-        Type(Piece piece) { this.obj = piece; }        //store the corresponding Tetris.Pieces.Piece
-        private final Piece obj;
+        public Piece getPiece() {
+            switch (ordinal()) {
+                case 0 -> {
+                    return Pieces.OPiece;
+                }
+                case 1 -> {
+                    return Pieces.IPiece;
+                }
+                case 2 -> {
+                    return Pieces.LPiece;
+                }
+                case 3 -> {
+                    return Pieces.JPiece;
+                }
+                case 4 -> {
+                    return Pieces.SPiece;
+                }
+                case 5 -> {
+                    return Pieces.ZPiece;
+                }
+                case 6 -> {
+                    return Pieces.TPiece;
+                }
+            }
+            return Pieces.EmptyPiece;
+        }
 
-        public Piece getPiece() { return obj; }
-
-        public static Type randomType()  {     //generate a random Tetris.Pieces.Piece according to the Tetris Guidelines
+        public static Type randomType()  {     //generate a random Piece according to the Tetris Guidelines
             if(GenBag.isEmpty()) {
                 GenBag = new ArrayList<>(List.of(Type.values()));
                 GenBag.remove(empty);
@@ -36,11 +58,18 @@ public class PieceUtil {
     }
 
     public enum Direction {
-        north,
-        east,
-        south,
-        west;
+        north(0),
+        east(90),
+        south(180),
+        west(270);
 
+        private final int angle;
+        Direction(int angle) {
+            this.angle = angle;
+        }
+        public int getAngle() {
+            return angle;
+        }
         public Direction getNextDirection() {
             return values()[(ordinal() + 1) % 4];
         }
@@ -77,9 +106,49 @@ public class PieceUtil {
                     case 0 -> {
                         return piece;
                     }
-                    case 1 -> out[x][length - 1 - y] = piece[y][x];
-                    case 2 -> out[length - 1 - y][length - 1 - x] = piece[y][x];
-                    case 3 -> out[length - 1 - x][y] = piece[y][x];
+                    case 1 -> {
+                        out[x][length - 1 - y] = piece[y][x];
+                        out[x][length - 1 - y].rotateCW();
+                    }
+                    case 2 -> {
+                        out[length - 1 - y][length - 1 - x] = piece[y][x];
+                        out[length - 1 - y][length - 1 - x].rotateCW();
+                        out[length - 1 - y][length - 1 - x].rotateCW();
+                    }
+                    case 3 -> {
+                        out[length - 1 - x][y] = piece[y][x];
+                        out[length - 1 - x][y].rotateCCW();
+                    }
+                }
+            }
+        }
+
+        return out;
+    }
+
+    public static Block[][] rotateCopy(Block[][] piece, int rotation) {         //rotate a Tetris.Pieces.Piece based on a rotation "index"
+        int length = piece.length;
+        Block[][] out = new Block[length][length];
+
+        for(int y=0; y < length; y++) {
+            for(int x=0; x < length; x++) {
+                switch (Math.abs(Math.floorMod(rotation, 4))) {
+                    case 0 -> {
+                        return piece.clone();
+                    }
+                    case 1 -> {
+                        out[x][length - 1 - y] = piece[y][x].clone();
+                        out[x][length - 1 - y].rotateCW();
+                    }
+                    case 2 -> {
+                        out[length - 1 - y][length - 1 - x] = piece[y][x].clone();
+                        out[length - 1 - y][length - 1 - x].rotateCW();
+                        out[length - 1 - y][length - 1 - x].rotateCW();
+                    }
+                    case 3 -> {
+                        out[length - 1 - x][y] = piece[y][x].clone();
+                        out[length - 1 - x][y].rotateCCW();
+                    }
                 }
             }
         }

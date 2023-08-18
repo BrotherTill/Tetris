@@ -2,7 +2,6 @@ package main.java.tjirm.Tetris.Rendering;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -95,7 +94,7 @@ public class Themes {
     public static int getPatternSize() {
         return Patterns.size();
     }
-    public static Image getPattern(String name) {
+    public static BufferedImage getPattern(String name) {
         if(!Patterns.containsKey(name)) {
             JOptionPane.showMessageDialog(null,
                     "The Image for this Theme is missing",

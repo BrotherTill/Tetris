@@ -40,6 +40,8 @@ public class Game extends KeyAdapter {
                     -> GameLoop.game.GameWin();
             case KeyEvent.VK_F3
                     -> Scoring.sendLines(10);
+            case KeyEvent.VK_F4
+                    -> Board.getField()[39][0].setFilled(false);
             case KeyEvent.VK_SHIFT, KeyEvent.VK_LESS, KeyEvent.VK_NUMPAD0
                     -> Board.Hold1();
             case KeyEvent.VK_C, KeyEvent.VK_DECIMAL

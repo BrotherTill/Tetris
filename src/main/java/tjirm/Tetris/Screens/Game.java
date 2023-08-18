@@ -107,7 +107,7 @@ public class Game extends Screen {
 
         for(int i=0; i < nextLength; i++) {         //draw the Tetris.Pieces.Tetris.Pieces in the Next queue
             tempPiece = fallingPiece.getNextTypes()[i].getPiece();
-            drawField(tempPiece.getField(), 18 + tempPiece.getRxOffset(), 6.5F + tempPiece.getRyOffset() + (i * 3), g);         //you can change the y value to change the position
+            drawField(tempPiece.getLook(), 18 + tempPiece.getRxOffset(), 6.5F + tempPiece.getRyOffset() + (i * 3), g);         //you can change the y value to change the position
         }
 
         ////////////////////draw the Held Tetris.Pieces.Tetris.Pieces

@@ -57,10 +57,6 @@ public class Board {
 
     public Board(int queueGenLength) {
         Board.queueGenLength = queueGenLength;
-
-        Blocks.fullLine = new Block[fieldWidth];
-        for(int i = 0; i < fieldWidth ; i++)
-            Blocks.fullLine[i] = new Block(true);
     }
 
     public static void resetField() {
@@ -210,7 +206,6 @@ public class Board {
         hold1Used = false;
         hold2Used = false;
     }
-
     public static void Hold1() {
         if(hold1Used | blockInput)
             return;
