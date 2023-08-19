@@ -21,7 +21,7 @@ public class Themes {
             for(Map.Entry<String, BufferedImage> entry : RetroLook.entrySet()){
                 String name = entry.getKey();
                 BufferedImage image = entry.getValue();
-                File file = new File("src/Main/resources/Images/retro" + name + ".png");
+                File file = new File(RenderUtil.recourcesPath + "/Images/retro" + name + ".png");
                 try {
                     ImageIO.write(image, "png", file);
                 } catch (IOException e) {
@@ -31,7 +31,7 @@ public class Themes {
             for(Map.Entry<String, BufferedImage> entry : Patterns.entrySet()){
                 String name = entry.getKey();
                 BufferedImage image = entry.getValue();
-                File file = new File("src/Main/resources/Images/pattern" + name + ".png");
+                File file = new File(RenderUtil.recourcesPath + "/Images/pattern" + name + ".png");
                 try {
                     ImageIO.write(image, "png", file);
                 } catch (IOException e) {
@@ -39,7 +39,7 @@ public class Themes {
                 }
             }
         }));
-        List<File> files = Stream.of(new File("src/Main/resources/Images/").listFiles())
+        List<File> files = Stream.of(new File(RenderUtil.recourcesPath + "/Images/").listFiles())
                 .filter(file -> !file.isDirectory())
                 .filter(file -> file.getName().startsWith("retro") && file.getName().endsWith(".png"))
                 .collect(Collectors.toList());
@@ -52,7 +52,7 @@ public class Themes {
                 throw new RuntimeException(e);
             }
         }
-        files = Stream.of(new File("src/Main/resources/Images/").listFiles())
+        files = Stream.of(new File(RenderUtil.recourcesPath + "/Images/").listFiles())
                 .filter(file -> !file.isDirectory())
                 .filter(file -> file.getName().startsWith("pattern") && file.getName().endsWith(".png"))
                 .collect(Collectors.toList());

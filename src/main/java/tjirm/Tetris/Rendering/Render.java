@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -32,7 +33,7 @@ public class Render extends JPanel implements ActionListener{
     public static KeyListener currentListener = new Menu();
 
 
-    public Render() {           //initialize the Renderer
+    public Render() throws IOException {           //initialize the Renderer
         RenderUtil.init();
 
         addKeyListener(currentListener);

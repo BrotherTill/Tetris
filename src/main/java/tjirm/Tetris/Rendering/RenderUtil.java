@@ -6,6 +6,9 @@ import main.java.tjirm.Tetris.Pieces.Pieces;
 import main.java.tjirm.Tetris.Screens.Screens;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
 
 public class RenderUtil {
 
@@ -32,8 +35,12 @@ public class RenderUtil {
     public static final int LevelSelectionY = 5;
     private static final int[][] LevelSelectionPage = new int[LevelSelectionY + 1][LevelSelectionX];
 
+    ////////////////////////////////////////////VERY IMPORTANT//////////////////////////////////////////////////////
+    public static Path recourcesPath;
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void init() {           //initialize Font Variables (in own method because I read form a File)
+
+    public static void init() throws IOException {           //initialize Font Variables (in own method because I read form a File)
         for(int x=0; x<LevelSelectionPage[0].length; x++){
             for (int y=0; y<LevelSelectionPage.length; y++){
                 LevelSelectionPage[y][x] = -1;
@@ -45,12 +52,43 @@ public class RenderUtil {
         frameWidth = totalBlockWidth * fieldWidth + totalBlockWidth * 14;
         frameHeight = totalBlockHeight * fieldHeight + totalBlockHeight * 2;
 
+        initPath();
+
         Themes.init();
         Blocks.init();
         Pieces.init();
         Text.init();
         Screens.init();
         System.out.println("finished");
+    }
+
+    private static void initPath() throws IOException {
+        try {
+            File IDEPath = new File("src/main/resources");
+            if(IDEPath.exists() || IDEPath.isDirectory()) {
+                System.out.println("Running in IDE");
+                recourcesPath = IDEPath.toPath();
+                return;
+            } else {
+                System.out.println("Didn't find files in IDE Path (src/main/resources)");
+            }
+        } catch (NullPointerException e) {
+            System.out.println("Didn't find files in IDE Path (src/main/resources)");
+        }
+        try {
+            File JARPath = new File("resources");
+            if(JARPath.exists() || JARPath.isDirectory()) {
+                System.out.println("Running in JAR");
+                recourcesPath = JARPath.toPath();
+                return;
+            } else {
+                System.out.println("Didn't find files in JAR Path (resources)");
+            }
+        } catch (NullPointerException e) {
+            System.out.println("Didn't find files in JAR Path (resources)");
+        }
+        System.out.println("didn't find resources");
+        throw new IOException("resources not Found");
     }
 
 }

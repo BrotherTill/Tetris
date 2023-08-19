@@ -2,6 +2,7 @@ package main.java.tjirm.Tetris.Rendering;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -34,7 +35,7 @@ public class Text {
 
     public static void init() {
         try {
-            InputStream fontFile = Render.class.getResourceAsStream("/main/resources/Fonts/Minecraft.otf");     //Paths are painful
+            InputStream fontFile = new FileInputStream(RenderUtil.recourcesPath + "/Fonts/Minecraft.otf");     //Paths are painful
 
             Font font = Font.createFont(Font.TRUETYPE_FONT, fontFile);
             textFont = font.deriveFont(Font.BOLD, RenderUtil.blockHeight);                  //DON'T TOUCH THIS IS VERY FRAGILE CODE

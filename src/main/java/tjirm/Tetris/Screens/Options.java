@@ -16,13 +16,13 @@ public class Options extends Screen {
         int TOTALBLOCKHeight = totalBlockHeight * 3;
 
         String select = Preferences.theme.toString().toLowerCase();
-        addDropDown(new DropDown<themes>("Themes", DropDown.bigFontSize, frameWidth / 2, TOTALBLOCKHeight * 2)
+        addDropDown(new DropDown<themes>("Themes", DropDown.bigFontSize, frameWidth / 2, (int) (TOTALBLOCKHeight * 3.5F))
                 .addOption("minimalistic", themes.minimalistic)
                 .addOption("color", themes.color)
                 .addOption("pattern", themes.pattern)
                 .addOption("retro", themes.retro)
                 .setSelected(select));
-        addTgl("Ghost", "ghost", Button.bigFontSize, frameWidth / 2, (int) (TOTALBLOCKHeight * 4.5F),true, Preferences.showGhost);
+        addTgl("Ghost", "ghost", Button.bigFontSize, frameWidth / 2, (int) (TOTALBLOCKHeight * 6F),true, Preferences.showGhost);
         addBtn("Menu", "menu", Button.normalFontSize, frameWidth - BLOCKWidth, TOTALBLOCKHeight * 7,true,true);
     }
 
